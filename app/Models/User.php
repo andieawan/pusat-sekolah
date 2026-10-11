@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Models;
+
+use App\Models\Concerns\PunyaUuid;
+use App\Services\Outbox;
+use App\Services\SsoService;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable
+{
+    use PunyaUuid;
+
+    protected $fillable = [
+        'username', 'nama', 'email', 'password', 'superadmin', 'aktif', 'pegawai_id', 'siswa_id',
+    ];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    protected function casts(): array
+    {
+        return [
+            'password' => 'hashed',
+            'superadmin' => 'boolean',
+            'aktif' => 'boolean',
+            'login_terakhir' => 'datetime',
+        ];
+    }
+
+    protected static function booted(): void
+    {
+        static::updated(function (self $u) {
+            if ($u->wasChanged('aktif') && ! $u->aktif) {
+                app(SsoService::class)->cabutUser($u); // akun nonaktif: semua token mati
+            }
+            if ($u->wasChanged(['aktif', 'nama', 'email'])) {
+                Outbox::akun($u);
+            }
+        });
+    }
+
+    public function setUsernameAttribute(string $v): void
+    {
+        $this->attributes['username'] = strtolower(trim($v));
+    }
+
+    public function pegawai(): BelongsTo
+    {
+        return $this->belongsTo(Pegawai::class, 'pegawai_id');
+    }
+
+    public function siswa(): BelongsTo
+    {
+        return $this->belongsTo(Siswa::class, 'siswa_id');
+    }
+
+    public function akses(): HasMany
+    {
+        return $this->hasMany(Akses::class, 'user_id');
+    }
+
+    /** Peran di sebuah aplikasi. Superadmin otomatis memegang peran "admin" di semua aplikasi. */
+    public function peranUntuk(Aplikasi $app): array
+    {
+        $peran = $this->akses()->where('aplikasi_id', $app->id)->pluck('peran')->all();
+        if ($this->superadmin) {
+            $peran[] = 'admin';
+        }
+
+        return array_values(array_unique($peran));
+    }
+
+    public function bolehAkses(Aplikasi $app): bool
+    {
+        return $this->aktif && $this->peranUntuk($app) !== [];
+    }
+
+    public function tipe(): string
+    {
+        return $this->siswa_id ? 'siswa' : ($this->pegawai_id ? 'pegawai' : 'akun');
+    }
+}

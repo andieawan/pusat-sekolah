@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Pusat Sekolah API
+  version: "1.0"
+servers:
+  - url: https://pusat.example.test
+components:
+  securitySchemes:
+    basic: {type: http, scheme: basic}
+    bearer: {type: http, scheme: bearer}
+paths:
+  /api/sso/token:
+    post:
+      summary: Tukar kode otorisasi dengan token akses
+      security: [{basic: []}]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required: [grant_type, code, redirect_uri]
+              properties:
+                grant_type: {type: string, enum: [authorization_code]}
+                code: {type: string}
+                redirect_uri: {type: string}
+                code_verifier: {type: string}
+      responses:
+        "200": {description: Token dan profil}
+        "400": {description: kode_tidak_valid}
+        "401": {description: klien_tidak_sah}
+  /api/sso/userinfo:
+    get:
+      security: [{bearer: []}]
+      responses: {"200": {description: Profil}, "401": {description: Token tidak valid}, "403": {description: Akses dicabut}}
+  /api/sso/revoke:
+    post:
+      security: [{bearer: []}]
+      responses: {"200": {description: ok}}
+  /api/v1/ping:
+    get:
+      security: [{basic: []}]
+      responses: {"200": {description: ok}}
+  /api/v1/master/{sumber}:
+    get:
+      security: [{basic: []}]
+      parameters:
+        - {name: sumber, in: path, required: true, schema: {type: string, enum: [tahun-ajaran, jurusan, kelas, siswa, pegawai]}}
+        - {name: updated_since, in: query, schema: {type: string, format: date-time}}
+        - {name: per_page, in: query, schema: {type: integer, minimum: 1, maximum: 500}}
+        - {name: page, in: query, schema: {type: integer, minimum: 1}}
+        - {name: status, in: query, schema: {type: string, enum: [aktif, lulus, pindah, keluar]}}
+      responses:
+        "200": {description: Daftar data beserta meta.waktu_server}
+        "403": {description: scope_tidak_cukup}
+        "422": {description: parameter_tidak_valid}
+  /api/v1/ringkasan:
+    get:
+      security: [{basic: []}]
+      responses: {"200": {description: Agregat aman-publik}}
+  /api/v1/akun:
+    get:
+      security: [{basic: []}]
+      responses: {"200": {description: Akun dan peran pada aplikasi pemanggil}}
