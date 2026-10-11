@@ -49,6 +49,11 @@ cd /var/www/pusat-sekolah
 composer install --no-dev --optimize-autoloader
 ```
 
+> **Repo privat? (muncul `Password authentication is not supported`)** GitHub tidak menerima password akun untuk git. Buat **token**:
+> GitHub → Settings → Developer settings → Personal access tokens → *Fine-grained tokens* → Repository access: hanya repo ini → Permissions: **Contents = Read-only**.
+> Saat `git clone` diminta *Username* isi nama akun GitHub, *Password* isi **token** (bukan password akun). Agar `git pull` untuk pembaruan tidak meminta lagi:
+> `git config --global credential.helper store` (jalankan sebelum clone; token tersimpan di `~/.git-credentials` milik user ini). Jangan tempel token ke chat/dokumen. Alternatif: jadikan repo *Public*, atau pakai *Deploy key* (SSH).
+
 ## 5. Isi `.env`
 ```bash
 cp .env.example .env && php artisan key:generate && nano .env
