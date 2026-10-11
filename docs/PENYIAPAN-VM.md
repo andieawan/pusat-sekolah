@@ -1,7 +1,7 @@
 # Penyiapan VM — Pusat Sekolah (dari nol sampai jalan)
 
 Pusat adalah aplikasi **pertama yang dipasang**: aplikasi lain (Absensi, Website, dst.) mendaftar ke sini.
-Target: VM **Ubuntu Server 24.04 LTS** (Proxmox), **Nginx + PHP 8.3-FPM + MariaDB**, dipublikasikan lewat NPMplus/Cloudflare.
+Target: VM **Ubuntu Server 26.04 LTS** (PHP 8.5; 24.04 dengan PHP 8.3 juga bisa), **Nginx + PHP-FPM + MariaDB**, dipublikasikan lewat NPMplus/Cloudflare.
 Semua perintah dijalankan sebagai user biasa yang punya `sudo`. Ganti `pusat.sekolah.sch.id` dengan domain Anda.
 
 ## Urutan pemasangan seluruh sistem
@@ -9,7 +9,7 @@ Semua perintah dijalankan sebagai user biasa yang punya `sudo`. Ganti `pusat.sek
 Tiap aplikasi boleh di VM sendiri-sendiri (disarankan: 1 VM per aplikasi, 1 GB RAM cukup untuk Pusat) atau satu VM dengan domain berbeda.
 
 ## 1. Buat VM di Proxmox
-1. Unggah ISO Ubuntu Server 24.04 ke storage ISO. **Create VM**: Machine `q35`, centang **Qemu Agent**, disk 20 GB, 1–2 vCPU, 1–2 GB RAM, network `vmbr0`.
+1. Unggah ISO Ubuntu Server 26.04 (atau 24.04) ke storage ISO. **Create VM**: Machine `q35`, centang **Qemu Agent**, disk 20 GB, 1–2 vCPU, 1–2 GB RAM, network `vmbr0`.
 2. Pasang Ubuntu, centang **Install OpenSSH server**. Nama host saran: `pusat`.
 3. Setelah masuk:
    ```bash
@@ -25,9 +25,10 @@ Tiap aplikasi boleh di VM sendiri-sendiri (disarankan: 1 VM per aplikasi, 1 GB R
 ```bash
 sudo apt -y install nginx mariadb-server git unzip curl composer \
   php-fpm php-cli php-mysql php-sqlite3 php-mbstring php-xml php-zip php-curl php-intl php-bcmath
-php -v    # harus >= 8.3
+php -v    # harus >= 8.3 (Ubuntu 26.04 = 8.5)
+php --ri pdo_mysql | head -2
 ```
-(Ubuntu 22.04: tambahkan PPA `ppa:ondrej/php` dan pakai paket `php8.3-*`.)
+Paket `php-fpm` dan `php-*` otomatis memakai PHP bawaan Ubuntu (26.04 → 8.5, 24.04 → 8.3). Ubuntu 22.04 hanya punya PHP 8.1: tambahkan PPA `ppa:ondrej/php` dan pakai paket `php8.3-*`.
 
 ## 3. Database
 ```bash
@@ -74,7 +75,7 @@ php artisan config:cache && php artisan route:cache && php artisan view:cache
 ```bash
 sudo cp deploy/nginx-pusat.conf /etc/nginx/sites-available/pusat
 sudo nano /etc/nginx/sites-available/pusat      # server_name
-# samakan versi PHP-FPM otomatis (Ubuntu 24.04 = 8.3, 26.04 = 8.5):
+# samakan versi PHP-FPM otomatis (Ubuntu 26.04 = 8.5, 24.04 = 8.3):
 SOK=$(basename $(ls /run/php/php*-fpm.sock | head -1)); sudo sed -i "s|php[0-9.]*-fpm.sock|$SOK|" /etc/nginx/sites-available/pusat
 sudo ln -s /etc/nginx/sites-available/pusat /etc/nginx/sites-enabled/pusat
 sudo rm -f /etc/nginx/sites-enabled/default
