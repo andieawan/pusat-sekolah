@@ -14,9 +14,10 @@ Tiap aplikasi boleh di VM sendiri-sendiri (disarankan: 1 VM per aplikasi, 1 GB R
 3. Setelah masuk:
    ```bash
    sudo apt update && sudo apt -y upgrade
-   sudo apt -y install qemu-guest-agent && sudo systemctl enable --now qemu-guest-agent
+   sudo apt -y install qemu-guest-agent && sudo systemctl start qemu-guest-agent
    sudo timedatectl set-timezone Asia/Jakarta
    ```
+   > Bila muncul pesan "unit files have no installation config" atau `start` gagal: itu normal (unit ini dijalankan otomatis oleh udev). Pastikan di Proxmox **Options → QEMU Guest Agent = Enabled**, lalu **Shutdown** dan **Start** ulang VM (bukan sekadar reboot); cek dengan `systemctl status qemu-guest-agent`.
 4. IP tetap: edit file di `/etc/netplan/` (contoh `192.168.10.30/24`, gateway `192.168.10.254`), lalu `sudo netplan apply`.
 5. Firewall (opsional): `sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw --force enable`.
 
