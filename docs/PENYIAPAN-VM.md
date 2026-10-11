@@ -73,7 +73,9 @@ php artisan config:cache && php artisan route:cache && php artisan view:cache
 ## 7. Nginx
 ```bash
 sudo cp deploy/nginx-pusat.conf /etc/nginx/sites-available/pusat
-sudo nano /etc/nginx/sites-available/pusat      # server_name, versi php-fpm
+sudo nano /etc/nginx/sites-available/pusat      # server_name
+# samakan versi PHP-FPM otomatis (Ubuntu 24.04 = 8.3, 26.04 = 8.5):
+SOK=$(basename $(ls /run/php/php*-fpm.sock | head -1)); sudo sed -i "s|php[0-9.]*-fpm.sock|$SOK|" /etc/nginx/sites-available/pusat
 sudo ln -s /etc/nginx/sites-available/pusat /etc/nginx/sites-enabled/pusat
 sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
@@ -126,7 +128,7 @@ Lalu isi data induk lewat Admin → Impor (urutan: **guru → kelas → siswa**)
 | Gejala | Solusi |
 |---|---|
 | 500 | `tail -50 storage/logs/laravel.log`; biasanya `APP_KEY` kosong, `.env` salah, atau izin folder (langkah 6) |
-| 502 | `systemctl status php8.3-fpm`; samakan versi di `fastcgi_pass` |
+| 502 | `ls /run/php/` lalu samakan nama soket di `fastcgi_pass`; `systemctl status php*-fpm` |
 | API 401 padahal kredensial benar | Header `Authorization` tidak diteruskan: pastikan baris `fastcgi_param HTTP_AUTHORIZATION` ada |
 | Setelah login kembali ke `http://` / redirect SSO ditolak | `TRUSTED_PROXIES` salah, atau NPMplus tidak mengirim `X-Forwarded-Proto` |
 | Webhook tidak terkirim | Cron belum terpasang (langkah 9); lihat Admin → Webhook untuk pesan galat |
