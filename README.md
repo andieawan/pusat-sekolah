@@ -8,6 +8,8 @@ Laravel 13 · PHP 8.3+ · MySQL 8 / MariaDB 10.6+ · tanpa proses build front-en
 
 ## Pasang di VM Ubuntu
 
+> Tutorial lengkap dari nol (Proxmox → Nginx → HTTPS → cron → backup): [`docs/PENYIAPAN-VM.md`](docs/PENYIAPAN-VM.md).
+
 ```bash
 # 1. Kebutuhan: php8.3 (+ extension mbstring xml curl mysql sqlite3 zip bcmath intl), composer, mysql
 cd /var/www && composer install --no-dev --optimize-autoloader   # di dalam folder proyek ini
@@ -72,6 +74,7 @@ Data induk (CRUD + impor CSV dengan pratinjau), akun & peran per aplikasi, aplik
 
 ## Dokumen
 
+- `docs/PENYIAPAN-VM.md` — tutorial penyiapan VM
 - `docs/api.md` — kontrak API & webhook
 - `docs/integrasi.md` — cara menyambungkan sebuah aplikasi (SSO, penerima webhook, sinkron data) + contoh PHP/Laravel
 - `docs/openapi.yaml` — spesifikasi OpenAPI
