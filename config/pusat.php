@@ -12,6 +12,9 @@ return [
         'timeout' => 10,
         'connect_timeout' => 5,
         'batch' => 100,
+        // Sertifikat HTTPS aplikasi tujuan. false/ca_bundle hanya untuk uji lokal bersertifikat buatan sendiri.
+        'verify_ssl' => filter_var(env('PUSAT_WEBHOOK_VERIFY_SSL', true), FILTER_VALIDATE_BOOLEAN),
+        'ca_bundle' => env('PUSAT_WEBHOOK_CA_BUNDLE'),
     ],
 
     // Daftar scope yang bisa diberikan ke aplikasi. Varian "_dasar" hanya memuat

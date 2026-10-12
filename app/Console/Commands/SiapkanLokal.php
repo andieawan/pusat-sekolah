@@ -30,6 +30,7 @@ class SiapkanLokal extends Command
         {--env-web= : Path berkas .env Website}
         {--demo : Tambah data contoh (kelas, guru, siswa, akun guru) agar sinkron Absensi ada isinya}
         {--putar : Putar ulang rahasia aplikasi yang sudah terdaftar (rahasia lama tidak berlaku lagi)}
+        {--abaikan-ssl : Uji lokal dengan HTTPS bersertifikat buatan sendiri: matikan pemeriksaan sertifikat (Pusat→aplikasi dan aplikasi→Pusat)}
         {--paksa : Izinkan di lingkungan production (tidak disarankan)}';
 
     protected $description = 'Siapkan Pusat untuk uji coba lokal: data awal, daftarkan Absensi/Website, tulis kredensial ke .env mereka';
@@ -100,11 +101,16 @@ class SiapkanLokal extends Command
                         'PUSAT_CLIENT_ID' => $kredensial[0],
                         'PUSAT_CLIENT_SECRET' => $kredensial[1],
                         'PUSAT_WEBHOOK_SECRET' => $kredensial[2],
-                    ]);
+                    ] + ($this->option('abaikan-ssl') ? ['PUSAT_VERIFY_SSL' => 'false'] : []));
                 }
             } else {
                 $this->line("Sudah terdaftar: {$app->nama}. URL diperbarui; rahasia tidak diubah (pakai --putar bila hilang).");
             }
+        }
+
+        if ($this->option('abaikan-ssl')) {
+            $this->tulisEnv(base_path('.env'), ['PUSAT_WEBHOOK_VERIFY_SSL' => 'false']);
+            $this->warn('Pemeriksaan sertifikat HTTPS dimatikan (khusus uji lokal). Jalankan php artisan config:clear di Pusat.');
         }
 
         if ($this->option('demo')) {

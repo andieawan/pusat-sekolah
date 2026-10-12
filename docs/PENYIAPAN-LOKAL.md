@@ -97,6 +97,7 @@ Perintah ini ditolak di lingkungan `production`. Di server sungguhan pakai `php 
 | `could not find driver` | Aktifkan ekstensi `pdo_mysql` (langkah 1.4), restart terminal |
 | Setelah login langsung keluar / "Page Expired" | `SESSION_SECURE_COOKIE=false`, `SESSION_COOKIE` unik per aplikasi, hapus cookie 127.0.0.1 di browser |
 | SSO: redirect_uri tidak cocok | Alamat di pendaftaran harus sama persis dengan `APP_URL` aplikasi (`127.0.0.1`, port benar, tanpa garis miring akhir) |
+| `cURL error 60: self-signed certificate` (Uji koneksi gagal) | Sertifikat HTTPS lokal buatan sendiri tidak dipercaya PHP. Pilih satu: (a) pakai `http://` untuk `PUSAT_URL` bila situs bisa dibuka lewat http; (b) `PUSAT_CA_BUNDLE=C:\\path\\rootCA.pem` (CA lokal envkit/mkcert, pemeriksaan tetap aktif); (c) khusus uji lokal `PUSAT_VERIFY_SSL=false`. Di Pusat untuk webhook ke aplikasi: `PUSAT_WEBHOOK_VERIFY_SSL=false` atau `PUSAT_WEBHOOK_CA_BUNDLE=...`. Lalu `php artisan config:clear` |
 | Port sudah dipakai | Ganti `--port=` dan sesuaikan `.env` + pendaftaran |
 | Webhook tidak terkirim | Terminal `schedule:work` belum jalan, atau aplikasi tujuan belum di-serve |
 | Perubahan `.env` tidak terbaca | `php artisan config:clear` |

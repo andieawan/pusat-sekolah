@@ -41,6 +41,7 @@ class WebhookPengirim
                 'User-Agent' => 'PusatSekolah-Webhook/1.0',
             ])
                 ->withBody($badan, 'application/json')
+                ->withOptions(['verify' => config('pusat.webhook.ca_bundle') ?: (bool) config('pusat.webhook.verify_ssl')])
                 ->timeout((int) config('pusat.webhook.timeout'))
                 ->connectTimeout((int) config('pusat.webhook.connect_timeout'))
                 ->post($app->webhook_url);
