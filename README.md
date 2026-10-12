@@ -77,6 +77,7 @@ Data induk (CRUD + impor CSV dengan pratinjau), akun & peran per aplikasi, aplik
 
 ## Dokumen
 
+- `docs/PANDUAN-PENGGUNAAN.md` — cara memakai Pusat dan aplikasi bawahannya
 - `docs/PENYIAPAN-VM.md` — tutorial penyiapan VM
 - `docs/api.md` — kontrak API & webhook
 - `docs/integrasi.md` — cara menyambungkan sebuah aplikasi (SSO, penerima webhook, sinkron data) + contoh PHP/Laravel
