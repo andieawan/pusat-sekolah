@@ -69,16 +69,23 @@ php artisan schedule:work            # terminal 2 — pengirim webhook (tiap men
 ```
 Buka http://127.0.0.1:8000/login dan masuk. Menu **Admin → Webhook → Kirim sekarang** juga bisa dipakai tanpa terminal 2.
 
-## 7. Daftarkan aplikasi lain
-Contoh Absensi (di folder Pusat):
+## 7. Daftarkan aplikasi lain (otomatis)
+Satu perintah mendaftarkan Absensi (dan Website, bila diberi `--web-url`), mengisi data contoh, dan **menulis kredensialnya langsung ke `.env` aplikasi itu**. Aman diulang.
 ```bash
-php artisan pusat:aplikasi-baru absensi --base-url=http://127.0.0.1:8001 --redirect=http://127.0.0.1:8001/sso/callback --webhook=http://127.0.0.1:8001/api/pusat/webhook
+php artisan pusat:siapkan-lokal --absensi-url=http://127.0.0.1:8001 --env-absensi=C:\laragon\www\absensi-pusat\.env --demo
 ```
-Website:
-```bash
-php artisan pusat:aplikasi-baru web --base-url=http://127.0.0.1:8002 --redirect=http://127.0.0.1:8002/pusat/callback --webhook=http://127.0.0.1:8002/pusat/webhook
-```
-Catat `client_id`, `client_secret`, `webhook_secret` (tampil sekali) lalu isi ke `.env` aplikasi tersebut. Lupa/hilang: Admin → Aplikasi → rotasi rahasia.
+Ganti `--absensi-url` dengan alamat Absensi Anda yang sebenarnya (mis. `http://absensi-pusat.test`) dan `--env-absensi` dengan path `.env`-nya. Opsi lain:
+
+| Opsi | Fungsi |
+|---|---|
+| `--web-url=http://127.0.0.1:8002 --env-web=...\.env` | ikut mendaftarkan Website |
+| `--pusat-url=http://pusat-sekolah.test` | alamat Pusat yang dilihat aplikasi lain (bawaan: `APP_URL` Pusat) |
+| `--demo` | 3 guru, 2 kelas, 10 siswa contoh + akun `guru.demo` (peran guru di Absensi; password acak ditampilkan sekali) |
+| `--putar` | buat rahasia baru bila lupa/hilang (rahasia lama tidak berlaku) |
+
+Perintah menulis `PUSAT_ENABLED`, `PUSAT_URL`, `PUSAT_CLIENT_ID`, `PUSAT_CLIENT_SECRET`, `PUSAT_WEBHOOK_SECRET` ke `.env` target (cadangan: `.env.bak-pusat`; isi lain tidak disentuh). Lalu di aplikasi itu jalankan `php artisan config:clear`. Akun **superadmin Pusat otomatis berperan "admin" di semua aplikasi**, jadi langsung bisa masuk lewat tombol "Masuk lewat Pusat".
+
+Perintah ini ditolak di lingkungan `production`. Di server sungguhan pakai `php artisan pusat:aplikasi-baru` (lihat `README.md`).
 
 ## 8. Menjalankan tes (opsional)
 `php artisan test` (setelah `composer install` dengan paket dev). Tes memakai SQLite memori, tidak menyentuh database `pusat`.

@@ -32,6 +32,7 @@ return [
     'aplikasi_bawaan' => [
         'absensi' => [
             'nama' => 'Absensi Siswa',
+            'webhook_path' => '/api/pusat/webhook', // klien Absensi menerima di route API
             'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
             'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun'],
         ],

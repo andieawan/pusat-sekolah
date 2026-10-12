@@ -50,6 +50,8 @@ Menjalankan `webhook:kirim` tiap menit dan `pusat:bersihkan` (hapus kode/token k
 
 ## Mendaftarkan aplikasi
 
+> Uji coba lokal? Cukup `php artisan pusat:siapkan-lokal --demo` (lihat `docs/PENYIAPAN-LOKAL.md`).
+
 ```bash
 php artisan pusat:aplikasi-baru absensi \
   --base-url=https://absensi.smkibu.example \
