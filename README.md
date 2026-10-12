@@ -8,6 +8,7 @@ Laravel 13 · PHP 8.3+ · MySQL 8 / MariaDB 10.6+ · tanpa proses build front-en
 
 ## Pasang di VM Ubuntu
 
+> Mau coba dulu di komputer Windows tanpa VM: [`docs/PENYIAPAN-LOKAL.md`](docs/PENYIAPAN-LOKAL.md).
 > Tutorial lengkap dari nol (Proxmox → Nginx → HTTPS → cron → backup): [`docs/PENYIAPAN-VM.md`](docs/PENYIAPAN-VM.md).
 
 ```bash
