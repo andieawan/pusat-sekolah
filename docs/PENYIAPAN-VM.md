@@ -43,6 +43,9 @@ EXIT;
 ```
 
 ## 4. Ambil kode
+
+> **`vendor/` sudah ikut di repo** (dibuat dengan `composer install --no-dev`, PHP 8.3). Setelah `git clone`, langkah `composer install` boleh dilewati. Jalankan `composer install` hanya untuk menjalankan tes (butuh paket dev) atau setelah `composer.json` berubah; untuk memperbarui `vendor/` di repo, jalankan workflow **Bundel vendor** (tab Actions di GitHub).
+
 ```bash
 sudo mkdir -p /var/www/pusat-sekolah && sudo chown $USER:$USER /var/www/pusat-sekolah
 git clone https://github.com/andieawan/pusat-sekolah.git /var/www/pusat-sekolah

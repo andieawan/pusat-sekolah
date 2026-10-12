@@ -20,6 +20,9 @@ Pasang Pusat dulu, lalu aplikasi lain (panduan di repo masing-masing: `docs/PENY
 Semua perintah di bawah dijalankan di **Terminal Laragon**, satu per satu.
 
 ## 2. Ambil kode Pusat
+
+> **`vendor/` sudah ikut di repo** (dibuat dengan `composer install --no-dev`, PHP 8.3). Setelah `git clone`, langkah `composer install` boleh dilewati. Jalankan `composer install` hanya untuk menjalankan tes (butuh paket dev) atau setelah `composer.json` berubah; untuk memperbarui `vendor/` di repo, jalankan workflow **Bundel vendor** (tab Actions di GitHub).
+
 ```bash
 cd C:\laragon\www
 git clone https://github.com/andieawan/pusat-sekolah.git
