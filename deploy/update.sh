@@ -8,9 +8,10 @@ OWNER="$(stat -c %U "$APP")"; as_owner() { sudo -u "$OWNER" -H "$@"; }
 trap 'php artisan up >/dev/null 2>&1 || true' EXIT
 echo "==> Backup database"; bash deploy/backup.sh
 php artisan down --retry=30 >/dev/null 2>&1 || true
-echo "==> git pull + composer"; as_owner git pull --ff-only; as_owner composer install --no-dev --optimize-autoloader --no-interaction
+echo "==> git pull + composer"; as_owner git ls-files -m -- vendor | as_owner xargs -r git checkout --; as_owner git pull --ff-only; as_owner composer install --no-dev --optimize-autoloader --no-interaction
 echo "==> migrate"; php artisan migrate --force
 php artisan optimize:clear; php artisan config:cache; php artisan route:cache; php artisan view:cache
 chown -R "$OWNER":www-data storage bootstrap/cache; chmod -R ug+rwX storage bootstrap/cache
 systemctl reload "$(systemctl list-units --type=service --no-legend 'php*-fpm.service' | awk 'NR==1{print $1}')" || true
+sudo -u "$OWNER" -H php artisan pusat:periksa || echo "PERHATIAN: ada masalah di atas — perbaiki sebelum dipakai."
 echo "Selesai."
