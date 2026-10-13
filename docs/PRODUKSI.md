@@ -8,7 +8,7 @@ pemeriksaan (✔) — jangan lanjut sebelum ✔ lulus. Langkah rinci pemasangan 
 
 | Siapkan | Catatan |
 |---|---|
-| 3 VM/alamat | mis. `pusat.…`, `absensi.…`, `www.…` — **masing-masing domain HTTPS sendiri** (jangan satu domain berbagi path) |
+| 3 subdomain | `pusat.smkibupakusari.sch.id`, `absensi.smkibupakusari.sch.id`, dan website di `smkibupakusari.sch.id` (+`www` diarahkan ke situ) — **masing-masing HTTPS sendiri** (jangan satu domain berbagi path) |
 | Sertifikat HTTPS **sah** | Let's Encrypt lewat NPMplus. Jangan sertifikat buatan sendiri di produksi |
 | PHP 8.3+ | Ubuntu 24.04 = 8.3, 26.04 = 8.5. Paket: `php-fpm php-cli php-mysql php-mbstring php-xml php-curl php-zip php-gd` |
 | Token GitHub (repo private) | Fine-grained, **Contents: read-only**. Jangan ditempel di chat/dokumen |
@@ -16,7 +16,14 @@ pemeriksaan (✔) — jangan lanjut sebelum ✔ lulus. Langkah rinci pemasangan 
 
 > **Hairpin NAT:** bila semua VM satu LAN tetapi domain publik lewat router/NPMplus, VM kadang tak bisa membuka
 > domain publiknya sendiri (timeout, "cURL error 28"). Solusi: tambahkan di `/etc/hosts` tiap VM
-> `IP-NPMplus  pusat.sekolah.sch.id absensi.sekolah.sch.id www.sekolah.sch.id`, atau pakai DNS lokal.
+> `IP-NPMplus  pusat.smkibupakusari.sch.id absensi.smkibupakusari.sch.id smkibupakusari.sch.id`, atau pakai DNS lokal.
+
+### DNS (Cloudflare) dan NPMplus
+
+Buat record `A`/`CNAME` untuk `pusat`, `absensi`, `@` (website) dan `www` ke IP publik/tunnel yang sama. Di NPMplus buat satu
+Proxy Host per subdomain → teruskan ke IP VM masing-masing (port 80), centang *Force SSL* + *HTTP/2*, minta sertifikat
+Let's Encrypt. Bila memakai proxy Cloudflare (awan oranye), mode SSL harus **Full (strict)**. Lalu isi `TRUSTED_PROXIES`
+di tiap VM dengan IP NPMplus. Cookie sesi tiap subdomain terpisah (jangan isi `SESSION_DOMAIN`).
 
 ## 1. Pasang Pusat  (`PENYIAPAN-VM.md`)
 
@@ -43,9 +50,9 @@ Isi **alamat produksi** (https) — bukan alamat uji:
 | Kolom | Absensi | Website |
 |---|---|---|
 | Kode | `absensi` | `web` |
-| URL dasar | `https://absensi.sekolah.sch.id` | `https://www.sekolah.sch.id` |
-| Redirect URI | `https://absensi.sekolah.sch.id/sso/callback` | `https://www.sekolah.sch.id/pusat/callback` |
-| URL webhook | `https://absensi.sekolah.sch.id/api/pusat/webhook` | `https://www.sekolah.sch.id/pusat/webhook` |
+| URL dasar | `https://absensi.smkibupakusari.sch.id` | `https://smkibupakusari.sch.id` |
+| Redirect URI | `https://absensi.smkibupakusari.sch.id/sso/callback` | `https://smkibupakusari.sch.id/pusat/callback` |
+| URL webhook | `https://absensi.smkibupakusari.sch.id/api/pusat/webhook` | `https://smkibupakusari.sch.id/pusat/webhook` |
 
 Redirect URI harus **persis sama** (https/http, www, tanpa garis miring di akhir). Salin **Client ID**, **Client Secret**
 dan **Webhook Secret** — secret hanya tampil sekali. Beri tiap pengguna akses/peran di menu Akses
@@ -57,7 +64,7 @@ Di `.env` Absensi:
 
 ```
 PUSAT_ENABLED=true
-PUSAT_URL=https://pusat.sekolah.sch.id
+PUSAT_URL=https://pusat.smkibupakusari.sch.id
 PUSAT_CLIENT_ID=…
 PUSAT_CLIENT_SECRET=…
 PUSAT_WEBHOOK_SECRET=…

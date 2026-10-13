@@ -2,7 +2,7 @@
 
 Pusat adalah aplikasi **pertama yang dipasang**: aplikasi lain (Absensi, Website, dst.) mendaftar ke sini.
 Target: VM **Ubuntu Server 26.04 LTS** (PHP 8.5; 24.04 dengan PHP 8.3 juga bisa), **Nginx + PHP-FPM + MariaDB**, dipublikasikan lewat NPMplus/Cloudflare.
-Semua perintah dijalankan sebagai user biasa yang punya `sudo`. Ganti `pusat.sekolah.sch.id` dengan domain Anda.
+Semua perintah dijalankan sebagai user biasa yang punya `sudo`. Domain yang dipakai: `smkibupakusari.sch.id` (subdomain per aplikasi).
 
 ## Urutan pemasangan seluruh sistem
 1. **Pusat** (panduan ini) → 2. **Absensi** (`docs/UBUNTU.md` di repo absensi-pusat) → 3. **Website** (`deploy/PANDUAN-VM.md` di repo web-pusat).
@@ -62,7 +62,7 @@ composer install --no-dev --optimize-autoloader
 ```bash
 cp .env.example .env && php artisan key:generate && nano .env
 ```
-Yang wajib: `APP_URL=https://pusat.sekolah.sch.id`, `DB_PASSWORD=...`, `TRUSTED_PROXIES=<IP NPMplus>` (satu IP persis),
+Yang wajib: `APP_URL=https://pusat.smkibupakusari.sch.id`, `DB_PASSWORD=...`, `TRUSTED_PROXIES=<IP NPMplus>` (satu IP persis),
 `SESSION_SECURE_COOKIE=true` (ubah ke `false` bila sementara dibuka lewat `http://IP`).
 
 ## 6. Izin folder, tabel, akun superadmin
@@ -87,8 +87,8 @@ sudo nginx -t && sudo systemctl reload nginx
 Tes dari VM: `curl -I http://localhost/login` → harus `200`.
 
 ## 8. HTTPS / publikasi
-- **Lewat NPMplus (disarankan):** Proxy Host → domain `pusat.sekolah.sch.id` → Forward `http://IP-VM:80` → tab SSL: Request certificate, *Force SSL*. DNS Cloudflare awalnya **DNS only**.
-- **Langsung Let's Encrypt:** `sudo apt -y install certbot python3-certbot-nginx && sudo certbot --nginx -d pusat.sekolah.sch.id`.
+- **Lewat NPMplus (disarankan):** Proxy Host → domain `pusat.smkibupakusari.sch.id` → Forward `http://IP-VM:80` → tab SSL: Request certificate, *Force SSL*. DNS Cloudflare awalnya **DNS only**.
+- **Langsung Let's Encrypt:** `sudo apt -y install certbot python3-certbot-nginx && sudo certbot --nginx -d pusat.smkibupakusari.sch.id`.
 - **Hanya jaringan lokal:** pakai `http://IP-VM`, `SESSION_SECURE_COOKIE=false`. Aplikasi lain tetap bisa tersambung di LAN, tetapi SSO yang melewati internet sebaiknya HTTPS.
 
 Setelah mengubah `.env`: `php artisan config:cache`.
@@ -114,16 +114,16 @@ Pulihkan: `gunzip < pusat_TANGGAL.sql.gz | mysql -u pusat -p pusat`.
 ```bash
 composer install && php artisan test       # opsional, butuh paket dev; lalu composer install --no-dev lagi
 php artisan pusat:aplikasi-baru absensi \
-  --base-url=https://absensi.sekolah.sch.id \
-  --redirect=https://absensi.sekolah.sch.id/sso/callback \
-  --webhook=https://absensi.sekolah.sch.id/api/pusat/webhook
+  --base-url=https://absensi.smkibupakusari.sch.id \
+  --redirect=https://absensi.smkibupakusari.sch.id/sso/callback \
+  --webhook=https://absensi.smkibupakusari.sch.id/api/pusat/webhook
 ```
 Perintah mencetak `client_id`, `client_secret`, `webhook_secret` **sekali saja** — salin ke `.env` aplikasi tersebut
 (lihat panduan masing-masing). Untuk Website: `pusat:aplikasi-baru web ... --redirect=https://WEBSITE/pusat/callback --webhook=https://WEBSITE/pusat/webhook`.
 Lalu isi data induk lewat Admin → Impor (urutan: **guru → kelas → siswa**).
 
 ## 12. Cek akhir
-- [ ] `https://pusat.sekolah.sch.id/login` terbuka (gembok hijau), login superadmin berhasil.
+- [ ] `https://pusat.smkibupakusari.sch.id/login` terbuka (gembok hijau), login superadmin berhasil.
 - [ ] Cron `schedule:run` terpasang; Admin → Webhook tidak menumpuk.
 - [ ] Admin → Aplikasi: tombol **ping** ke aplikasi terdaftar berhasil.
 - [ ] Backup pertama: `sudo bash deploy/backup.sh` menghasilkan berkas di `/var/backups/pusat`.
