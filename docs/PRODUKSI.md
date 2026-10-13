@@ -18,6 +18,23 @@ pemeriksaan (✔) — jangan lanjut sebelum ✔ lulus. Langkah rinci pemasangan 
 > domain publiknya sendiri (timeout, "cURL error 28"). Solusi: tambahkan di `/etc/hosts` tiap VM
 > `IP-NPMplus  pusat.smkibupakusari.sch.id absensi.smkibupakusari.sch.id smkibupakusari.sch.id`, atau pakai DNS lokal.
 
+### Susunan: 1 aplikasi = 1 VM
+
+| VM | Isi | Domain | Saran awal |
+|---|---|---|---|
+| vm-pusat | Pusat + MariaDB + cron | `pusat.smkibupakusari.sch.id` | 1–2 vCPU, 2 GB RAM, 20 GB |
+| vm-absensi | Absensi + MariaDB + cron | `absensi.smkibupakusari.sch.id` | 2 vCPU, 2–4 GB RAM, 30 GB |
+| vm-web | Website + MariaDB | `smkibupakusari.sch.id` | 1–2 vCPU, 2 GB RAM, 20–30 GB |
+
+Aturan jaringan (beri IP tetap/DHCP reservasi untuk tiap VM):
+- NPMplus → tiap VM: port 80 (HTTP biasa; HTTPS berhenti di NPMplus).
+- Antar-VM: **tidak perlu** akses langsung. Absensi/Website memanggil Pusat, dan Pusat mengirim webhook ke Absensi/Website,
+  semuanya **lewat domain HTTPS** (jadi lewat NPMplus). Karena itu tiap VM wajib bisa me-resolve ketiga subdomain
+  (DNS lokal atau `/etc/hosts` → IP NPMplus; lihat catatan hairpin di bawah).
+- Firewall tiap VM (`ufw`): `sudo ufw allow from <IP-NPMplus> to any port 80 proto tcp`, `sudo ufw allow from <IP-admin> to any port 22 proto tcp`, `sudo ufw enable`.
+  Database dibiarkan hanya di `127.0.0.1` (default MariaDB) — tiap VM punya database sendiri.
+- Tiap VM punya cron `schedule:run` dan backup sendiri; Pusat dan Absensi sebaiknya di-backup ke tempat berbeda dari VM-nya.
+
 ### DNS (Cloudflare) dan NPMplus
 
 Buat record `A`/`CNAME` untuk `pusat`, `absensi`, `@` (website) dan `www` ke IP publik/tunnel yang sama. Di NPMplus buat satu
