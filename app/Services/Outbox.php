@@ -66,16 +66,19 @@ final class Outbox
         }
     }
 
-    /** Data akun (nama/email/aktif) berubah: kabarkan ke semua aplikasi tempat akun punya akses. */
+    /** Data akun (nama/email/aktif/superadmin) berubah: kabarkan ke semua aplikasi tempat akun punya akses (superadmin: semua aplikasi). */
     public static function akun(User $u): void
     {
         try {
-            $u->akses()->get()->groupBy('aplikasi_id')->each(function ($baris, $aplikasiId) use ($u) {
-                $app = Aplikasi::find($aplikasiId);
-                if ($app && $app->aktif && $app->webhook_url && $app->punyaScope('akun')) {
-                    self::antre($app, 'akun.diperbarui', Representasi::akun($u, $baris->pluck('peran')->all()));
+            $ids = $u->akses()->pluck('aplikasi_id')->unique()->all();
+            $aplikasi = Aplikasi::where('aktif', true)->whereNotNull('webhook_url')
+                ->when(! $u->superadmin, fn ($q) => $q->whereIn('id', $ids))
+                ->get();
+            foreach ($aplikasi as $app) {
+                if ($app->punyaScope('akun')) {
+                    self::antre($app, 'akun.diperbarui', Representasi::akun($u, $u->peranUntuk($app)));
                 }
-            });
+            }
         } catch (Throwable $e) {
             report($e);
         }

@@ -81,6 +81,9 @@ class AkunController extends Controller
             return back()->with('galat', 'Anda tidak bisa menghapus akun sendiri.');
         }
         Audit::catat('akun.dihapus', $akun->username);
+        if ($akun->aktif) {
+            $akun->update(['aktif' => false]); // kabarkan aplikasi (webhook) & cabut token sebelum akun hilang
+        }
         $akun->delete(); // akses & token ikut terhapus (cascade)
 
         return redirect()->route('admin.akun.index')->with('sukses', 'Akun dihapus.');

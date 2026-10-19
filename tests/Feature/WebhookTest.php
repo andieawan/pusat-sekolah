@@ -31,6 +31,24 @@ class WebhookTest extends PakaiData
         $this->assertSame('pending', $o[0]->status);
     }
 
+    public function test_superadmin_tanpa_akses_eksplisit_tetap_dikabari_dan_hapus_akun_memberi_tahu_aplikasi(): void
+    {
+        [$app] = $this->appDenganWebhook();
+        $u = $this->buatUser(['superadmin' => true]);
+
+        $u->update(['superadmin' => false]); // peran admin implisit hilang -> peran kosong
+        $o = WebhookOutbox::where('event', 'akun.diperbarui')->latest('id')->first();
+        $this->assertNotNull($o);
+        $this->assertSame([], $o->payload['data']['peran']);
+
+        $u2 = $this->buatUser([], $app, ['guru']);
+        WebhookOutbox::query()->delete();
+        $this->actingAs($this->buatUser(['superadmin' => true]))->delete(route('admin.akun.destroy', $u2));
+        $o = WebhookOutbox::where('event', 'akun.diperbarui')->first();
+        $this->assertNotNull($o);
+        $this->assertFalse($o->payload['data']['aktif']);
+    }
+
     public function test_pengiriman_menyertakan_tanda_tangan_yang_valid(): void
     {
         Http::fake(['*' => Http::response('ok', 200)]);

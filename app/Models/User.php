@@ -35,7 +35,7 @@ class User extends Authenticatable
             if ($u->wasChanged('aktif') && ! $u->aktif) {
                 app(SsoService::class)->cabutUser($u); // akun nonaktif: semua token mati
             }
-            if ($u->wasChanged(['aktif', 'nama', 'email'])) {
+            if ($u->wasChanged(['aktif', 'nama', 'email', 'superadmin'])) {
                 Outbox::akun($u);
             }
         });

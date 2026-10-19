@@ -31,6 +31,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'app.client' => AuthAplikasi::class,
             'superadmin' => HanyaSuperadmin::class,
+            'akun.aktif' => \App\Http\Middleware\AkunAktif::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

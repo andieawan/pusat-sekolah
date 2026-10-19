@@ -24,7 +24,7 @@ Route::get('/sso/authorize', [SsoController::class, 'otorisasi'])->name('sso.aut
 Route::get('/sso/logout', [SsoController::class, 'keluar'])->name('sso.logout');
 
 // --- Sudah login ---
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::get('/', fn () => redirect()->route('portal'));
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/portal', [PortalController::class, 'index'])->name('portal');
