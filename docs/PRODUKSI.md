@@ -132,6 +132,13 @@ penautan pertama berdasarkan **email**, jadi email di Pusat harus sama dengan em
 | Webhook tak sampai | cron `schedule:run` belum jalan, atau URL/secret webhook salah | cek crontab; `pusat:periksa` |
 | `git pull` gagal "local changes … vendor" | composer mengubah berkas di vendor/ | `git ls-files -m -- vendor \| xargs git checkout --` (sudah otomatis di `update.sh`) |
 | `git clone` "Password authentication is not supported" | repo private | pakai token (lihat langkah clone di panduan) |
+| Halaman Laravel "419" saat login lewat `http://IP` | `SESSION_SECURE_COOKIE=true` tetapi akses http | set `false` untuk uji http; kembalikan `true` setelah HTTPS |
+| Tampilan polos (tanpa CSS) lewat HTTPS | aset dibuat `http://` (mixed content) karena proxy tak tepercaya | `git pull` (Absensi memaksa https bila `APP_URL` https); isi `TRUSTED_PROXIES` dengan IP NPMplus dari `access.log` |
+| `dubious ownership` / `Permission denied` di `vendor/` | folder di-clone dengan `sudo` (milik root) | `sudo chown -R $USER:www-data /var/www/<folder>`; clone tanpa sudo |
+| `Unable to set application key` | cache konfigurasi lama / `.env` rusak saat tempel banyak baris ke nano | `cp .env.example .env`, `php artisan config:clear`, lalu isi satu per satu |
+| `Access denied ... using password: NO/YES` | `DB_PASSWORD` kosong/beda dari MariaDB | buat ulang user dengan password acak (lihat `PENYIAPAN-VM.md`) |
+| Pusat: "redirect_uri tidak terdaftar" | Redirect URI di Pusat ≠ alamat callback yang dikirim klien | samakan persis, pakai https & domain, bukan IP |
+| Webhook `ping` HTTP 404 | `PUSAT_ENABLED=false` atau secret kosong di klien | isi `.env` klien, `config:clear`, kirim ulang di Pusat → Webhook |
 
 ## 8. Alat khusus uji lokal — JANGAN dipakai di produksi
 
