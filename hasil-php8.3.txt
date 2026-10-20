@@ -3,21 +3,8 @@ PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.3.35
 Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 
-........F......................F....                              36 / 36 (100%)
+....................................                              36 / 36 (100%)
 
-Time: 00:02.119, Memory: 58.50 MB
+Time: 00:02.169, Memory: 58.50 MB
 
-There were 2 failures:
-
-1) Tests\Feature\AdminAksesTest::test_impor_kelas_menautkan_jurusan_wali_dan_tahun_aktif
-Failed asserting that 3 is identical to 1.
-
-/home/runner/work/pusat-sekolah/pusat-sekolah/tests/Feature/AdminAksesTest.php:95
-
-2) Tests\Feature\WebhookTest::test_superadmin_tanpa_akses_eksplisit_tetap_dikabari_dan_hapus_akun_memberi_tahu_aplikasi
-Failed asserting that null is not null.
-
-/home/runner/work/pusat-sekolah/pusat-sekolah/tests/Feature/WebhookTest.php:41
-
-FAILURES!
-Tests: 36, Assertions: 119, Failures: 2.
+OK (36 tests, 127 assertions)
