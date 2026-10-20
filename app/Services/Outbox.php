@@ -67,12 +67,12 @@ final class Outbox
     }
 
     /** Data akun (nama/email/aktif/superadmin) berubah: kabarkan ke semua aplikasi tempat akun punya akses (superadmin: semua aplikasi). */
-    public static function akun(User $u): void
+    public static function akun(User $u, bool $semuaAplikasi = false): void
     {
         try {
             $ids = $u->akses()->pluck('aplikasi_id')->unique()->all();
             $aplikasi = Aplikasi::where('aktif', true)->whereNotNull('webhook_url')
-                ->when(! $u->superadmin, fn ($q) => $q->whereIn('id', $ids))
+                ->when(! $u->superadmin && ! $semuaAplikasi, fn ($q) => $q->whereIn('id', $ids))
                 ->get();
             foreach ($aplikasi as $app) {
                 if ($app->punyaScope('akun')) {

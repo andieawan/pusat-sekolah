@@ -36,7 +36,8 @@ class User extends Authenticatable
                 app(SsoService::class)->cabutUser($u); // akun nonaktif: semua token mati
             }
             if ($u->wasChanged(['aktif', 'nama', 'email', 'superadmin'])) {
-                Outbox::akun($u);
+                // Status superadmin baru dicabut: kabari SEMUA aplikasi (peran admin implisit hilang di sana).
+                Outbox::akun($u, $u->wasChanged('superadmin') && (bool) $u->getOriginal('superadmin'));
             }
         });
     }

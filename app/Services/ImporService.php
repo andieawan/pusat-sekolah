@@ -68,11 +68,13 @@ class ImporService
             }
         });
 
+        // Satu baris bisa punya beberapa galat; yang dilaporkan adalah jumlah BARIS yang dilewati.
+        $barisGalat = count(array_unique(array_column($r['galat'], 'baris')));
         Audit::catat('impor.'.$sumber, null, [
-            'baru' => $r['baru'], 'ubah' => $r['ubah'], 'sama' => $r['sama'], 'galat' => count($r['galat']),
+            'baru' => $r['baru'], 'ubah' => $r['ubah'], 'sama' => $r['sama'], 'galat' => $barisGalat,
         ]);
 
-        return ['baru' => $r['baru'], 'ubah' => $r['ubah'], 'sama' => $r['sama'], 'galat' => count($r['galat'])];
+        return ['baru' => $r['baru'], 'ubah' => $r['ubah'], 'sama' => $r['sama'], 'galat' => $barisGalat];
     }
 
     private function rencanaSiswa(array $baris): array
