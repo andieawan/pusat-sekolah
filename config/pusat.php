@@ -56,8 +56,10 @@ return [
         ],
         'pkl' => [
             'nama' => 'Manajemen PKL',
+            'webhook_path' => '/api/pusat/webhook',
+            // siswa lengkap: nomor HP siswa untuk dihubungi pembimbing; pembimbing industri memakai akun lokal di aplikasi PKL
             'peran' => ['admin', 'koordinator', 'guru_pembimbing', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa_dasar', 'pegawai_dasar', 'akun'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai_dasar', 'akun'],
         ],
         'web' => [
             'nama' => 'Website Sekolah',
