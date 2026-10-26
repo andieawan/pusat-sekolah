@@ -14,4 +14,9 @@ php artisan optimize:clear; php artisan config:cache; php artisan route:cache; p
 chown -R "$OWNER":www-data storage bootstrap/cache; chmod -R ug+rwX storage bootstrap/cache
 systemctl reload "$(systemctl list-units --type=service --no-legend 'php*-fpm.service' | awk 'NR==1{print $1}')" || true
 sudo -u "$OWNER" -H php artisan pusat:periksa || echo "PERHATIAN: ada masalah di atas — perbaiki sebelum dipakai."
+# Jadwal backup harian 01:15 (dipasang sekali; tidak menimpa jadwal yang sudah diatur)
+if [ ! -f /etc/cron.d/pusat-backup ]; then
+    echo "15 1 * * * root bash $APP/deploy/backup.sh >> /var/log/pusat-backup.log 2>&1" > /etc/cron.d/pusat-backup
+    chmod 644 /etc/cron.d/pusat-backup; echo "==> Jadwal backup harian dipasang (/etc/cron.d/pusat-backup)"
+fi
 echo "Selesai."
