@@ -42,11 +42,14 @@ return [
         ],
         'bk' => [
             'nama' => 'Bimbingan Konseling',
-            'peran' => ['guru_bk', 'wali_kelas', 'kepsek', 'admin'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai_dasar', 'akun'],
+            'webhook_path' => '/api/pusat/webhook',
+            // sesuai peta peran aplikasi BK; wali kelas otomatis dari data kelas (cukup peran guru)
+            'peran' => ['bk', 'kepsek', 'admin', 'guru'],
+            'scope' => ['tahun_ajaran', 'kelas', 'siswa', 'akun'],
         ],
         'tu' => [
             'nama' => 'Tata Usaha',
+            'webhook_path' => '/api/pusat/webhook',
             // pegawai = guru/staf yang absen mandiri di aplikasi TU
             'peran' => ['staf_tu', 'kepsek', 'admin', 'pegawai'],
             'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_tulis'],
