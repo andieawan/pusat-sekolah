@@ -3,16 +3,8 @@ PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.3.36
 Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 
-...................F..................                            38 / 38 (100%)
+......................................                            38 / 38 (100%)
 
-Time: 00:01.972, Memory: 58.50 MB
+Time: 00:02.094, Memory: 58.50 MB
 
-There was 1 failure:
-
-1) Tests\Feature\ProxyTest::test_proxy_tidak_tepercaya_diabaikan
-Failed asserting that true is false.
-
-/home/runner/work/pusat-sekolah/pusat-sekolah/tests/Feature/ProxyTest.php:36
-
-FAILURES!
-Tests: 38, Assertions: 132, Failures: 1.
+OK (38 tests, 133 assertions)
