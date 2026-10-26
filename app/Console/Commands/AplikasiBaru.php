@@ -12,8 +12,8 @@ class AplikasiBaru extends Command
 {
     protected $signature = 'pusat:aplikasi-baru {kode : mis. absensi, bk, tu, pkl, web}
                             {--base-url= : URL aplikasi, mis. https://absensi.smkibupakusari.sch.id}
-                            {--redirect= : Redirect URI SSO (bawaan: {base-url}/sso/callback)}
-                            {--webhook= : URL penerima webhook (bawaan: {base-url}/pusat/webhook; Absensi: {base-url}/api/pusat/webhook)}';
+                            {--redirect= : Redirect URI SSO (bawaan: <base-url>/sso/callback)}
+                            {--webhook= : URL penerima webhook (bawaan: <base-url>/pusat/webhook; Absensi: <base-url>/api/pusat/webhook)}';
 
     protected $description = 'Daftarkan aplikasi dengan pengaturan bawaan, lalu tampilkan kredensialnya SEKALI';
 
