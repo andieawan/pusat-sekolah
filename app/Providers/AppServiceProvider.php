@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Proxy tepercaya dari config (lihat config/app.php: trusted_proxies).
+        if ($proxi = trim((string) config('app.trusted_proxies'))) {
+            \Illuminate\Http\Middleware\TrustProxies::at($proxi === '*' ? '*' : array_map('trim', explode(',', $proxi)));
+        }
         // Endpoint token/userinfo SSO: dibatasi per IP.
         RateLimiter::for('sso-token', fn (Request $r) => Limit::perMinute(60)->by($r->ip()));
 

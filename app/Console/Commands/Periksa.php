@@ -74,7 +74,7 @@ class Periksa extends Command
             }
             config('pusat.webhook.verify_ssl') ? $this->ok('PUSAT_WEBHOOK_VERIFY_SSL aktif') : $this->gagalkan('PUSAT_WEBHOOK_VERIFY_SSL=false di produksi', 'Hapus baris itu dari .env');
         }
-        env('TRUSTED_PROXIES') ? $this->ok('TRUSTED_PROXIES = '.env('TRUSTED_PROXIES')) : $this->warn2('TRUSTED_PROXIES kosong', 'Jika di belakang NPMplus, isi IP-nya agar HTTPS & IP pengunjung terbaca benar');
+        config('app.trusted_proxies') ? $this->ok('TRUSTED_PROXIES = '.config('app.trusted_proxies')) : $this->warn2('TRUSTED_PROXIES kosong', 'Jika di belakang NPMplus, isi IP-nya agar HTTPS & IP pengunjung terbaca benar');
         if (config('session.driver') === 'file' && $prod) {
             $this->warn2('SESSION_DRIVER=file', 'Disarankan database');
         }

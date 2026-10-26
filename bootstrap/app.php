@@ -16,15 +16,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Di belakang NPMplus: isi TRUSTED_PROXIES dengan IP proxy (mis. 192.168.10.10) atau "*".
-        $proxy = env('TRUSTED_PROXIES');
-        $middleware->trustProxies(
-            at: $proxy === '*' ? '*' : ($proxy ? array_map('trim', explode(',', $proxy)) : null),
-            headers: Request::HEADER_X_FORWARDED_FOR
-                | Request::HEADER_X_FORWARDED_HOST
-                | Request::HEADER_X_FORWARDED_PORT
-                | Request::HEADER_X_FORWARDED_PROTO,
-        );
+        // Proxy tepercaya (TRUSTED_PROXIES) dipasang di AppServiceProvider dari config, bukan env() di sini:
+        // callback ini berjalan sebelum .env dimuat sehingga env() selalu kosong.
+        $middleware->trustProxies(headers: Request::HEADER_X_FORWARDED_FOR
+            | Request::HEADER_X_FORWARDED_HOST
+            | Request::HEADER_X_FORWARDED_PORT
+            | Request::HEADER_X_FORWARDED_PROTO);
 
         $middleware->append(HeaderKeamanan::class);
 
