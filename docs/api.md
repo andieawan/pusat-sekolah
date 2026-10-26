@@ -49,6 +49,15 @@ Simpan `meta.waktu_server` (dikurangi ±5 detik) sebagai `updated_since` sinkron
 - `GET /api/v1/ringkasan` (scope `ringkasan`) → agregat aman-publik (jumlah siswa per jurusan, dst.), cache 5 menit
 - `GET /api/v1/akun` (scope `akun`) → akun beserta peran di aplikasi pemanggil
 
+## Tulis siswa (scope `siswa_tulis`, untuk mutasi di Tata Usaha)
+
+- `POST /api/v1/siswa` `{nis, nama, jenis_kelamin: L|P, kelas_uuid, nisn?, tempat_lahir?, tanggal_lahir? (Y-m-d), no_hp?, no_hp_ortu?, nama_ortu?, petugas?}`
+  → `201 {"data": siswa}`. NIS yang sudah dipakai → `409 nis_sudah_ada`; NIS siswa yang pernah dihapus → dipulihkan (uuid sama).
+- `PATCH /api/v1/siswa/{uuid}` `{status?: aktif|lulus|pindah|keluar, kelas_uuid?, petugas?}` → `200 {"data": siswa}`.
+  Sengaja hanya status & kelas; nama/NIS/data pribadi diubah di panel Pusat.
+
+Setiap perubahan tercatat di Audit (aplikasi + `petugas`) dan dikirim sebagai webhook `siswa.*` ke aplikasi lain.
+
 ## Webhook
 
 `POST` ke `webhook_url` aplikasi, badan JSON `{"id","event","waktu","data":{...}}`.

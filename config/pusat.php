@@ -29,6 +29,7 @@ return [
         'pegawai' => 'Guru & staf (lengkap)',
         'akun' => 'Daftar akun & peran untuk aplikasi ini',
         'ringkasan' => 'Ringkasan statistik (aman untuk publik)',
+        'siswa_tulis' => 'Tambah siswa & ubah status/kelas (mutasi oleh Tata Usaha)',
     ],
 
     // Nilai awal saat mendaftarkan aplikasi baru di panel admin.
@@ -46,8 +47,9 @@ return [
         ],
         'tu' => [
             'nama' => 'Tata Usaha',
-            'peran' => ['staf_tu', 'kepsek', 'admin'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun'],
+            // pegawai = guru/staf yang absen mandiri di aplikasi TU
+            'peran' => ['staf_tu', 'kepsek', 'admin', 'pegawai'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_tulis'],
         ],
         'pkl' => [
             'nama' => 'Manajemen PKL',
