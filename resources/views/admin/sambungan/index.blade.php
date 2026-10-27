@@ -90,5 +90,5 @@
         </div>
     @endforeach
 
-    <p class="samar"><small>Aplikasi yang belum diperbarui (deploy/update.sh) akan mengabaikan kabar ini. Website tidak menerima webhook: ia mengambil sambungan setiap jam, atau segera saat tombol <em>Sinkron sekarang</em> di Website → Integrasi Pusat diklik.</small></p>
+    <p class="samar"><small>Aplikasi yang belum diperbarui (deploy/update.sh) akan mengabaikan kabar ini.</small></p>
 @endsection

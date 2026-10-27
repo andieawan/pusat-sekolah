@@ -30,7 +30,6 @@ Tombol lain:
 - Pusat menyimpan kunci terenkripsi (tabel `sambungan`). Webhook `sambungan.diperbarui` hanya berisi nama sambungan, **tanpa kunci**.
 - Aplikasi lalu mengambil sendiri `GET /api/v1/sambungan` (Basic client_id:client_secret) dan menyimpannya terenkripsi di
   `storage/app/sambungan-pusat.json`. Aplikasi juga mengambilnya saat sinkron (tiap jam / tombol Sinkron sekarang).
-  Website tidak menerima webhook, jadi mengandalkan sinkron tiap jam atau tombol Sinkron sekarang.
 - Nilai dari Pusat menimpa `.env` (`PKL_API_KUNCI_BK`, `PKL_URL`, `PKL_API_KEY`, `ABSENSI_URL`, `ABSENSI_API_KEY`, `TU_API_KUNCI_PKL`,
   `TU_URL`, `TU_API_KEY`, `PKL_MITRA_PUBLIK`). Selama sebuah sambungan belum pernah diatur dari Pusat, nilai `.env` tetap dipakai.
 - Kunci hanya berlaku satu arah dan satu keperluan (BK hanya bisa *membaca* data PKL; PKL hanya bisa *meminta nomor surat* di TU).
