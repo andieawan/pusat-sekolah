@@ -37,7 +37,7 @@ class KenaikanController extends Controller
     {
         $d = $request->validate(['nama' => ['required', 'string', 'max:20', 'regex:/^\d{4}\/\d{4}$/', 'unique:tahun_ajaran,nama']],
             ['nama.regex' => 'Format tahun ajaran: 2027/2028.', 'nama.unique' => 'Tahun ajaran itu sudah ada.']);
-        $t = TahunAjaran::create(['nama' => $d['nama'], 'aktif' => false]);
+        $t = TahunAjaran::create(['nama' => $d['nama'], 'semester' => 'Ganjil', 'aktif' => false]);
         Audit::catat('kenaikan.tahun_baru', $t->nama);
 
         return redirect()->route('admin.kenaikan.index', ['dari' => TahunAjaran::aktif()?->id, 'ke' => $t->id])

@@ -33,7 +33,7 @@
             <div class="baris">
                 <label>Guru BK (untuk tanda tangan surat BK)</label>
                 <div>{{ $guruBk ? implode(', ', $guruBk) : '—' }}</div>
-                <div class="samar">Otomatis: akun yang diberi peran <strong>bk</strong> di menu Akun.</div>
+                <div class="samar">Otomatis: akun yang diberi peran <strong>bk</strong> / <strong>guru_bk</strong> di menu Akun.</div>
             </div>
         </div>
 

@@ -116,6 +116,7 @@ final class Representasi
             'nama' => $t->nama,
             'mulai' => $t->mulai?->format('Y-m-d'),
             'selesai' => $t->selesai?->format('Y-m-d'),
+            'semester' => $t->semester ?: 'Ganjil',
             'aktif' => (bool) $t->aktif,
             'diperbarui' => self::waktu($t->updated_at),
             'dihapus' => self::waktu($t->deleted_at),

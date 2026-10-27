@@ -38,7 +38,7 @@ final class ProfilSekolah
     /** Nama guru yang berperan BK (di aplikasi mana pun), untuk surat-surat BK. @return string[] */
     public static function guruBk(): array
     {
-        return User::where('aktif', true)->whereHas('akses', fn ($q) => $q->where('peran', 'bk'))->with('pegawai')->orderBy('nama')->get()
+        return User::where('aktif', true)->whereHas('akses', fn ($q) => $q->whereIn('peran', ['bk', 'guru_bk']))->with('pegawai')->orderBy('nama')->get()
             ->map(fn ($u) => $u->pegawai?->nama ?? $u->nama)->unique()->values()->all();
     }
 

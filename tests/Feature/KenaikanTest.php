@@ -59,4 +59,17 @@ class KenaikanTest extends PakaiData
         $this->actingAs($this->buatUser(['superadmin' => true]))->post('/admin/kenaikan', ['dari' => $lama->id, 'ke' => $baru->id])->assertSessionHasErrors('yakin');
         $this->actingAs($this->buatUser())->get('/admin/kenaikan')->assertForbidden();
     }
+
+    public function test_semester_diatur_di_tahun_ajaran_dan_dikirim_ke_aplikasi(): void
+    {
+        [$app, $sec] = $this->buatAplikasi('absensi', ['tahun_ajaran'], ['webhook_url' => 'https://absensi.example.test/api/pusat/webhook', 'webhook_secret' => 'x']);
+        $ta = TahunAjaran::create(['nama' => '2026/2027', 'aktif' => true]);
+        $this->getJson('/api/v1/master/tahun-ajaran', $this->basic($app->client_id, $sec))->assertJsonPath('data.0.semester', 'Ganjil');
+        WebhookOutbox::query()->delete();
+        $this->actingAs($this->buatUser(['superadmin' => true]))
+            ->put(route('admin.master.update', ['tahun-ajaran', $ta->id]), ['nama' => '2026/2027', 'semester' => 'Genap', 'aktif' => 1])->assertRedirect();
+        $this->assertSame('Genap', $ta->fresh()->semester);
+        $o = WebhookOutbox::where('event', 'tahun_ajaran.diperbarui')->firstOrFail();
+        $this->assertSame('Genap', $o->payload['data']['semester']);
+    }
 }

@@ -16,7 +16,7 @@ class TahunAjaran extends Model
 
     protected $table = 'tahun_ajaran';
 
-    protected $fillable = ['nama', 'mulai', 'selesai', 'aktif'];
+    protected $fillable = ['nama', 'mulai', 'selesai', 'semester', 'aktif'];
 
     protected function casts(): array
     {
