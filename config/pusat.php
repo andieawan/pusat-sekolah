@@ -67,4 +67,29 @@ return [
             'scope' => ['jurusan', 'ringkasan', 'akun'],
         ],
     ],
+
+    // Sambungan antar-aplikasi yang bisa dinyalakan dari menu Administrasi → Sambungan.
+    // pemberi = aplikasi yang menyediakan data; peminta = aplikasi yang mengambilnya. Kunci dibuat otomatis oleh Pusat.
+    'sambungan' => [
+        'absensi-bk' => [
+            'nama' => 'Absensi → BK',
+            'keterangan' => 'BK membaca rekap kehadiran, mencatat absensi manual, dan membuat tautan delegasi ketua kelas.',
+            'pemberi' => 'absensi', 'peminta' => 'bk', 'kunci' => true,
+        ],
+        'pkl-bk' => [
+            'nama' => 'PKL → BK',
+            'keterangan' => 'BK melihat siswa PKL yang perlu perhatian (sering alpa / jurnal kosong) dan riwayat PKL per siswa.',
+            'pemberi' => 'pkl', 'peminta' => 'bk', 'kunci' => true,
+        ],
+        'pkl-tu' => [
+            'nama' => 'PKL ↔ TU',
+            'keterangan' => 'Surat pengantar & penarikan PKL mendapat nomor resmi dari register Surat Keluar TU.',
+            'pemberi' => 'tu', 'peminta' => 'pkl', 'kunci' => true,
+        ],
+        'pkl-web' => [
+            'nama' => 'PKL → Website',
+            'keterangan' => 'Website menampilkan daftar mitra industri (DUDI) dari aplikasi PKL. Hanya nama & bidang, tanpa data siswa.',
+            'pemberi' => 'pkl', 'peminta' => 'web', 'kunci' => false,
+        ],
+    ],
 ];

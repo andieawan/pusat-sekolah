@@ -41,6 +41,7 @@
             <a href="{{ route('admin.akun.index') }}" @class(['aktif' => request()->routeIs('admin.akun.*')])>Akun</a>
             <a href="{{ route('admin.aplikasi.index') }}" @class(['aktif' => request()->routeIs('admin.aplikasi.*')])>Aplikasi</a>
             <a href="{{ route('admin.webhook.index') }}" @class(['aktif' => request()->routeIs('admin.webhook.*')])>Webhook</a>
+            <a href="{{ route('admin.sambungan.index') }}" @class(['aktif' => request()->routeIs('admin.sambungan.*')])>Sambungan</a>
             <a href="{{ route('admin.audit') }}" @class(['aktif' => request()->routeIs('admin.audit')])>Audit</a>
         </div>
     </div>

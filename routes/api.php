@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AkunController;
 use App\Http\Controllers\Api\MasterController;
 use App\Http\Controllers\Api\RingkasanController;
+use App\Http\Controllers\Api\SambunganController;
 use App\Http\Controllers\Api\SiswaTulisController;
 use App\Http\Controllers\SsoController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,7 @@ Route::prefix('v1')->middleware(['app.client', 'throttle:api-master'])->group(fu
         ->where('sumber', 'tahun-ajaran|jurusan|kelas|siswa|pegawai');
     Route::get('ringkasan', [RingkasanController::class, 'index']);
     Route::get('akun', [AkunController::class, 'index']);
+    Route::get('sambungan', [SambunganController::class, 'index']);
     // Tulis siswa (scope siswa_tulis: mutasi oleh Tata Usaha)
     Route::post('siswa', [SiswaTulisController::class, 'store']);
     Route::patch('siswa/{uuid}', [SiswaTulisController::class, 'update'])->whereUuid('uuid');

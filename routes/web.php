@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuditController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImporController;
 use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\SambunganController;
 use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PortalController;
@@ -68,6 +69,14 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
             Route::get('/{webhook}', [WebhookController::class, 'show'])->name('show');
             Route::post('/{webhook}/ulang', [WebhookController::class, 'ulang'])->name('ulang');
         });
+
+        Route::prefix('sambungan/{jenis}')->where(['jenis' => '[a-z0-9-]+'])->name('sambungan.')->group(function () {
+            Route::post('/nyalakan', [SambunganController::class, 'nyalakan'])->name('nyalakan');
+            Route::post('/matikan', [SambunganController::class, 'matikan'])->name('matikan');
+            Route::post('/ganti-kunci', [SambunganController::class, 'gantiKunci'])->name('kunci');
+            Route::post('/kabari', [SambunganController::class, 'kabari'])->name('kabari');
+        });
+        Route::get('sambungan', [SambunganController::class, 'index'])->name('sambungan.index');
 
         Route::get('audit', [AuditController::class, 'index'])->name('audit');
     });
