@@ -33,6 +33,12 @@ class AplikasiBaru extends Command
 
             return self::FAILURE;
         }
+        // Salah isi yang pernah terjadi: --base-url=https://pkl.../login → redirect & webhook ikut salah.
+        if (preg_match('#/(login|sso/callback|sso/login|admin|api/pusat/webhook|pusat/webhook)$#i', (string) parse_url($base, PHP_URL_PATH))) {
+            $this->error('Isi --base-url dengan alamat dasar aplikasi saja, mis. https://pkl.smkibupakusari.sch.id (tanpa /login, /admin, atau /sso/...).');
+
+            return self::FAILURE;
+        }
         if (Aplikasi::where('kode', $kode)->exists()) {
             $this->error("Aplikasi \"{$kode}\" sudah terdaftar. Putar rahasianya lewat panel admin jika perlu.");
 
