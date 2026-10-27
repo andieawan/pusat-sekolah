@@ -10,6 +10,18 @@
     }
   });
 
+  // Menu akun (<details>) tertutup saat klik di luar; Esc menutup menu akun & menu samping.
+  document.addEventListener('click', function (e) {
+    document.querySelectorAll('details.akun-menu[open]').forEach(function (d) {
+      if (!d.contains(e.target)) d.removeAttribute('open');
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('details.akun-menu[open]').forEach(function (d) { d.removeAttribute('open'); });
+    document.body.classList.remove('menu-buka');
+  });
+
   document.addEventListener('click', function (e) {
     var el = e.target.closest ? e.target.closest('[data-aksi]') : null;
     if (!el) return;
@@ -28,6 +40,12 @@
         document.execCommand && document.execCommand('copy');
         selesai();
       }
+    }
+
+    // <button data-aksi="menu"> : buka/tutup menu samping (layar sempit)
+    if (aksi === 'menu') {
+      var buka = document.body.classList.toggle('menu-buka');
+      document.querySelectorAll('.tombol-menu').forEach(function (b) { b.setAttribute('aria-expanded', buka ? 'true' : 'false'); });
     }
 
     // <button data-aksi="cetak"> : cetak halaman (daftar password awal)

@@ -13,16 +13,16 @@
 
     <div class="kartu">
         <div class="gulir">
-            <table class="tabel">
+            <table class="tabel hp-kartu">
                 <thead><tr><th>Aplikasi</th><th>Alamat</th><th>Status</th><th>Akun</th><th>Webhook</th><th></th></tr></thead>
                 <tbody>
                 @forelse ($items as $a)
                     <tr>
                         <td><strong>{{ $a->nama }}</strong><div class="samar">{{ $a->kode }}</div></td>
-                        <td class="mono">{{ $a->base_url }}</td>
-                        <td><span class="lencana {{ $a->aktif ? 'ok' : 'warn' }}">{{ $a->aktif ? 'aktif' : 'nonaktif' }}</span></td>
-                        <td>{{ $a->akses_count }}</td>
-                        <td class="mono">{{ $a->webhook_url ?: '—' }}</td>
+                        <td class="mono" data-label="Alamat">{{ $a->base_url }}</td>
+                        <td data-label="Status"><span class="lencana {{ $a->aktif ? 'ok' : 'warn' }}">{{ $a->aktif ? 'aktif' : 'nonaktif' }}</span></td>
+                        <td data-label="Akun">{{ $a->akses_count }}</td>
+                        <td class="mono" data-label="Webhook">{{ $a->webhook_url ?: '—' }}</td>
                         <td class="kanan">
                             <div class="aksi">
                                 <a class="tombol sekunder kecil" href="{{ route('admin.aplikasi.edit', $a) }}">Ubah</a>

@@ -23,10 +23,35 @@ class MasterController extends Controller
                 }
             });
         }
+        $filter = $this->filter($sumber);
+        foreach ($filter as $kolom => [, $pilihan]) {
+            $v = (string) $request->query($kolom, '');
+            if ($v !== '' && array_key_exists($v, $pilihan)) {
+                $q->where($kolom, $v);
+            }
+        }
+        $total = (clone $q)->count();
         [$kolom, $arah] = $d['urut'];
         $items = $q->orderBy($kolom, $arah)->orderBy('id')->simplePaginate(25)->withQueryString();
 
-        return view('admin.master.index', ['d' => $d, 'sumber' => $sumber, 'items' => $items]);
+        return view('admin.master.index', ['d' => $d, 'sumber' => $sumber, 'items' => $items, 'filter' => $filter, 'total' => $total]);
+    }
+
+    /** Saringan daftar per sumber: kolom => [label, [nilai => teks]]. */
+    private function filter(string $sumber): array
+    {
+        $ta = \App\Models\TahunAjaran::aktif();
+
+        return match ($sumber) {
+            'siswa' => [
+                'kelas_id' => ['Semua kelas', \App\Models\Kelas::when($ta, fn ($q) => $q->where('tahun_ajaran_id', $ta->id))
+                    ->orderByRaw("CASE tingkat WHEN 'X' THEN 1 WHEN 'XI' THEN 2 ELSE 3 END")->orderBy('nama')->pluck('nama', 'id')->mapWithKeys(fn ($n, $id) => [(string) $id => $n])->all()],
+                'status' => ['Semua status', ['aktif' => 'Aktif', 'lulus' => 'Lulus', 'pindah' => 'Pindah', 'keluar' => 'Keluar']],
+            ],
+            'pegawai' => ['jenis' => ['Guru & staf', ['guru' => 'Guru', 'staf' => 'Staf']]],
+            'kelas' => ['tahun_ajaran_id' => ['Semua tahun ajaran', \App\Models\TahunAjaran::orderByDesc('nama')->pluck('nama', 'id')->mapWithKeys(fn ($n, $id) => [(string) $id => $n])->all()]],
+            default => [],
+        };
     }
 
     public function create(string $sumber)

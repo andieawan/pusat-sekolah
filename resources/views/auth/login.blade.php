@@ -3,8 +3,9 @@
 @section('judul', 'Masuk')
 
 @section('isi')
+    @if (\App\Services\ProfilSekolah::logoPath())<img class="logo" src="{{ route('logo.sekolah') }}" alt="">@endif
     <h1>Pusat Sekolah</h1>
-    <p class="sub">Satu akun untuk semua aplikasi sekolah</p>
+    <p class="sub">{{ \App\Models\Pengaturan::ambil('nama', 'Satu akun untuk semua aplikasi sekolah') }}</p>
 
     <form method="post" action="{{ route('login.proses') }}">
         @csrf
