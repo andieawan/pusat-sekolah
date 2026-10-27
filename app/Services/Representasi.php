@@ -54,6 +54,7 @@ final class Representasi
                 'no_hp' => $s->no_hp,
                 'no_hp_ortu' => $s->no_hp_ortu,
                 'nama_ortu' => $s->nama_ortu,
+                'alamat' => $s->alamat,
             ];
         }
 

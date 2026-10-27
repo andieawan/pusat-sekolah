@@ -96,6 +96,7 @@ final class BarisImpor
                 'no_hp' => self::telepon($b['no_hp'] ?? ''),
                 'no_hp_ortu' => self::telepon($b['no_hp_ortu'] ?? ''),
                 'nama_ortu' => ($o = trim($b['nama_ortu'] ?? '')) !== '' ? mb_substr($o, 0, 150) : null,
+                'alamat' => ($al = trim(preg_replace('/\s+/', ' ', (string) ($b['alamat'] ?? '')))) !== '' ? mb_substr($al, 0, 255) : null,
             ],
             'kelas' => ($k = trim($b['kelas'] ?? '')) !== '' ? $k : null,
             'galat' => $galat,

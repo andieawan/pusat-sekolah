@@ -19,7 +19,7 @@ class Siswa extends Model
 
     protected $fillable = [
         'nis', 'nisn', 'nama', 'jenis_kelamin', 'kelas_id', 'status',
-        'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu',
+        'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu', 'alamat',
     ];
 
     protected function casts(): array

@@ -151,6 +151,7 @@ final class Definisi
                     ['no_hp', 'No. HP siswa', 'text', 'nullable|string|max:30'],
                     ['no_hp_ortu', 'No. HP orang tua/wali', 'text', 'nullable|string|max:30'],
                     ['nama_ortu', 'Nama orang tua/wali', 'text', 'nullable|string|max:150'],
+                    ['alamat', 'Alamat rumah', 'text', 'nullable|string|max:255'],
                 ],
                 'penghalang' => fn ($m) => null,
             ],

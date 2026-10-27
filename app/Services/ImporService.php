@@ -20,7 +20,7 @@ class ImporService
     public const SUMBER = ['siswa', 'pegawai', 'kelas'];
 
     public const KOLOM = [
-        'siswa' => ['nis', 'nisn', 'nama', 'jenis_kelamin', 'kelas', 'status', 'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu'],
+        'siswa' => ['nis', 'nisn', 'nama', 'jenis_kelamin', 'kelas', 'status', 'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu', 'alamat'],
         'kelas' => ['nama', 'tingkat', 'jurusan', 'tahun_ajaran', 'wali'],
         'pegawai' => ['nip', 'nama', 'jenis', 'jabatan', 'no_hp', 'email'],
     ];
@@ -93,6 +93,12 @@ class ImporService
             $p = BarisImpor::siswa($b);
             $galat = $p['galat'];
             $data = $p['data'];
+            // Kolom tambahan yang tidak ada di file tidak boleh mengosongkan isian lama (mis. CSV lama tanpa kolom alamat).
+            foreach (['nisn', 'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu', 'alamat'] as $opsional) {
+                if (! array_key_exists($opsional, $b)) {
+                    unset($data[$opsional]);
+                }
+            }
 
             if ($p['kelas'] !== null) {
                 if (! $tahun) {

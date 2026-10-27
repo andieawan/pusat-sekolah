@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
  * Sengaja sempit: tambah siswa (mutasi masuk) dan ubah status/kelas (mutasi keluar, pindah kelas).
  * Perubahan lain (nama, NIS, data pribadi) tetap lewat panel Pusat. Webhook ke aplikasi lain terkirim otomatis.
  *
- *   POST  /api/v1/siswa          {nis, nama, jenis_kelamin L|P, kelas_uuid, nisn?, tempat_lahir?, tanggal_lahir?, no_hp?, no_hp_ortu?, nama_ortu?, petugas?}
+ *   POST  /api/v1/siswa          {nis, nama, jenis_kelamin L|P, kelas_uuid, nisn?, tempat_lahir?, tanggal_lahir?, no_hp?, no_hp_ortu?, nama_ortu?, alamat?, petugas?}
  *   PATCH /api/v1/siswa/{uuid}   {status? aktif|lulus|pindah|keluar, kelas_uuid?, petugas?}
  */
 class SiswaTulisController extends Controller
@@ -58,6 +58,7 @@ class SiswaTulisController extends Controller
             'no_hp' => ['nullable', 'string', 'max:30'],
             'no_hp_ortu' => ['nullable', 'string', 'max:30'],
             'nama_ortu' => ['nullable', 'string', 'max:150'],
+            'alamat' => ['nullable', 'string', 'max:255'],
             'petugas' => ['nullable', 'string', 'max:100'],
         ]);
         if ($v->fails()) {
@@ -76,7 +77,7 @@ class SiswaTulisController extends Controller
             'nis' => $nis, 'nama' => trim($d['nama']), 'jenis_kelamin' => $d['jenis_kelamin'], 'kelas_id' => $kelas->id, 'status' => 'aktif',
             'nisn' => preg_replace('/\D/', '', (string) ($d['nisn'] ?? '')) ?: null, 'tempat_lahir' => $d['tempat_lahir'] ?? null,
             'tanggal_lahir' => $d['tanggal_lahir'] ?? null, 'no_hp' => BarisImpor::telepon($d['no_hp'] ?? null),
-            'no_hp_ortu' => BarisImpor::telepon($d['no_hp_ortu'] ?? null), 'nama_ortu' => $d['nama_ortu'] ?? null,
+            'no_hp_ortu' => BarisImpor::telepon($d['no_hp_ortu'] ?? null), 'nama_ortu' => $d['nama_ortu'] ?? null, 'alamat' => $d['alamat'] ?? null,
         ];
 
         $s = DB::transaction(function () use ($nis, $data) {
