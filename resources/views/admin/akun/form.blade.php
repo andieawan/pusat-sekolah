@@ -59,7 +59,7 @@
             </div>
             <div class="aksi">
                 <button class="tombol sekunder kecil" type="button" data-aksi="acak-password" data-target="#password,#password_confirmation">Buat password acak</button>
-                <span class="samar">Minimal 10 karakter, ada huruf dan angka. Sampaikan ke pemilik akun lewat jalur aman.</span>
+                <span class="samar">{{ \App\Support\AturanPassword::keterangan() }} Sampaikan ke pemilik akun lewat jalur aman.</span>
             </div>
         </div>
 

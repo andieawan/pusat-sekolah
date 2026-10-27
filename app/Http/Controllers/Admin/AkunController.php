@@ -104,7 +104,7 @@ class AkunController extends Controller
     private function validasi(Request $request, ?User $akun): array
     {
         $request->merge(['username' => strtolower(trim((string) $request->input('username')))]);
-        $passwordAturan = ['confirmed', Password::min(10)->letters()->numbers()];
+        $passwordAturan = ['confirmed', \App\Support\AturanPassword::rule()];
         $v = $request->validate([
             'username' => ['required', 'string', 'min:3', 'max:60', 'regex:/^[A-Za-z0-9._-]+$/',
                 Rule::unique('users', 'username')->ignore($akun?->id)],

@@ -30,6 +30,7 @@ return [
         'akun' => 'Daftar akun & peran untuk aplikasi ini',
         'ringkasan' => 'Ringkasan statistik (aman untuk publik)',
         'siswa_tulis' => 'Tambah siswa & ubah status/kelas (mutasi oleh Tata Usaha)',
+        'siswa_kontak' => 'Ubah kontak orang tua siswa (No. HP & nama; oleh wali kelas di Absensi)',
     ],
 
     // Nilai awal saat mendaftarkan aplikasi baru di panel admin.
@@ -38,7 +39,7 @@ return [
             'nama' => 'Absensi Siswa',
             'webhook_path' => '/api/pusat/webhook', // klien Absensi menerima di route API
             'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_kontak'],
         ],
         'bk' => [
             'nama' => 'Bimbingan Konseling',

@@ -70,7 +70,7 @@ final class AkunMassal
                     $nama = self::usulanUsername($p, $terpakai);
                     $terpakai[] = $nama;
                 }
-                $password = self::passwordAwal();
+                $password = \App\Support\AturanPassword::acak();
                 $email = $p->email && ! User::where('email', $p->email)->exists() ? $p->email : null;
                 $u = new User(['username' => $nama, 'nama' => $p->nama, 'email' => $email, 'aktif' => true, 'pegawai_id' => $p->id]);
                 $u->password = $password;

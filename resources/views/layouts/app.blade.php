@@ -32,6 +32,7 @@
     <div class="subnav">
         <div class="bar-isi">
             <a href="{{ route('admin.dashboard') }}" @class(['aktif' => request()->routeIs('admin.dashboard')])>Ringkasan</a>
+            <a href="{{ route('admin.profil.edit') }}" @class(['aktif' => request()->routeIs('admin.profil.*')])>Profil Sekolah</a>
             <a href="{{ route('admin.master.index', 'siswa') }}" @class(['aktif' => request()->is('admin/data/siswa*')])>Siswa</a>
             <a href="{{ route('admin.master.index', 'pegawai') }}" @class(['aktif' => request()->is('admin/data/pegawai*')])>Guru &amp; Staf</a>
             <a href="{{ route('admin.master.index', 'kelas') }}" @class(['aktif' => request()->is('admin/data/kelas*')])>Kelas</a>

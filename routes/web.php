@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ImporController;
 use App\Http\Controllers\Admin\MasterController;
 use App\Http\Controllers\Admin\AkunMassalController;
 use App\Http\Controllers\Admin\KenaikanController;
+use App\Http\Controllers\Admin\ProfilSekolahController;
 use App\Http\Controllers\Admin\SambunganController;
 use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\AuthController;
@@ -23,6 +24,7 @@ Route::middleware('guest')->group(function () {
 });
 
 // --- SSO (browser) ---
+Route::get('/logo-sekolah', [ProfilSekolahController::class, 'logo'])->middleware('throttle:120,1')->name('logo.sekolah');
 Route::get('/sso/authorize', [SsoController::class, 'otorisasi'])->name('sso.authorize');
 Route::get('/sso/logout', [SsoController::class, 'keluar'])->name('sso.logout');
 
@@ -81,6 +83,9 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
             Route::post('/kabari', [SambunganController::class, 'kabari'])->name('kabari');
         });
         Route::get('sambungan', [SambunganController::class, 'index'])->name('sambungan.index');
+
+        Route::get('profil-sekolah', [ProfilSekolahController::class, 'edit'])->name('profil.edit');
+        Route::put('profil-sekolah', [ProfilSekolahController::class, 'update'])->name('profil.update');
 
         Route::get('kenaikan', [KenaikanController::class, 'index'])->name('kenaikan.index');
         Route::post('kenaikan/tahun-baru', [KenaikanController::class, 'tahunBaru'])->name('kenaikan.tahun');

@@ -18,7 +18,7 @@ class ProfilController extends Controller
     {
         $data = $request->validate([
             'password_lama' => ['required', 'current_password'],
-            'password' => ['required', 'confirmed', 'different:password_lama', Password::min(10)->letters()->numbers()],
+            'password' => ['required', 'confirmed', 'different:password_lama', \App\Support\AturanPassword::rule()],
         ]);
 
         $user = $request->user();

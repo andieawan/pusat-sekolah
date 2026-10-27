@@ -16,7 +16,7 @@
             <div class="baris">
                 <label for="password">Password baru</label>
                 <input type="password" id="password" name="password" required autocomplete="new-password">
-                <div class="samar">Minimal 10 karakter, mengandung huruf dan angka.</div>
+                <div class="samar">{{ \App\Support\AturanPassword::keterangan() }}</div>
             </div>
             <div class="baris">
                 <label for="password_confirmation">Ulangi password baru</label>
