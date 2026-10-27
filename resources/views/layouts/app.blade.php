@@ -37,6 +37,7 @@
             <a href="{{ route('admin.master.index', 'kelas') }}" @class(['aktif' => request()->is('admin/data/kelas*')])>Kelas</a>
             <a href="{{ route('admin.master.index', 'jurusan') }}" @class(['aktif' => request()->is('admin/data/jurusan*')])>Jurusan</a>
             <a href="{{ route('admin.master.index', 'tahun-ajaran') }}" @class(['aktif' => request()->is('admin/data/tahun-ajaran*')])>Tahun Ajaran</a>
+            <a href="{{ route('admin.kenaikan.index') }}" @class(['aktif' => request()->routeIs('admin.kenaikan.*')])>Kenaikan Kelas</a>
             <a href="{{ route('admin.impor.form') }}" @class(['aktif' => request()->routeIs('admin.impor.*')])>Impor CSV</a>
             <a href="{{ route('admin.akun.index') }}" @class(['aktif' => request()->routeIs('admin.akun.*')])>Akun</a>
             <a href="{{ route('admin.aplikasi.index') }}" @class(['aktif' => request()->routeIs('admin.aplikasi.*')])>Aplikasi</a>

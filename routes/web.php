@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuditController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImporController;
 use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\KenaikanController;
 use App\Http\Controllers\Admin\SambunganController;
 use App\Http\Controllers\Admin\WebhookController;
 use App\Http\Controllers\AuthController;
@@ -77,6 +78,10 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
             Route::post('/kabari', [SambunganController::class, 'kabari'])->name('kabari');
         });
         Route::get('sambungan', [SambunganController::class, 'index'])->name('sambungan.index');
+
+        Route::get('kenaikan', [KenaikanController::class, 'index'])->name('kenaikan.index');
+        Route::post('kenaikan/tahun-baru', [KenaikanController::class, 'tahunBaru'])->name('kenaikan.tahun');
+        Route::post('kenaikan', [KenaikanController::class, 'terapkan'])->name('kenaikan.terapkan');
 
         Route::get('audit', [AuditController::class, 'index'])->name('audit');
     });
