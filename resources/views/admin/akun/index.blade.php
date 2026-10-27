@@ -8,7 +8,10 @@
             <h1>Akun</h1>
             <p class="samar">Akun login tunggal dan peran di tiap aplikasi.</p>
         </div>
-        <a class="tombol" href="{{ route('admin.akun.create') }}">+ Tambah akun</a>
+        <div class="aksi">
+            <a class="tombol sekunder" href="{{ route('admin.akun.massal') }}">Buat akun guru &amp; staf sekaligus</a>
+            <a class="tombol" href="{{ route('admin.akun.create') }}">+ Tambah akun</a>
+        </div>
     </div>
 
     <form class="pencarian" method="get" action="{{ route('admin.akun.index') }}">

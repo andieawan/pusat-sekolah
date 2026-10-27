@@ -26,6 +26,7 @@ class User extends Authenticatable
             'superadmin' => 'boolean',
             'aktif' => 'boolean',
             'login_terakhir' => 'datetime',
+            'wajib_ganti_password' => 'boolean',
         ];
     }
 

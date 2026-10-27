@@ -30,6 +30,11 @@
       }
     }
 
+    // <button data-aksi="cetak"> : cetak halaman (daftar password awal)
+    if (aksi === 'cetak') {
+      window.print();
+    }
+
     // <button data-aksi="tampilkan" data-target="#id"> : tampil/sembunyi nilai rahasia
     if (aksi === 'tampilkan' && input) {
       var sembunyi = input.type === 'password';

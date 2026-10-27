@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuditController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImporController;
 use App\Http\Controllers\Admin\MasterController;
+use App\Http\Controllers\Admin\AkunMassalController;
 use App\Http\Controllers\Admin\KenaikanController;
 use App\Http\Controllers\Admin\SambunganController;
 use App\Http\Controllers\Admin\WebhookController;
@@ -26,7 +27,7 @@ Route::get('/sso/authorize', [SsoController::class, 'otorisasi'])->name('sso.aut
 Route::get('/sso/logout', [SsoController::class, 'keluar'])->name('sso.logout');
 
 // --- Sudah login ---
-Route::middleware(['auth', 'akun.aktif'])->group(function () {
+Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
     Route::get('/', fn () => redirect()->route('portal'));
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/portal', [PortalController::class, 'index'])->name('portal');
@@ -57,6 +58,8 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
             Route::post('/terapkan', [ImporController::class, 'terapkan'])->name('terapkan');
         });
 
+        Route::get('akun/massal', [AkunMassalController::class, 'form'])->name('akun.massal');
+        Route::post('akun/massal', [AkunMassalController::class, 'buat'])->name('akun.massal.buat');
         Route::resource('akun', AkunController::class)->except('show')->parameters(['akun' => 'akun']);
 
         Route::resource('aplikasi', AplikasiController::class)->except('show')->parameters(['aplikasi' => 'aplikasi']);

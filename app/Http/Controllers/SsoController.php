@@ -52,6 +52,11 @@ class SsoController extends Controller
         }
 
         $user = Auth::user();
+        if ($user->wajib_ganti_password) {
+            $request->session()->put('url.intended', $request->fullUrl()); // setelah ganti password langsung lanjut ke aplikasi
+
+            return redirect()->route('profil.password')->with('galat', 'Ini login pertama Anda: ganti password awal terlebih dahulu.');
+        }
         if (! $user->bolehAkses($app)) {
             Audit::catat('sso.ditolak', $app->kode);
 

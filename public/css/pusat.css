@@ -125,3 +125,10 @@ pre.kode { background: #10211b; color: #d8f0e4; padding: .8rem 1rem; border-radi
   .bar nav { order: 3; flex-basis: 100%; }
   h1 { font-size: 1.3rem; }
 }
+
+/* Cetak (mis. daftar password awal akun): hanya isi halaman, tanpa menu & tombol. */
+@media print {
+  .bar, .subnav, .aksi, form, .notif { display: none !important; }
+  body:has(.cetak-saja) .wadah > *:not(.cetak-saja) { display: none !important; }
+  .kartu { box-shadow: none; border: 1px solid #999; }
+}

@@ -22,10 +22,12 @@ class ProfilController extends Controller
         ]);
 
         $user = $request->user();
-        $user->update(['password' => $data['password']]);
+        $user->password = $data['password'];
+        $user->wajib_ganti_password = false;
+        $user->save();
         $sso->cabutUser($user); // token aplikasi lama tidak berlaku lagi
         Audit::catat('password.diubah');
 
-        return redirect()->route('portal')->with('sukses', 'Password berhasil diubah.');
+        return redirect()->intended(route('portal'))->with('sukses', 'Password berhasil diubah.');
     }
 }
