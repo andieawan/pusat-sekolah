@@ -10,6 +10,7 @@
         </div>
         <div class="aksi">
             <a class="tombol sekunder" href="{{ route('admin.akun.massal') }}">Buat akun guru &amp; staf sekaligus</a>
+            <a class="tombol sekunder" href="{{ route('admin.akun.siswa') }}">Buat akun siswa sekaligus</a>
             <a class="tombol" href="{{ route('admin.akun.create') }}">+ Tambah akun</a>
         </div>
     </div>

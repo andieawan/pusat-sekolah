@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ImporController;
 use App\Http\Controllers\Admin\MasterController;
 use App\Http\Controllers\Admin\AkunMassalController;
+use App\Http\Controllers\Admin\AkunSiswaMassalController;
 use App\Http\Controllers\Admin\KenaikanController;
 use App\Http\Controllers\Admin\ProfilSekolahController;
 use App\Http\Controllers\Admin\SambunganController;
@@ -62,6 +63,8 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
 
         Route::get('akun/massal', [AkunMassalController::class, 'form'])->name('akun.massal');
         Route::post('akun/massal', [AkunMassalController::class, 'buat'])->name('akun.massal.buat');
+        Route::get('akun/siswa', [AkunSiswaMassalController::class, 'form'])->name('akun.siswa');
+        Route::post('akun/siswa', [AkunSiswaMassalController::class, 'buat'])->name('akun.siswa.buat');
         Route::resource('akun', AkunController::class)->except('show')->parameters(['akun' => 'akun']);
 
         Route::resource('aplikasi', AplikasiController::class)->except('show')->parameters(['aplikasi' => 'aplikasi']);

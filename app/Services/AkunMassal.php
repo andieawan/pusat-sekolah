@@ -26,12 +26,18 @@ final class AkunMassal
 
     public static function usulanUsername(Pegawai $p, array $terpakai = []): string
     {
-        $nip = strtolower(preg_replace('/[^A-Za-z0-9._-]/', '', (string) $p->nip));
+        return self::username((string) $p->nip, $p->nama, $terpakai, 'guru');
+    }
+
+    /** Kode (NIP/NIS) bila layak & belum dipakai; selain itu nama depan + angka. */
+    public static function username(string $kode, string $nama, array $terpakai = [], string $cadangan = 'akun'): string
+    {
+        $kode = strtolower(preg_replace('/[^A-Za-z0-9._-]/', '', $kode));
         $bebas = fn (string $u) => ! in_array($u, $terpakai, true) && ! User::where('username', $u)->exists();
-        if (strlen($nip) >= 3 && strlen($nip) <= 60 && $bebas($nip)) {
-            return $nip;
+        if (strlen($kode) >= 3 && strlen($kode) <= 60 && $bebas($kode)) {
+            return $kode;
         }
-        $dasar = strtolower(preg_replace('/[^a-z]/i', '', \Illuminate\Support\Str::ascii(explode(' ', trim(preg_replace('/^(drs?|dra|ir|h|hj)\.?\s+/i', '', $p->nama)))[0]))) ?: 'guru';
+        $dasar = strtolower(preg_replace('/[^a-z]/i', '', \Illuminate\Support\Str::ascii(explode(' ', trim(preg_replace('/^(drs?|dra|ir|h|hj)\.?\s+/i', '', $nama)))[0]))) ?: $cadangan;
         $dasar = substr(str_pad($dasar, 3, 'x'), 0, 40);
         for ($i = 1; ; $i++) {
             $u = $i === 1 ? $dasar : $dasar.$i;
