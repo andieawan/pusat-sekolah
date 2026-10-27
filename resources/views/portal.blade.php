@@ -17,7 +17,7 @@
     @else
         <div class="grid">
             @foreach ($aplikasi as $item)
-                <a class="app" href="{{ $item['model']->base_url }}" rel="noopener">
+                <a class="app" href="{{ route('buka', $item['model']->kode) }}" rel="noopener">
                     <strong>{{ $item['model']->nama }}</strong>
                     <span class="samar">{{ parse_url($item['model']->base_url, PHP_URL_HOST) }}</span>
                     <div class="peran">

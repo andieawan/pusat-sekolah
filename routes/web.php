@@ -28,6 +28,7 @@ Route::middleware(['auth', 'akun.aktif'])->group(function () {
     Route::get('/', fn () => redirect()->route('portal'));
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/portal', [PortalController::class, 'index'])->name('portal');
+    Route::get('/buka/{kode}', [PortalController::class, 'buka'])->where('kode', '[a-z0-9_-]+')->name('buka');
     Route::get('/profil/password', [ProfilController::class, 'formPassword'])->name('profil.password');
     Route::put('/profil/password', [ProfilController::class, 'ubahPassword'])->name('profil.password.ubah');
 

@@ -130,6 +130,10 @@ class SsoService
                 'kelas_uuid' => $u->siswa->kelas?->uuid,
                 'kelas_nama' => $u->siswa->kelas?->nama,
             ] : null,
+            // Untuk menu "Aplikasi lain": aplikasi lain yang boleh dibuka akun ini; tautan lewat Pusat (langsung masuk).
+            'aplikasi_lain' => Aplikasi::where('aktif', true)->whereKeyNot($app->id)->orderBy('nama')->get()
+                ->filter(fn (Aplikasi $a) => $u->bolehAkses($a))
+                ->map(fn (Aplikasi $a) => ['kode' => $a->kode, 'nama' => $a->nama, 'url' => route('buka', $a->kode)])->values()->all(),
         ];
     }
 

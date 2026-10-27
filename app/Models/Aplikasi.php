@@ -69,6 +69,22 @@ class Aplikasi extends Model
         return $this->punyaScope($sumber) ? 'lengkap' : null;
     }
 
+    /**
+     * Alamat untuk langsung masuk ke aplikasi lewat SSO (tanpa halaman login aplikasi):
+     * redirect …/sso/callback → …/sso/login (Absensi, BK, TU, PKL); …/pusat/callback → …/pusat/masuk (Website).
+     */
+    public function urlMasuk(): string
+    {
+        $cb = (string) (($this->redirect_uris ?? [])[0] ?? '');
+        foreach (['/sso/callback' => '/sso/login', '/pusat/callback' => '/pusat/masuk'] as $akhir => $mulai) {
+            if (str_ends_with($cb, $akhir)) {
+                return substr($cb, 0, -strlen($akhir)).$mulai;
+            }
+        }
+
+        return (string) $this->base_url;
+    }
+
     public function akses(): HasMany
     {
         return $this->hasMany(Akses::class, 'aplikasi_id');
