@@ -26,6 +26,7 @@ Route::prefix('v1')->middleware(['app.client', 'throttle:api-master'])->group(fu
         ->where('sumber', 'tahun-ajaran|jurusan|kelas|siswa|pegawai|mapel|pengampu');
     Route::get('ringkasan', [RingkasanController::class, 'index']);
     Route::get('akun', [AkunController::class, 'index']);
+    Route::post('masuk-lokal', \App\Http\Controllers\Api\MasukLokalController::class)->middleware('throttle:120,1');
     Route::get('sambungan', [SambunganController::class, 'index']);
     Route::get('profil', [ProfilController::class, 'index']);
     Route::patch('siswa/{uuid}/kontak', [SiswaKontakController::class, 'update'])->whereUuid('uuid');

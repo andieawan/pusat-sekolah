@@ -28,6 +28,7 @@ return [
         'pegawai_dasar' => 'Guru & staf (data dasar)',
         'pegawai' => 'Guru & staf (lengkap)',
         'akun' => 'Daftar akun & peran untuk aplikasi ini',
+        'akun_sandi' => 'Login cadangan: salinan hash password akun (tetap bisa masuk saat Pusat tidak bisa dihubungi)',
         'ringkasan' => 'Ringkasan statistik (aman untuk publik)',
         'siswa_tulis' => 'Tambah siswa & ubah status/kelas (mutasi oleh Tata Usaha)',
         'mapel' => 'Mata pelajaran',
@@ -41,28 +42,28 @@ return [
             'nama' => 'Absensi Siswa',
             'webhook_path' => '/api/pusat/webhook', // klien Absensi menerima di route API
             'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_kontak', 'mapel', 'pengampu'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'akun_sandi', 'siswa_kontak', 'mapel', 'pengampu'],
         ],
         'bk' => [
             'nama' => 'Bimbingan Konseling',
             'webhook_path' => '/api/pusat/webhook',
             // sesuai peta peran aplikasi BK; wali kelas otomatis dari data kelas (cukup peran guru)
             'peran' => ['bk', 'kepsek', 'admin', 'guru'],
-            'scope' => ['tahun_ajaran', 'kelas', 'siswa', 'akun'],
+            'scope' => ['tahun_ajaran', 'kelas', 'siswa', 'akun', 'akun_sandi'],
         ],
         'tu' => [
             'nama' => 'Tata Usaha',
             'webhook_path' => '/api/pusat/webhook',
             // pegawai = guru/staf yang absen mandiri di aplikasi TU
             'peran' => ['staf_tu', 'kepsek', 'admin', 'pegawai'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_tulis'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'akun_sandi', 'siswa_tulis'],
         ],
         'pkl' => [
             'nama' => 'Manajemen PKL',
             'webhook_path' => '/api/pusat/webhook',
             // siswa lengkap: nomor HP siswa untuk dihubungi pembimbing; pembimbing industri memakai akun lokal di aplikasi PKL
             'peran' => ['admin', 'koordinator', 'guru_pembimbing', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai_dasar', 'akun'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai_dasar', 'akun', 'akun_sandi'],
         ],
         'web' => [
             'nama' => 'Website Sekolah',

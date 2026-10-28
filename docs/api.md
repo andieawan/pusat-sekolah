@@ -70,3 +70,10 @@ Event: `siswa.dibuat|diperbarui|dihapus`, `pegawai.*`, `kelas.*`, `jurusan.*`, `
 Balas HTTP 2xx bila sudah diterima. Selain itu dicoba ulang: 1 mnt, 5 mnt, 15 mnt, 1 jam, 6 jam; setelah 6 percobaan berstatus `gagal`
 (bisa dikirim ulang dari panel). Tolak bila timestamp selisih > 5 menit atau tanda tangan salah.
 Webhook bisa terlambat atau hilang → sinkron berkala `updated_since` (mis. tiap jam) tetap wajib sebagai jaring pengaman.
+
+### Login cadangan (scope `akun_sandi`)
+
+Aplikasi berizin `akun_sandi` menerima field tambahan `password_hash` (bcrypt) pada `GET /api/v1/akun` dan event
+`akun.diperbarui` / `akses.diperbarui`, agar akun Pusat tetap bisa masuk lewat login lokal aplikasi saat Pusat tidak bisa
+dihubungi. Nilainya `null` selama akun masih wajib mengganti password awal (aplikasi tidak boleh membuka login lokal untuk
+akun itu). Event `akun.diperbarui` dikirim ulang setiap kali password, username, atau status akun berubah.

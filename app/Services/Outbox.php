@@ -59,7 +59,7 @@ final class Outbox
     {
         try {
             if ($app->aktif && $app->webhook_url && $app->punyaScope('akun')) {
-                self::antre($app, 'akses.diperbarui', Representasi::akun($u, $peran));
+                self::antre($app, 'akses.diperbarui', Representasi::akun($u, $peran, $app->punyaScope('akun_sandi')));
             }
         } catch (Throwable $e) {
             report($e);
@@ -76,7 +76,7 @@ final class Outbox
                 ->get();
             foreach ($aplikasi as $app) {
                 if ($app->punyaScope('akun')) {
-                    self::antre($app, 'akun.diperbarui', Representasi::akun($u, $u->peranUntuk($app)));
+                    self::antre($app, 'akun.diperbarui', Representasi::akun($u, $u->peranUntuk($app), $app->punyaScope('akun_sandi')));
                 }
             }
         } catch (Throwable $e) {

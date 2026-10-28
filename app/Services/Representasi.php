@@ -139,11 +139,15 @@ final class Representasi
     }
 
     /** Akun beserta peran di satu aplikasi. Tidak pernah memuat password. */
-    public static function akun(User $u, array $peran): array
+    /**
+     * @param  bool  $sandi  sertakan hash password (bcrypt) untuk login cadangan di aplikasi — hanya untuk aplikasi
+     *                       berizin "akun_sandi". Hash TIDAK dikirim selama akun masih wajib ganti password awal.
+     */
+    public static function akun(User $u, array $peran, bool $sandi = false): array
     {
         $u->loadMissing(['pegawai', 'siswa']);
 
-        return [
+        return ($sandi ? ['password_hash' => $u->wajib_ganti_password ? null : $u->getAuthPassword()] : []) + [
             'uuid' => $u->uuid,
             'username' => $u->username,
             'nama' => $u->nama,

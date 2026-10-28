@@ -52,7 +52,7 @@ class AkunController extends Controller
         $hal = $q->orderBy('id')->paginate((int) $request->query('per_page', 200));
 
         return response()->json([
-            'data' => $hal->getCollection()->map(fn (User $u) => Representasi::akun($u, $u->akses->pluck('peran')->all()))->values(),
+            'data' => $hal->getCollection()->map(fn (User $u) => Representasi::akun($u, $u->akses->pluck('peran')->all(), $app->punyaScope('akun_sandi')))->values(),
             'meta' => [
                 'halaman' => $hal->currentPage(),
                 'per_halaman' => $hal->perPage(),
