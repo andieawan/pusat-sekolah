@@ -25,6 +25,7 @@ final class Representasi
             $m instanceof Kelas => self::kelas($m),
             $m instanceof Jurusan => self::jurusan($m),
             $m instanceof TahunAjaran => self::tahunAjaran($m),
+            $m instanceof \App\Models\Mapel => self::mapel($m),
             default => throw new InvalidArgumentException('Model tidak didukung: '.$m::class),
         };
     }
@@ -106,6 +107,19 @@ final class Representasi
             'aktif' => (bool) $j->aktif,
             'diperbarui' => self::waktu($j->updated_at),
             'dihapus' => self::waktu($j->deleted_at),
+        ];
+    }
+
+    public static function mapel(\App\Models\Mapel $m): array
+    {
+        return [
+            'uuid' => $m->uuid,
+            'kode' => $m->kode,
+            'nama' => $m->nama,
+            'kelompok' => $m->kelompok,
+            'aktif' => (bool) $m->aktif,
+            'diperbarui' => self::waktu($m->updated_at),
+            'dihapus' => self::waktu($m->deleted_at),
         ];
     }
 

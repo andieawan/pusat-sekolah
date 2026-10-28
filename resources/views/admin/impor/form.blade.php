@@ -18,6 +18,7 @@
                 <label class="centang"><input type="radio" name="sumber" value="siswa" @checked(old('sumber', 'siswa') === 'siswa')> Siswa (kunci: NIS)</label>
                 <label class="centang"><input type="radio" name="sumber" value="pegawai" @checked(old('sumber') === 'pegawai')> Guru &amp; staf (kunci: NIP/ID)</label>
                 <label class="centang"><input type="radio" name="sumber" value="kelas" @checked(old('sumber') === 'kelas')> Kelas (kunci: nama + tahun ajaran)</label>
+                <label class="centang"><input type="radio" name="sumber" value="mapel" @checked(old('sumber') === 'mapel')> Mata pelajaran (kunci: kode)</label>
             </div>
             <div class="baris">
                 <label for="berkas">File CSV (maks. 2 MB / 5.000 baris)</label>
@@ -32,7 +33,7 @@
         <p class="samar">Baris pertama adalah judul kolom. Pemisah <code>,</code> atau <code>;</code> dikenali otomatis (Excel Indonesia: Simpan sebagai "CSV (pemisah koma)"). Kolom yang tidak ada dibiarkan kosong.</p>
         @foreach ($kolom as $sumber => $daftar)
             <p>
-                <strong>{{ ['siswa' => 'Siswa', 'kelas' => 'Kelas'][$sumber] ?? 'Guru & staf' }}</strong>
+                <strong>{{ ['siswa' => 'Siswa', 'kelas' => 'Kelas', 'mapel' => 'Mata pelajaran'][$sumber] ?? 'Guru & staf' }}</strong>
                 — <a href="{{ route('admin.impor.templat', $sumber) }}">unduh templat</a><br>
                 <span class="mono">{{ implode('; ', $daftar) }}</span>
             </p>

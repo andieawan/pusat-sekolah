@@ -3,7 +3,7 @@
 @section('judul', 'Pratinjau impor')
 
 @section('isi')
-    <div class="kepala"><h1>Pratinjau impor {{ ['siswa' => 'siswa', 'kelas' => 'kelas'][$sumber] ?? 'guru & staf' }}</h1></div>
+    <div class="kepala"><h1>Pratinjau impor {{ ['siswa' => 'siswa', 'kelas' => 'kelas', 'mapel' => 'mata pelajaran'][$sumber] ?? 'guru & staf' }}</h1></div>
 
     <div class="grid">
         <div class="kartu"><div class="angka">{{ $ringkas['baru'] }}</div><div class="samar">data baru</div></div>
@@ -34,13 +34,13 @@
             <h2>Contoh baris yang akan diproses</h2>
             <div class="gulir">
                 <table class="tabel">
-                    <thead><tr><th>Baris</th><th>Aksi</th><th>{{ ['siswa' => 'NIS', 'kelas' => 'Tingkat'][$sumber] ?? 'NIP' }}</th><th>Nama</th></tr></thead>
+                    <thead><tr><th>Baris</th><th>Aksi</th><th>{{ ['siswa' => 'NIS', 'kelas' => 'Tingkat', 'mapel' => 'Kode'][$sumber] ?? 'NIP' }}</th><th>Nama</th></tr></thead>
                     <tbody>
                     @foreach ($contoh as $c)
                         <tr>
                             <td>{{ $c['baris'] }}</td>
                             <td><span class="lencana {{ $c['aksi'] === 'baru' ? 'ok' : ($c['aksi'] === 'ubah' ? 'warn' : '') }}">{{ $c['aksi'] }}</span></td>
-                            <td>{{ $c['data'][['siswa' => 'nis', 'kelas' => 'tingkat'][$sumber] ?? 'nip'] }}</td>
+                            <td>{{ $c['data'][['siswa' => 'nis', 'kelas' => 'tingkat', 'mapel' => 'kode'][$sumber] ?? 'nip'] }}</td>
                             <td>{{ $c['data']['nama'] }}</td>
                         </tr>
                     @endforeach

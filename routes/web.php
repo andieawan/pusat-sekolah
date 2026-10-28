@@ -43,7 +43,7 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('data/{sumber}')
-            ->where(['sumber' => 'tahun-ajaran|jurusan|pegawai|kelas|siswa'])
+            ->where(['sumber' => 'tahun-ajaran|jurusan|pegawai|kelas|siswa|mapel'])
             ->name('master.')
             ->group(function () {
                 Route::get('/', [MasterController::class, 'index'])->name('index');

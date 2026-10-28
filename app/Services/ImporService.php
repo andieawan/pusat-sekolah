@@ -17,12 +17,13 @@ use InvalidArgumentException;
  */
 class ImporService
 {
-    public const SUMBER = ['siswa', 'pegawai', 'kelas'];
+    public const SUMBER = ['siswa', 'pegawai', 'kelas', 'mapel'];
 
     public const KOLOM = [
         'siswa' => ['nis', 'nisn', 'nama', 'jenis_kelamin', 'kelas', 'status', 'tempat_lahir', 'tanggal_lahir', 'no_hp', 'no_hp_ortu', 'nama_ortu', 'alamat'],
         'kelas' => ['nama', 'tingkat', 'jurusan', 'tahun_ajaran', 'wali'],
         'pegawai' => ['nip', 'nama', 'jenis', 'jabatan', 'no_hp', 'email'],
+        'mapel' => ['kode', 'nama', 'kelompok'],
     ];
 
     /**
@@ -38,6 +39,7 @@ class ImporService
         return match ($sumber) {
             'siswa' => $this->rencanaSiswa($baris),
             'kelas' => $this->rencanaKelas($baris),
+            'mapel' => $this->rencanaMapel($baris),
             default => $this->rencanaPegawai($baris),
         };
     }
@@ -46,8 +48,8 @@ class ImporService
     public function terapkan(string $sumber, array $baris): array
     {
         $r = $this->rencana($sumber, $baris);
-        $model = ['siswa' => Siswa::class, 'kelas' => Kelas::class][$sumber] ?? Pegawai::class;
-        $kunci = $sumber === 'siswa' ? 'nis' : 'nip';
+        $model = ['siswa' => Siswa::class, 'kelas' => Kelas::class, 'mapel' => \App\Models\Mapel::class][$sumber] ?? Pegawai::class;
+        $kunci = ['siswa' => 'nis', 'mapel' => 'kode'][$sumber] ?? 'nip';
 
         DB::transaction(function () use ($r, $model, $kunci, $sumber) {
             foreach ($r['item'] as $it) {
@@ -161,6 +163,52 @@ class ImporService
             if ($lama) {
                 $aksi = (! $lama->trashed() && $this->sama($lama, $data)) ? 'sama' : 'ubah';
             }
+            $hasil[$aksi]++;
+            $hasil['item'][] = ['aksi' => $aksi, 'baris' => $no, 'data' => $data];
+        }
+
+        return $hasil;
+    }
+
+    /** Mapel: kunci = kode; kelompok umum/kejuruan/mulok (bawaan umum). */
+    private function rencanaMapel(array $baris): array
+    {
+        $ada = \App\Models\Mapel::withTrashed()->get()->keyBy('kode');
+        $hasil = ['item' => [], 'galat' => [], 'baru' => 0, 'ubah' => 0, 'sama' => 0];
+        $terlihat = [];
+        $kelompok = ['umum' => 'umum', 'kejuruan' => 'kejuruan', 'mulok' => 'mulok', 'muatan lokal' => 'mulok', 'produktif' => 'kejuruan', 'normatif' => 'umum', 'adaptif' => 'umum'];
+        foreach ($baris as $b) {
+            $no = $b['_baris'] ?? '?';
+            $kode = strtoupper(trim(preg_replace('/\s+/', ' ', (string) ($b['kode'] ?? ''))));
+            $nama = trim((string) ($b['nama'] ?? ''));
+            $kel = mb_strtolower(trim((string) ($b['kelompok'] ?? '')));
+            $galat = [];
+            if ($kode === '' || mb_strlen($kode) > 20) {
+                $galat[] = 'Kode wajib diisi (maks. 20 karakter)';
+            }
+            if ($nama === '') {
+                $galat[] = 'Nama mapel wajib diisi';
+            }
+            if ($kel !== '' && ! isset($kelompok[$kel])) {
+                $galat[] = "Kelompok \"{$kel}\" tidak dikenal (umum / kejuruan / mulok)";
+            }
+            if ($kode !== '' && isset($terlihat[$kode])) {
+                $galat[] = "Kode ganda dalam file (sudah ada di baris {$terlihat[$kode]})";
+            }
+            if ($galat) {
+                foreach ($galat as $g) {
+                    $hasil['galat'][] = ['baris' => $no, 'pesan' => $g];
+                }
+
+                continue;
+            }
+            $terlihat[$kode] = $no;
+            $data = ['kode' => $kode, 'nama' => mb_substr($nama, 0, 150), 'kelompok' => $kelompok[$kel] ?? 'umum', 'aktif' => true];
+            if (! array_key_exists('kelompok', $b)) {
+                unset($data['kelompok']);
+            }
+            $lama = $ada->get($kode);
+            $aksi = $lama ? ((! $lama->trashed() && $this->sama($lama, $data)) ? 'sama' : 'ubah') : 'baru';
             $hasil[$aksi]++;
             $hasil['item'][] = ['aksi' => $aksi, 'baris' => $no, 'data' => $data];
         }

@@ -9,7 +9,7 @@
             <p class="samar">Perubahan di sini otomatis dikabarkan ke aplikasi yang berhak.</p>
         </div>
         <div class="aksi">
-            @if (in_array($sumber, ['siswa', 'pegawai', 'kelas'], true))
+            @if (in_array($sumber, ['siswa', 'pegawai', 'kelas', 'mapel'], true))
                 <a class="tombol sekunder" href="{{ route('admin.impor.form') }}">Impor CSV</a>
             @endif
             <a class="tombol" href="{{ route('admin.master.create', $sumber) }}">+ Tambah {{ mb_strtolower($d['judul']) }}</a>

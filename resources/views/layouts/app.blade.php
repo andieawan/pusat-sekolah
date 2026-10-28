@@ -22,6 +22,7 @@
             ['Guru & Staf', route('admin.master.index', 'pegawai'), request()->is('admin/data/pegawai*')],
             ['Kelas', route('admin.master.index', 'kelas'), request()->is('admin/data/kelas*')],
             ['Jurusan', route('admin.master.index', 'jurusan'), request()->is('admin/data/jurusan*')],
+            ['Mata Pelajaran', route('admin.master.index', 'mapel'), request()->is('admin/data/mapel*')],
             ['Tahun Ajaran', route('admin.master.index', 'tahun-ajaran'), request()->is('admin/data/tahun-ajaran*')],
         ],
         'Proses' => [

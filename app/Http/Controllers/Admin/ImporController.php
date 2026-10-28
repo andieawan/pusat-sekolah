@@ -44,7 +44,7 @@ class ImporController extends Controller
             return back()->withErrors(['berkas' => $e->getMessage()]);
         }
 
-        $wajib = ['siswa' => ['nis', 'nama'], 'kelas' => ['nama', 'tingkat']][$data['sumber']] ?? ['nip', 'nama'];
+        $wajib = ['siswa' => ['nis', 'nama'], 'kelas' => ['nama', 'tingkat'], 'mapel' => ['kode', 'nama']][$data['sumber']] ?? ['nip', 'nama'];
         $hilang = array_diff($wajib, $csv['header']);
         if ($hilang) {
             return back()->withErrors(['berkas' => 'Kolom wajib tidak ditemukan: '.implode(', ', $hilang).'. Unduh templat untuk format yang benar.']);

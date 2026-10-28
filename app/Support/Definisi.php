@@ -16,7 +16,7 @@ use App\Models\TahunAjaran;
  */
 final class Definisi
 {
-    public const SUMBER = ['tahun-ajaran', 'jurusan', 'pegawai', 'kelas', 'siswa'];
+    public const SUMBER = ['tahun-ajaran', 'jurusan', 'pegawai', 'kelas', 'siswa', 'mapel'];
 
     public static function ambil(string $sumber): array
     {
@@ -70,6 +70,27 @@ final class Definisi
                     ['aktif', 'Aktif', 'checkbox', 'boolean'],
                 ],
                 'penghalang' => fn ($m) => $m->kelas()->exists() ? 'Masih ada kelas yang memakai jurusan ini.' : null,
+            ],
+            'mapel' => [
+                'model' => \App\Models\Mapel::class,
+                'tabel' => 'mapel',
+                'judul' => 'Mata Pelajaran',
+                'kunci' => 'kode',
+                'cari' => ['kode', 'nama'],
+                'urut' => ['nama', 'asc'],
+                'kolom' => [
+                    ['Kode', 'kode'],
+                    ['Nama', 'nama'],
+                    ['Kelompok', fn ($m) => \App\Models\Mapel::KELOMPOK[$m->kelompok] ?? $m->kelompok],
+                    ['Aktif', fn ($m) => $m->aktif ? 'Ya' : '—'],
+                ],
+                'field' => [
+                    ['kode', 'Kode (mis. MTK, BIND, DKV-DG)', 'text', 'required|string|max:20'],
+                    ['nama', 'Nama mata pelajaran', 'text', 'required|string|max:150'],
+                    ['kelompok', 'Kelompok', 'select', 'required|in:umum,kejuruan,mulok', fn () => \App\Models\Mapel::KELOMPOK],
+                    ['aktif', 'Aktif (mapel nonaktif tidak muncul di pilihan aplikasi; riwayatnya tetap ada)', 'checkbox', 'boolean'],
+                ],
+                'penghalang' => fn ($m) => null,
             ],
             'pegawai' => [
                 'model' => Pegawai::class,
