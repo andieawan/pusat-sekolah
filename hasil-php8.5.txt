@@ -6,6 +6,6 @@ Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 ................................................................. 65 / 70 ( 92%)
 .....                                                             70 / 70 (100%)
 
-Time: 00:04.303, Memory: 66.50 MB
+Time: 00:03.655, Memory: 66.50 MB
 
 OK (70 tests, 413 assertions)
