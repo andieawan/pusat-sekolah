@@ -157,6 +157,7 @@ final class Representasi
             'pegawai_uuid' => $u->pegawai?->uuid,
             'siswa_uuid' => $u->siswa?->uuid,
             'peran' => array_values($peran),
+            'admin_pusat' => $u->bisaAdmin(),
             'diperbarui' => self::waktu($u->updated_at),
         ];
     }

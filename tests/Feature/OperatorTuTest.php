@@ -52,4 +52,14 @@ class OperatorTuTest extends PakaiData
         $u = $this->buatUser(['username' => 'staf.tu']);
         $this->actingAs($admin)->get("/admin/akun/{$u->id}/edit")->assertOk()->assertSee('Operator TU di Pusat');
     }
+
+    public function test_status_admin_pusat_dikabarkan_ke_aplikasi(): void
+    {
+        [$tu] = $this->buatAplikasi('tu', ['akun'], ['webhook_url' => 'https://tu.test/api/pusat/webhook', 'webhook_secret' => 'x']);
+        $u = $this->buatUser(['username' => 'staf.tu'], $tu, ['staf_tu']);
+        \App\Models\WebhookOutbox::query()->delete();
+        $u->update(['operator_tu' => true]);
+        $w = \App\Models\WebhookOutbox::where('event', 'akun.diperbarui')->where('aplikasi_id', $tu->id)->firstOrFail();
+        $this->assertTrue($w->payload['data']['admin_pusat']);
+    }
 }

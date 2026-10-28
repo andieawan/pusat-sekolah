@@ -118,6 +118,8 @@ class SsoService
             'email' => $u->email,
             'tipe' => $u->tipe(),
             'peran' => $u->peranUntuk($app),
+            // Boleh membuka panel Administrasi Pusat (superadmin / Operator TU): aplikasi bisa menampilkan menu "Administrasi".
+            'admin_pusat' => $u->bisaAdmin(),
             'pegawai' => $u->pegawai ? [
                 'uuid' => $u->pegawai->uuid,
                 'nip' => $u->pegawai->nip,
