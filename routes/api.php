@@ -23,7 +23,7 @@ Route::prefix('sso')->middleware('throttle:sso-token')->group(function () {
 Route::prefix('v1')->middleware(['app.client', 'throttle:api-master'])->group(function () {
     Route::get('ping', fn () => response()->json(['ok' => true, 'waktu_server' => now()->toIso8601String()]));
     Route::get('master/{sumber}', [MasterController::class, 'index'])
-        ->where('sumber', 'tahun-ajaran|jurusan|kelas|siswa|pegawai|mapel');
+        ->where('sumber', 'tahun-ajaran|jurusan|kelas|siswa|pegawai|mapel|pengampu');
     Route::get('ringkasan', [RingkasanController::class, 'index']);
     Route::get('akun', [AkunController::class, 'index']);
     Route::get('sambungan', [SambunganController::class, 'index']);

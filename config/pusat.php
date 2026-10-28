@@ -31,6 +31,7 @@ return [
         'ringkasan' => 'Ringkasan statistik (aman untuk publik)',
         'siswa_tulis' => 'Tambah siswa & ubah status/kelas (mutasi oleh Tata Usaha)',
         'mapel' => 'Mata pelajaran',
+        'pengampu' => 'Pengampu mapel (guru – mapel – kelas)',
         'siswa_kontak' => 'Ubah kontak orang tua siswa (No. HP & nama; oleh wali kelas di Absensi)',
     ],
 
@@ -40,7 +41,7 @@ return [
             'nama' => 'Absensi Siswa',
             'webhook_path' => '/api/pusat/webhook', // klien Absensi menerima di route API
             'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_kontak', 'mapel'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'siswa_kontak', 'mapel', 'pengampu'],
         ],
         'bk' => [
             'nama' => 'Bimbingan Konseling',

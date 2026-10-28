@@ -20,12 +20,12 @@
             $kurang = collect(['pemberi' => $s['pemberi'], 'peminta' => $s['peminta']])->filter(fn ($a) => ! $a)->keys();
         @endphp
         <div class="kartu">
-            <div class="kepala" style="margin-bottom:6px">
+            <div class="kepala rapat">
                 <div>
-                    <h2 style="margin:0">{{ $def['nama'] }}
+                    <h2 class="tanpa-jarak">{{ $def['nama'] }}
                         @if ($nyala)<span class="lencana ok">tersambung</span>@else<span class="lencana">belum tersambung</span>@endif
                     </h2>
-                    <p class="samar" style="margin:4px 0 0">{{ $def['keterangan'] }}</p>
+                    <p class="samar jarak-kecil">{{ $def['keterangan'] }}</p>
                 </div>
                 <div class="aksi">
                     @if ($kurang->isNotEmpty())
@@ -85,7 +85,7 @@
                 </table>
             </div>
             @if ($row?->kunci_dibuat_pada && $def['kunci'])
-                <p class="samar" style="margin:8px 0 0"><small>Kunci dibuat {{ $row->kunci_dibuat_pada->format('d/m/Y H:i') }}. Kunci tidak pernah ditampilkan; hanya dikirim ke kedua aplikasi.</small></p>
+                <p class="samar jarak-kecil"><small>Kunci dibuat {{ $row->kunci_dibuat_pada->format('d/m/Y H:i') }}. Kunci tidak pernah ditampilkan; hanya dikirim ke kedua aplikasi.</small></p>
             @endif
         </div>
     @endforeach

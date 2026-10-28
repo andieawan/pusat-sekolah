@@ -23,7 +23,7 @@
             <div class="aksi"><button class="tombol sekunder" type="submit">Tampilkan usulan</button></div>
         </form>
         @if (! $ke)
-            <form class="form" method="post" action="{{ route('admin.kenaikan.tahun') }}" style="margin-top:12px">
+            <form class="form jarak-atas" method="post" action="{{ route('admin.kenaikan.tahun') }}">
                 @csrf
                 <p class="samar">Tahun ajaran tujuan belum ada. Buat dulu (belum langsung aktif):</p>
                 <div class="baris"><div><label for="nama">Nama tahun ajaran baru</label><input id="nama" name="nama" value="{{ old('nama', $usulNama) }}" placeholder="2027/2028" required></div></div>
@@ -79,8 +79,8 @@
                 <h2>3. Pengecualian per siswa</h2>
                 <p class="samar">Semua siswa ikut kelasnya. Ubah hanya bagi yang tinggal kelas (tetap di tingkat yang sama, kelas bernama sama di {{ $ke->nama }}), keluar, atau lulus lebih awal.</p>
                 @foreach ($rencana as $r)
-                    <details style="border-top:1px solid #e5e7eb;padding:8px 0">
-                        <summary style="cursor:pointer"><strong>{{ $r['kelas']->nama }}</strong> <span class="samar">— {{ $r['siswa']->count() }} siswa</span></summary>
+                    <details class="lipat-baris">
+                        <summary><strong>{{ $r['kelas']->nama }}</strong> <span class="samar">— {{ $r['siswa']->count() }} siswa</span></summary>
                         <div class="gulir">
                             <table class="tabel">
                                 <thead><tr><th>NIS</th><th>Nama</th><th>Keputusan</th></tr></thead>

@@ -30,6 +30,7 @@ class MasterController extends Controller
         'siswa' => [Siswa::class, ['kelas']],
         'pegawai' => [Pegawai::class, []],
         'mapel' => [\App\Models\Mapel::class, []],
+        'pengampu' => [\App\Models\Pengampu::class, ['pegawai', 'mapel', 'kelas']],
     ];
 
     public function index(Request $request, string $sumber): JsonResponse

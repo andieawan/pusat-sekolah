@@ -17,7 +17,7 @@
             <h2>Akun siswa baru — {{ config('app.name') }}</h2>
             <p class="samar">Masuk di {{ url('/login') }} lalu ganti password. Daftar ini hanya tampil sekali.</p>
             @foreach (collect($hasil)->groupBy('kelas') as $namaKelas => $baris)
-                <h3 style="margin:14px 0 6px">Kelas {{ $namaKelas ?: '-' }}</h3>
+                <h3 class="subjudul">Kelas {{ $namaKelas ?: '-' }}</h3>
                 <div class="gulir">
                     <table class="tabel">
                         <thead><tr><th>NIS</th><th>Nama</th><th>Username</th><th>Password awal</th></tr></thead>
@@ -71,7 +71,7 @@
                                 <td>{{ $s->kelas?->nama }}</td>
                                 <td class="mono">{{ $s->nis }}</td>
                                 <td>{{ $s->nama }}</td>
-                                <td><input class="mono" type="text" name="username[{{ $s->id }}]" value="{{ old('username.'.$s->id, $usulan[$s->id]) }}" maxlength="60" pattern="[A-Za-z0-9._\-]{3,60}" aria-label="Username {{ $s->nama }}" style="max-width:200px"></td>
+                                <td><input type="text" name="username[{{ $s->id }}]" value="{{ old('username.'.$s->id, $usulan[$s->id]) }}" maxlength="60" pattern="[A-Za-z0-9._\-]{3,60}" aria-label="Username {{ $s->nama }}" class="mono input-sedang"></td>
                             </tr>
                         @endforeach
                         </tbody>

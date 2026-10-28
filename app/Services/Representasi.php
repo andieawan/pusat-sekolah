@@ -26,6 +26,7 @@ final class Representasi
             $m instanceof Jurusan => self::jurusan($m),
             $m instanceof TahunAjaran => self::tahunAjaran($m),
             $m instanceof \App\Models\Mapel => self::mapel($m),
+            $m instanceof \App\Models\Pengampu => self::pengampu($m),
             default => throw new InvalidArgumentException('Model tidak didukung: '.$m::class),
         };
     }
@@ -153,6 +154,23 @@ final class Representasi
             'siswa_uuid' => $u->siswa?->uuid,
             'peran' => array_values($peran),
             'diperbarui' => self::waktu($u->updated_at),
+        ];
+    }
+
+    public static function pengampu(\App\Models\Pengampu $p): array
+    {
+        $p->loadMissing(['pegawai', 'mapel', 'kelas']);
+
+        return [
+            'uuid' => $p->uuid,
+            'pegawai_uuid' => $p->pegawai?->uuid,
+            'pegawai_nama' => $p->pegawai?->nama,
+            'mapel_uuid' => $p->mapel?->uuid,
+            'mapel_nama' => $p->mapel?->nama,
+            'kelas_uuid' => $p->kelas?->uuid,
+            'kelas_nama' => $p->kelas?->nama,
+            'diperbarui' => self::waktu($p->updated_at),
+            'dihapus' => self::waktu($p->deleted_at),
         ];
     }
 }

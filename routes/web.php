@@ -94,6 +94,12 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
         Route::post('kenaikan/tahun-baru', [KenaikanController::class, 'tahunBaru'])->name('kenaikan.tahun');
         Route::post('kenaikan', [KenaikanController::class, 'terapkan'])->name('kenaikan.terapkan');
 
+        Route::get('pengampu', [\App\Http\Controllers\Admin\PengampuController::class, 'index'])->name('pengampu.index');
+        Route::post('pengampu', [\App\Http\Controllers\Admin\PengampuController::class, 'store'])->name('pengampu.store');
+        Route::delete('pengampu/{pengampu}', [\App\Http\Controllers\Admin\PengampuController::class, 'destroy'])->whereNumber('pengampu')->name('pengampu.destroy');
+        Route::post('pengampu/impor', [\App\Http\Controllers\Admin\PengampuController::class, 'impor'])->name('pengampu.impor');
+        Route::get('pengampu/templat', [\App\Http\Controllers\Admin\PengampuController::class, 'templat'])->name('pengampu.templat');
+
         Route::get('audit', [AuditController::class, 'index'])->name('audit');
     });
 });

@@ -90,7 +90,7 @@ final class Definisi
                     ['kelompok', 'Kelompok', 'select', 'required|in:umum,kejuruan,mulok', fn () => \App\Models\Mapel::KELOMPOK],
                     ['aktif', 'Aktif (mapel nonaktif tidak muncul di pilihan aplikasi; riwayatnya tetap ada)', 'checkbox', 'boolean'],
                 ],
-                'penghalang' => fn ($m) => null,
+                'penghalang' => fn ($m) => \App\Models\Pengampu::where('mapel_id', $m->id)->exists() ? 'Masih diampu guru. Hapus dulu di Pengampu Mapel.' : null,
             ],
             'pegawai' => [
                 'model' => Pegawai::class,
@@ -115,7 +115,8 @@ final class Definisi
                     ['email', 'Email', 'text', 'nullable|email|max:255'],
                     ['aktif', 'Aktif', 'checkbox', 'boolean'],
                 ],
-                'penghalang' => fn ($m) => Kelas::where('wali_id', $m->id)->exists() ? 'Masih menjadi wali kelas. Ganti wali kelasnya dulu.' : null,
+                'penghalang' => fn ($m) => Kelas::where('wali_id', $m->id)->exists() ? 'Masih menjadi wali kelas. Ganti wali kelasnya dulu.'
+                    : (\App\Models\Pengampu::where('pegawai_id', $m->id)->exists() ? 'Masih tercatat sebagai pengampu mapel. Hapus dulu di Pengampu Mapel.' : null),
             ],
             'kelas' => [
                 'model' => Kelas::class,
@@ -142,7 +143,8 @@ final class Definisi
                     ['wali_id', 'Wali kelas', 'select', 'nullable|integer|exists:pegawai,id',
                         fn () => Pegawai::where('jenis', 'guru')->orderBy('nama')->pluck('nama', 'id')->all()],
                 ],
-                'penghalang' => fn ($m) => $m->siswa()->exists() ? 'Masih ada siswa di kelas ini. Pindahkan dulu.' : null,
+                'penghalang' => fn ($m) => $m->siswa()->exists() ? 'Masih ada siswa di kelas ini. Pindahkan dulu.'
+                    : (\App\Models\Pengampu::where('kelas_id', $m->id)->exists() ? 'Masih ada pengampu mapel di kelas ini. Hapus dulu di Pengampu Mapel.' : null),
             ],
             'siswa' => [
                 'model' => Siswa::class,

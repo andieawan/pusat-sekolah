@@ -25,7 +25,7 @@
             @endforeach
             <div class="baris">
                 <label for="logo">Logo sekolah (PNG/JPG, maks. 2 MB)</label>
-                @if ($logo)<div><img src="{{ route('logo.sekolah') }}?v={{ $nilai['logo_versi'] ?? '' }}" alt="Logo sekolah" width="72" height="72" style="object-fit:contain"></div>@endif
+                @if ($logo)<div><img src="{{ route('logo.sekolah') }}?v={{ $nilai['logo_versi'] ?? '' }}" alt="Logo sekolah" width="72" height="72" class="logo-pratinjau"></div>@endif
                 <input id="logo" name="logo" type="file" accept="image/png,image/jpeg,image/webp">
                 @if ($logo)<label class="centang"><input type="checkbox" name="hapus_logo" value="1"> Hapus logo</label>@endif
                 @error('logo') <div class="galat-input">{{ $message }}</div> @enderror
@@ -42,7 +42,7 @@
             <p class="samar">Berlaku untuk semua akun Pusat (dan karena itu untuk semua aplikasi yang masuk lewat Pusat).</p>
             <div class="baris">
                 <label for="pw_min">Panjang minimal</label>
-                <input id="pw_min" name="pw_min" type="number" min="8" max="64" value="{{ old('pw_min', $pw['min']) }}" required style="max-width:120px">
+                <input id="pw_min" name="pw_min" type="number" min="8" max="64" value="{{ old('pw_min', $pw['min']) }}" required class="input-pendek">
             </div>
             <label class="centang"><input type="checkbox" name="pw_huruf" value="1" @checked($pw['huruf'])> Wajib ada huruf</label>
             <label class="centang"><input type="checkbox" name="pw_angka" value="1" @checked($pw['angka'])> Wajib ada angka</label>

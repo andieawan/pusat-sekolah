@@ -49,7 +49,7 @@
                                 <td>{{ $p->nama }}</td>
                                 <td>{{ $p->jenis === 'staf' ? 'Staf' : 'Guru' }}</td>
                                 <td class="mono">{{ $p->nip }}</td>
-                                <td><input class="mono" type="text" name="username[{{ $p->id }}]" value="{{ old('username.'.$p->id, $usulan[$p->id]) }}" maxlength="60" pattern="[A-Za-z0-9._\-]{3,60}" aria-label="Username {{ $p->nama }}" style="max-width:220px"></td>
+                                <td><input type="text" name="username[{{ $p->id }}]" value="{{ old('username.'.$p->id, $usulan[$p->id]) }}" maxlength="60" pattern="[A-Za-z0-9._\-]{3,60}" aria-label="Username {{ $p->nama }}" class="mono input-sedang"></td>
                             </tr>
                         @endforeach
                         </tbody>
