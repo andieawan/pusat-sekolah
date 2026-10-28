@@ -9,7 +9,7 @@
             <p class="samar">Untuk guru/staf aktif (menu Guru &amp; Staf) yang belum punya akun. Username = NIP; password awal acak dan
                 wajib diganti saat pertama masuk. Akun langsung tersambung ke data guru/staf-nya.</p>
         </div>
-        <a class="tombol sekunder" href="{{ route('admin.akun.index') }}">Kembali ke Akun</a>
+        @if (auth()->user()->superadmin)<a class="tombol sekunder" href="{{ route('admin.akun.index') }}">Kembali ke Akun</a>@endif
     </div>
 
     @if (is_array($hasil) && $hasil)
@@ -73,6 +73,7 @@
                                         <select name="peran[{{ $a->id }}][{{ $j }}]" aria-label="Peran {{ $j }} di {{ $a->nama }}">
                                             <option value="">— tanpa peran —</option>
                                             @foreach ($a->peran_tersedia ?? [] as $r)
+                                            @continue($r === 'admin' && ! auth()->user()->superadmin)
                                                 <option value="{{ $r }}" @selected($pilih === $r)>{{ $r }}</option>
                                             @endforeach
                                         </select>

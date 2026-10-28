@@ -38,8 +38,8 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
     Route::get('/profil/password', [ProfilController::class, 'formPassword'])->name('profil.password');
     Route::put('/profil/password', [ProfilController::class, 'ubahPassword'])->name('profil.password.ubah');
 
-    // --- Panel admin (khusus superadmin) ---
-    Route::middleware('superadmin')->prefix('admin')->name('admin.')->group(function () {
+    // --- Panel admin (superadmin; Operator TU sebagian — lihat AdminPusat::OPERATOR_TU) ---
+    Route::middleware('admin.pusat')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::prefix('data/{sumber}')

@@ -36,6 +36,9 @@ class AkunSiswaMassalController extends Controller
             'username' => ['nullable', 'array'], 'username.*' => ['nullable', 'string', 'min:3', 'max:60', 'regex:/^[A-Za-z0-9._-]+$/'],
             'peran' => ['nullable', 'array'], 'peran.*' => ['nullable', 'string', 'max:40'],
         ], ['siswa.required' => 'Centang minimal satu siswa.', 'username.*.regex' => 'Username hanya huruf, angka, titik, garis bawah, atau strip.']);
+        if (! $request->user()->superadmin && in_array('admin', \Illuminate\Support\Arr::flatten((array) ($d['peran'] ?? [])), true)) {
+            return back()->withInput()->with('galat', 'Peran "admin" hanya bisa diberikan oleh administrator Pusat.');
+        }
         $pilih = array_map('intval', $d['siswa']);
         $nama = array_filter(array_map(fn ($u) => strtolower(trim((string) $u)), array_intersect_key((array) ($d['username'] ?? []), array_flip($pilih))));
         $ganda = array_keys(array_filter(array_count_values($nama), fn ($n) => $n > 1));

@@ -27,11 +27,11 @@ class Pegawai extends Model
     {
         // Pegawai dihapus -> akun yang terhubung dinonaktifkan (token ikut dicabut oleh User).
         static::deleted(function (self $p) {
-            User::where('pegawai_id', $p->id)->get()->each->update(['aktif' => false]);
+            User::where('pegawai_id', $p->id)->where('superadmin', false)->get()->each->update(['aktif' => false]);
         });
         static::updated(function (self $p) {
-            if ($p->wasChanged('aktif') && ! $p->aktif) {
-                User::where('pegawai_id', $p->id)->get()->each->update(['aktif' => false]);
+            if ($p->wasChanged('aktif') && ! $p->aktif) { // akun superadmin tidak ikut dinonaktifkan (cegah admin terkunci)
+                User::where('pegawai_id', $p->id)->where('superadmin', false)->get()->each->update(['aktif' => false]);
             }
         });
     }

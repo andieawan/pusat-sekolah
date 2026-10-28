@@ -23,15 +23,16 @@ class ProfilSekolahController extends Controller
     {
         $aturan = array_map(fn ($k) => $k[1], ProfilSekolah::KOLOM) + [
             'logo' => 'nullable|image|mimes:png,jpg,jpeg,webp|max:2048', 'hapus_logo' => 'nullable|boolean',
-            'pw_min' => 'required|integer|min:8|max:64',
-        ];
+        ] + ($request->user()->superadmin ? ['pw_min' => 'required|integer|min:8|max:64'] : []);
         $d = $request->validate($aturan);
         foreach (array_keys(ProfilSekolah::KOLOM) as $k) {
             Pengaturan::simpan($k, isset($d[$k]) && trim((string) $d[$k]) !== '' ? trim((string) $d[$k]) : null);
         }
-        Pengaturan::simpan('pw_min', (string) $d['pw_min']);
-        foreach (['pw_huruf', 'pw_angka', 'pw_simbol'] as $k) {
-            Pengaturan::simpan($k, $request->boolean($k) ? '1' : '0');
+        if ($request->user()->superadmin) { // aturan password: keamanan akun, khusus superadmin
+            Pengaturan::simpan('pw_min', (string) $d['pw_min']);
+            foreach (['pw_huruf', 'pw_angka', 'pw_simbol'] as $k) {
+                Pengaturan::simpan($k, $request->boolean($k) ? '1' : '0');
+            }
         }
         if ($request->hasFile('logo')) {
             $lama = Pengaturan::ambil('logo');

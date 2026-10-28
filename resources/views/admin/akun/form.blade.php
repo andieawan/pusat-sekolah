@@ -95,6 +95,10 @@
                 <input type="checkbox" name="superadmin" value="1" @checked($adaOld ? (bool) old('superadmin') : (bool) $akun->superadmin)>
                 Superadmin Pusat (mengelola semua data, akun, dan aplikasi; otomatis berperan "admin" di semua aplikasi)
             </label>
+            <label class="centang">
+                <input type="checkbox" name="operator_tu" value="1" @checked($adaOld ? (bool) old('operator_tu') : (bool) $akun->operator_tu)>
+                Operator TU di Pusat (kelola data siswa, guru &amp; staf, kelas, impor CSV, profil sekolah, dan buat akun sekaligus — tanpa menghapus data dan tanpa peran admin)
+            </label>
         </div>
 
         <div class="aksi">

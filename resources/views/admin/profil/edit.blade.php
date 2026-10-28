@@ -37,6 +37,7 @@
             </div>
         </div>
 
+        @if (auth()->user()->superadmin)
         <div class="kartu">
             <h2>Aturan password akun</h2>
             <p class="samar">Berlaku untuk semua akun Pusat (dan karena itu untuk semua aplikasi yang masuk lewat Pusat).</p>
@@ -48,6 +49,7 @@
             <label class="centang"><input type="checkbox" name="pw_angka" value="1" @checked($pw['angka'])> Wajib ada angka</label>
             <label class="centang"><input type="checkbox" name="pw_simbol" value="1" @checked($pw['simbol'])> Wajib ada simbol</label>
         </div>
+        @endif
 
         <div class="aksi"><button class="tombol" type="submit">Simpan &amp; kabarkan ke semua aplikasi</button></div>
     </form>

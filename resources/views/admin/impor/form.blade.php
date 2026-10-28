@@ -18,7 +18,7 @@
                 <label class="centang"><input type="radio" name="sumber" value="siswa" @checked(old('sumber', 'siswa') === 'siswa')> Siswa (kunci: NIS)</label>
                 <label class="centang"><input type="radio" name="sumber" value="pegawai" @checked(old('sumber') === 'pegawai')> Guru &amp; staf (kunci: NIP/ID)</label>
                 <label class="centang"><input type="radio" name="sumber" value="kelas" @checked(old('sumber') === 'kelas')> Kelas (kunci: nama + tahun ajaran)</label>
-                <label class="centang"><input type="radio" name="sumber" value="mapel" @checked(old('sumber') === 'mapel')> Mata pelajaran (kunci: kode)</label>
+                @if (auth()->user()->superadmin)<label class="centang"><input type="radio" name="sumber" value="mapel" @checked(old('sumber') === 'mapel')> Mata pelajaran (kunci: kode)</label>@endif
             </div>
             <div class="baris">
                 <label for="berkas">File CSV (maks. 2 MB / 5.000 baris)</label>
@@ -32,6 +32,7 @@
         <h2>Format file</h2>
         <p class="samar">Baris pertama adalah judul kolom. Pemisah <code>,</code> atau <code>;</code> dikenali otomatis (Excel Indonesia: Simpan sebagai "CSV (pemisah koma)"). Kolom yang tidak ada dibiarkan kosong.</p>
         @foreach ($kolom as $sumber => $daftar)
+            @continue(! auth()->user()->superadmin && ! in_array($sumber, \App\Http\Middleware\AdminPusat::SUMBER_TU, true))
             <p>
                 <strong>{{ ['siswa' => 'Siswa', 'kelas' => 'Kelas', 'mapel' => 'Mata pelajaran'][$sumber] ?? 'Guru & staf' }}</strong>
                 — <a href="{{ route('admin.impor.templat', $sumber) }}">unduh templat</a><br>

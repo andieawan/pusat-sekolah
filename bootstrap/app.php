@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'app.client' => AuthAplikasi::class,
             'superadmin' => HanyaSuperadmin::class,
+            'admin.pusat' => \App\Http\Middleware\AdminPusat::class,
             'akun.aktif' => \App\Http\Middleware\AkunAktif::class,
             'ganti.password' => \App\Http\Middleware\WajibGantiPassword::class,
         ]);

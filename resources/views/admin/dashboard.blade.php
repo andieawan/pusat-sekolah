@@ -40,6 +40,7 @@
         </ul>
     </div>
 
+    @if (auth()->user()->superadmin)
     <div class="kartu">
         <div class="kartu-kepala">
             <h2>Aplikasi terhubung</h2>
@@ -75,4 +76,5 @@
             </div>
         @endif
     </div>
+    @endif
 @endsection

@@ -20,7 +20,7 @@
             <h1>{{ $salam }}, {{ auth()->user()->nama }}</h1>
             <p class="samar">Pilih aplikasi yang ingin dibuka — Anda langsung masuk tanpa login lagi.</p>
         </div>
-        @if (auth()->user()->superadmin)
+        @if (auth()->user()->bisaAdmin())
             <a class="tombol sekunder" href="{{ route('admin.dashboard') }}">Buka Administrasi</a>
         @endif
     </div>

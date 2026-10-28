@@ -10,7 +10,7 @@
 </head>
 @php
     $saya = auth()->user();
-    $admin = $saya?->superadmin && request()->routeIs('admin.*');
+    $admin = $saya?->bisaAdmin() && request()->routeIs('admin.*');
     $namaSekolah = \App\Models\Pengaturan::ambil('nama');
     $adaLogo = \App\Services\ProfilSekolah::logoPath() !== null;
     $menu = [
@@ -43,6 +43,19 @@
             ['Audit', route('admin.audit'), request()->routeIs('admin.audit')],
         ],
     ];
+    if ($saya && ! $saya->superadmin) {
+        // Operator TU: hanya menu yang boleh dikerjakannya.
+        $menu = [
+            '' => [['Ringkasan', route('admin.dashboard'), request()->routeIs('admin.dashboard')]],
+            'Data induk' => array_values(array_filter($menu['Data induk'], fn ($m) => in_array($m[0], ['Siswa', 'Guru & Staf', 'Kelas'], true))),
+            'Proses' => [$menu['Proses'][0]],
+            'Akun' => [
+                ['Buat akun guru & staf', route('admin.akun.massal'), request()->routeIs('admin.akun.massal*')],
+                ['Buat akun siswa', route('admin.akun.siswa'), request()->routeIs('admin.akun.siswa*')],
+            ],
+            'Sekolah' => [$menu['Sekolah'][0]],
+        ];
+    }
 @endphp
 <body @class(['dengan-sisi' => $admin])>
 <a class="lompat" href="#isi">Lompat ke isi</a>
@@ -59,7 +72,7 @@
         </a>
         <nav class="nav-utama" aria-label="Menu utama">
             <a href="{{ route('portal') }}" @class(['aktif' => request()->routeIs('portal')])>Aplikasi saya</a>
-            @if ($saya?->superadmin)
+            @if ($saya?->bisaAdmin())
                 <a href="{{ route('admin.dashboard') }}" @class(['aktif' => request()->routeIs('admin.*')])>Administrasi</a>
             @endif
         </nav>
@@ -67,9 +80,9 @@
             <details class="akun-menu">
                 <summary><span class="avatar" aria-hidden="true">{{ mb_strtoupper(mb_substr($saya->nama, 0, 1)) }}</span><span class="akun-nama">{{ $saya->nama }}</span></summary>
                 <div class="akun-isi">
-                    <div class="akun-kepala"><strong>{{ $saya->nama }}</strong><span class="samar">{{ $saya->username }}{{ $saya->superadmin ? ' · superadmin' : '' }}</span></div>
+                    <div class="akun-kepala"><strong>{{ $saya->nama }}</strong><span class="samar">{{ $saya->username }}{{ $saya->superadmin ? ' · superadmin' : ($saya->operator_tu ? ' · operator TU' : '') }}</span></div>
                     <a class="hanya-hp" href="{{ route('portal') }}">Aplikasi saya</a>
-                    @if ($saya->superadmin)<a class="hanya-hp" href="{{ route('admin.dashboard') }}">Administrasi</a>@endif
+                    @if ($saya->bisaAdmin())<a class="hanya-hp" href="{{ route('admin.dashboard') }}">Administrasi</a>@endif
                     <a href="{{ route('profil.password') }}">Ganti password</a>
                     <form method="post" action="{{ route('logout') }}">@csrf<button type="submit">Keluar</button></form>
                 </div>

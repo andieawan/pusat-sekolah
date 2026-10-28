@@ -137,6 +137,7 @@ class AkunController extends Controller
                 'pegawai_id' => $v['pegawai_id'] ?? null,
                 'siswa_id' => $siswaId,
                 'superadmin' => $request->boolean('superadmin'),
+                'operator_tu' => $request->boolean('operator_tu'),
                 'aktif' => $request->boolean('aktif'),
             ],
             'password' => $v['password'] ?? null,

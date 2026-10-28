@@ -14,7 +14,7 @@ class User extends Authenticatable
     use PunyaUuid;
 
     protected $fillable = [
-        'username', 'nama', 'email', 'password', 'superadmin', 'aktif', 'pegawai_id', 'siswa_id',
+        'username', 'nama', 'email', 'password', 'superadmin', 'operator_tu', 'aktif', 'pegawai_id', 'siswa_id',
     ];
 
     protected $hidden = ['password', 'remember_token'];
@@ -24,6 +24,7 @@ class User extends Authenticatable
         return [
             'password' => 'hashed',
             'superadmin' => 'boolean',
+            'operator_tu' => 'boolean',
             'aktif' => 'boolean',
             'login_terakhir' => 'datetime',
             'wajib_ganti_password' => 'boolean',
@@ -83,5 +84,11 @@ class User extends Authenticatable
     public function tipe(): string
     {
         return $this->siswa_id ? 'siswa' : ($this->pegawai_id ? 'pegawai' : 'akun');
+    }
+
+    /** Boleh membuka panel Administrasi Pusat (superadmin, atau Operator TU untuk sebagian halaman). */
+    public function bisaAdmin(): bool
+    {
+        return $this->superadmin || $this->operator_tu;
     }
 }

@@ -25,6 +25,12 @@ class DashboardController extends Controller
             return $a;
         });
         $tahun = TahunAjaran::aktif();
+        $super = (bool) auth()->user()->superadmin;
+        $tugas = $this->tugas($tahun, $aplikasi);
+        if (! $super) { // Operator TU: hanya tugas yang bisa ia kerjakan
+            $boleh = [route('admin.profil.edit'), route('admin.master.index', 'kelas'), route('admin.master.index', 'siswa'), route('admin.akun.massal')];
+            $tugas = array_values(array_filter($tugas, fn ($t) => in_array($t[3], $boleh, true)));
+        }
 
         return view('admin.dashboard', [
             'tahun' => $tahun,
@@ -32,9 +38,9 @@ class DashboardController extends Controller
                 ['Siswa aktif', Siswa::where('status', 'aktif')->count(), route('admin.master.index', 'siswa')],
                 ['Guru & staf', Pegawai::where('aktif', true)->count(), route('admin.master.index', 'pegawai')],
                 ['Kelas '.($tahun?->nama ?? ''), $tahun ? Kelas::where('tahun_ajaran_id', $tahun->id)->count() : Kelas::count(), route('admin.master.index', 'kelas')],
-                ['Akun aktif', User::where('aktif', true)->count(), route('admin.akun.index')],
+                ['Akun aktif', User::where('aktif', true)->count(), $super ? route('admin.akun.index') : route('admin.akun.massal')],
             ],
-            'tugas' => $this->tugas($tahun, $aplikasi),
+            'tugas' => $tugas,
             'aplikasi' => $aplikasi,
         ]);
     }

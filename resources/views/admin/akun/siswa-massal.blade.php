@@ -9,7 +9,7 @@
             <p class="samar">Untuk siswa aktif yang belum punya akun (mis. siswa yang akan PKL). Username = NIS; password awal acak dan wajib
                 diganti saat pertama masuk. Akun otomatis nonaktif bila siswa lulus, pindah, atau keluar.</p>
         </div>
-        <a class="tombol sekunder" href="{{ route('admin.akun.index') }}">Kembali ke Akun</a>
+        @if (auth()->user()->superadmin)<a class="tombol sekunder" href="{{ route('admin.akun.index') }}">Kembali ke Akun</a>@endif
     </div>
 
     @if (is_array($hasil) && $hasil)
@@ -93,6 +93,7 @@
                                     <select name="peran[{{ $a->id }}]" aria-label="Peran siswa di {{ $a->nama }}">
                                         <option value="">— tanpa peran —</option>
                                         @foreach ($a->peran_tersedia ?? [] as $r)
+                                            @continue($r === 'admin' && ! auth()->user()->superadmin)
                                             <option value="{{ $r }}" @selected($pilih === $r)>{{ $r }}</option>
                                         @endforeach
                                     </select>

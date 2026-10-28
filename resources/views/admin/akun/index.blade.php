@@ -29,7 +29,7 @@
                     <tr>
                         <td>
                             {{ $u->username }}
-                            @if ($u->superadmin) <span class="lencana warn">superadmin</span> @endif
+                            @if ($u->superadmin) <span class="lencana warn">superadmin</span> @endif @if ($u->operator_tu) <span class="lencana">operator TU</span> @endif
                             @unless ($u->aktif) <span class="lencana bad">nonaktif</span> @endunless
                         </td>
                         <td data-label="Nama">{{ $u->nama }}</td>

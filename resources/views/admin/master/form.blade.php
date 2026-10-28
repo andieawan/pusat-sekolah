@@ -64,7 +64,7 @@
         </form>
     </div>
 
-    @if ($rec->exists)
+    @if ($rec->exists && auth()->user()->superadmin)
         <div class="kartu zona-bahaya">
             <h2>Hapus {{ mb_strtolower($d['judul']) }}</h2>
             <p class="samar">Data dihapus dari Pusat dan semua aplikasi diberi tahu.@if ($sumber === 'siswa') Untuk siswa yang lulus atau pindah, cukup ubah <strong>Status</strong> — riwayatnya tetap tersimpan.@endif</p>
