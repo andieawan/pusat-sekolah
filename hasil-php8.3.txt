@@ -3,8 +3,9 @@ PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.3.36
 Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 
-...............................................................   63 / 63 (100%)
+................................................................. 65 / 65 (100%)
 
-Time: 00:03.107, Memory: 64.50 MB
 
-OK (63 tests, 342 assertions)
+Time: 00:03.930, Memory: 64.50 MB
+
+OK (65 tests, 356 assertions)
