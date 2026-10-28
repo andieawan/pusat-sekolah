@@ -68,7 +68,7 @@ return [
         'web' => [
             'nama' => 'Website Sekolah',
             'peran' => ['admin', 'editor'],
-            'scope' => ['jurusan', 'ringkasan', 'akun'],
+            'scope' => ['jurusan', 'ringkasan', 'akun', 'akun_sandi'],
         ],
     ],
 
