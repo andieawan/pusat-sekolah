@@ -39,7 +39,7 @@ final class SambunganService
     {
         $baris = Sambungan::all()->keyBy('jenis');
         $hasil = [];
-        foreach ((array) config('pusat.sambungan') as $jenis => $def) {
+        foreach (Sambungan::semua() as $jenis => $def) {
             if (! in_array($app->kode, [$def['pemberi'], $def['peminta']], true)) {
                 continue;
             }

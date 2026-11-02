@@ -17,7 +17,7 @@ class SambunganController extends Controller
     {
         $baris = Sambungan::all()->keyBy('jenis');
         $daftar = [];
-        foreach ((array) config('pusat.sambungan') as $jenis => $def) {
+        foreach (Sambungan::semua() as $jenis => $def) {
             [$pemberi, $peminta] = SambunganService::pasangan($def);
             $kabar = [];
             foreach ([$pemberi, $peminta] as $app) {
