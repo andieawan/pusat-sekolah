@@ -56,11 +56,7 @@ class Sambungan extends Model
     /** Kode aplikasi yang melayani data kehadiran untuk aplikasi lain (bawaan: absensi). */
     public static function penyediaAbsensi(): string
     {
-        try {
-            return Pengaturan::ambil('aplikasi_absensi') ?: 'absensi';
-        } catch (\Throwable) {
-            return 'absensi';
-        }
+        return Pengaturan::ambil('aplikasi_absensi', 'absensi');
     }
 
     public function buatKunci(): void
