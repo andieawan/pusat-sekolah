@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class AplikasiBaru extends Command
 {
-    protected $signature = 'pusat:aplikasi-baru {kode : mis. absensi, bk, tu, pkl, web}
+    protected $signature = 'pusat:aplikasi-baru {kode : mis. absensi, jurnal, bk, tu, pkl, web}
                             {--base-url= : URL aplikasi, mis. https://absensi.smkibupakusari.sch.id}
                             {--redirect= : Redirect URI SSO (bawaan: <base-url>/sso/callback)}
                             {--webhook= : URL penerima webhook (bawaan: <base-url>/pusat/webhook; Absensi: <base-url>/api/pusat/webhook)}';
