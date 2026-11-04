@@ -24,4 +24,14 @@ class AplikasiBaruTest extends TestCase
         $this->assertSame(['https://pkl.example.test/sso/callback'], $a->redirect_uris);
         $this->assertContains('siswa', $a->scope);
     }
+
+    public function test_templat_tanggungan_hanya_data_siswa_dasar(): void
+    {
+        $this->artisan('pusat:aplikasi-baru', ['kode' => 'tanggungan', '--base-url' => 'https://tanggungan.example.test'])->assertSuccessful();
+        $a = Aplikasi::where('kode', 'tanggungan')->firstOrFail();
+        $this->assertSame('https://tanggungan.example.test/api/pusat/webhook', $a->webhook_url);
+        $this->assertContains('siswa_dasar', $a->scope);
+        $this->assertNotContains('siswa', $a->scope);
+        $this->assertSame(['admin', 'bendahara', 'kepsek', 'wali_kelas'], $a->peran_tersedia);
+    }
 }

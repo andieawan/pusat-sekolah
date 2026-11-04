@@ -72,6 +72,13 @@ return [
             'peran' => ['admin', 'koordinator', 'guru_pembimbing', 'siswa'],
             'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai_dasar', 'akun', 'akun_sandi'],
         ],
+        'tanggungan' => [
+            'nama' => 'Tanggungan Siswa',
+            'webhook_path' => '/api/pusat/webhook',
+            // Daftar ulang & iuran syariah. Bendahara mencatat; kepsek & wali kelas melihat. Data siswa dasar saja.
+            'peran' => ['admin', 'bendahara', 'kepsek', 'wali_kelas'],
+            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa_dasar', 'pegawai_dasar', 'akun', 'akun_sandi'],
+        ],
         'web' => [
             'nama' => 'Website Sekolah',
             'peran' => ['admin', 'editor'],
