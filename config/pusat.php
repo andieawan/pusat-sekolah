@@ -44,7 +44,7 @@ return [
             'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
             'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'akun_sandi', 'siswa_kontak', 'mapel', 'pengampu'],
         ],
-        // Jurnal Guru: pengembangan dari Absensi (jurnal mengajar + absensi + nilai), memakai klien Pusat yang sama.
+        // Jurnal Guru: pengganti Absensi (jurnal mengajar + absensi + nilai), memakai klien Pusat yang sama.
         'jurnal' => [
             'nama' => 'Jurnal Guru',
             'webhook_path' => '/api/pusat/webhook',
@@ -83,9 +83,9 @@ return [
     // pemberi = aplikasi yang menyediakan data; peminta = aplikasi yang mengambilnya. Kunci dibuat otomatis oleh Pusat.
     'sambungan' => [
         'absensi-bk' => [
-            'nama' => 'Absensi → BK',
+            'nama' => 'Jurnal Guru → BK',
             'keterangan' => 'BK membaca rekap kehadiran, mencatat absensi manual, dan membuat tautan delegasi ketua kelas.',
-            'pemberi' => 'absensi', 'peminta' => 'bk', 'kunci' => true,
+            'pemberi' => 'jurnal', 'peminta' => 'bk', 'kunci' => true,
         ],
         'pkl-bk' => [
             'nama' => 'PKL → BK',

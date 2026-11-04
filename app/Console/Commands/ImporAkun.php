@@ -20,7 +20,7 @@ use InvalidArgumentException;
  */
 class ImporAkun extends Command
 {
-    protected $signature = 'pusat:impor-akun {berkas : Path CSV} {--aplikasi=absensi : Kode aplikasi tempat peran diberikan} {--terapkan : Tulis ke database (tanpa ini hanya simulasi)}';
+    protected $signature = 'pusat:impor-akun {berkas : Path CSV} {--aplikasi=jurnal : Kode aplikasi tempat peran diberikan} {--terapkan : Tulis ke database (tanpa ini hanya simulasi)}';
 
     protected $description = 'Buat akun guru/staf dan peran di satu aplikasi dari CSV';
 

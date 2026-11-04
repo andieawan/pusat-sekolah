@@ -1,7 +1,7 @@
 # Pusat Sekolah — SMKS Islam Bustanul Ulum
 
 Aplikasi pusat yang mengatur **login tunggal (SSO)**, **data induk** (tahun ajaran, jurusan, kelas, siswa, guru/staf),
-**hak akses per aplikasi**, **API**, dan **webhook** untuk aplikasi-aplikasi sekolah (Absensi, BK, TU, PKL, Website).
+**hak akses per aplikasi**, **API**, dan **webhook** untuk aplikasi-aplikasi sekolah (Jurnal Guru, BK, TU, PKL, Website).
 Tiap aplikasi tetap punya database sendiri; Pusat hanya menyimpan data yang dipakai bersama.
 
 Laravel 13 · PHP 8.3+ · MySQL 8 / MariaDB 10.6+ · tanpa proses build front-end.
@@ -55,10 +55,7 @@ Menjalankan `webhook:kirim` tiap menit dan `pusat:bersihkan` (hapus kode/token k
 > Uji coba lokal? Cukup `php artisan pusat:siapkan-lokal --demo` (lihat `docs/PENYIAPAN-LOKAL.md`).
 
 ```bash
-php artisan pusat:aplikasi-baru absensi \
-  --base-url=https://absensi.smkibu.example \
-  --redirect=https://absensi.smkibu.example/sso/callback \
-  --webhook=https://absensi.smkibu.example/hooks/pusat
+php artisan pusat:aplikasi-baru jurnal --base-url=https://jurnal.smkibu.example
 ```
 Perintah mencetak `client_id`, `client_secret`, dan `webhook_secret` **sekali saja** — simpan di `.env` aplikasi tersebut.
 Bisa juga lewat panel: **Admin → Aplikasi** (ada tombol rotasi rahasia dan uji ping webhook).
@@ -66,11 +63,11 @@ Bisa juga lewat panel: **Admin → Aplikasi** (ada tombol rotasi rahasia dan uji
 ### Mengisi Pusat dari aplikasi yang sudah berjalan
 
 Urutan impor di panel **Admin → Impor CSV**: **Guru & staf → Kelas → Siswa** (selalu ada pratinjau dulu).
-Akun login guru dibuat dari CSV dengan `php artisan pusat:impor-akun akun.csv --aplikasi=absensi` (simulasi),
+Akun login guru dibuat dari CSV dengan `php artisan pusat:impor-akun akun.csv --aplikasi=jurnal` (simulasi),
 lalu ulangi dengan `--terapkan`; password sementara ditulis ke satu berkas yang harus dibagikan lalu dihapus.
-Untuk Absensi, CSV-nya dibuat oleh `php artisan pusat:ekspor` di sisi Absensi (lihat `docs/PUSAT.md` di repo Absensi).
+CSV-nya bisa dibuat oleh `php artisan pusat:ekspor` di sisi Jurnal (lihat `docs/PUSAT.md` di repo jurnal-pusat).
 
-Preset (peran & scope bawaan): `absensi`, `bk`, `tu`, `pkl`, `web` — lihat `config/pusat.php`.
+Preset (peran & scope bawaan): `jurnal`, `bk`, `tu`, `pkl`, `web` — lihat `config/pusat.php`.
 
 ## Panel admin (hanya superadmin)
 

@@ -1,11 +1,12 @@
 # Penyiapan VM — Pusat Sekolah (dari nol sampai jalan)
 
-Pusat adalah aplikasi **pertama yang dipasang**: aplikasi lain (Absensi, Website, dst.) mendaftar ke sini.
+Pusat adalah aplikasi **pertama yang dipasang**: aplikasi lain (Jurnal Guru, BK, TU, PKL, Website) mendaftar ke sini.
 Target: VM **Ubuntu Server 26.04 LTS** (PHP 8.5; 24.04 dengan PHP 8.3 juga bisa), **Nginx + PHP-FPM + MariaDB**, dipublikasikan lewat NPMplus/Cloudflare.
 Semua perintah dijalankan sebagai user biasa yang punya `sudo`. Domain yang dipakai: `smkibupakusari.sch.id` (subdomain per aplikasi).
 
 ## Urutan pemasangan seluruh sistem
-1. **Pusat** (panduan ini) → 2. **Absensi** (`docs/UBUNTU.md` di repo absensi-pusat) → 3. **Website** (`deploy/PANDUAN-VM.md` di repo web-pusat).
+1. **Pusat** (panduan ini) → 2. **Jurnal Guru** (`docs/PASANG-VM-JURNAL.md` di repo jurnal-pusat) → 3. **BK, TU, PKL** (`docs/PASANG-*.md` di repo masing-masing) → 4. **Website** (`deploy/PANDUAN-VM.md` di repo web-pusat).
+Semuanya dipasang dengan pola yang sama: `git clone` lalu `sudo … bash deploy/install.sh`.
 Tiap aplikasi boleh di VM sendiri-sendiri (disarankan: 1 VM per aplikasi, 1 GB RAM cukup untuk Pusat) atau satu VM dengan domain berbeda.
 
 ## 1. Buat VM di Proxmox
@@ -136,10 +137,7 @@ Pulihkan: `gunzip < pusat_TANGGAL.sql.gz | mysql -u pusat -p pusat`.
 ## 11. Tes & mendaftarkan aplikasi pertama
 ```bash
 composer install && php artisan test       # opsional, butuh paket dev; lalu composer install --no-dev lagi
-php artisan pusat:aplikasi-baru absensi \
-  --base-url=https://absensi.smkibupakusari.sch.id \
-  --redirect=https://absensi.smkibupakusari.sch.id/sso/callback \
-  --webhook=https://absensi.smkibupakusari.sch.id/api/pusat/webhook
+sudo -u www-data php artisan pusat:aplikasi-baru jurnal --base-url=https://jurnal.smkibupakusari.sch.id
 ```
 Perintah mencetak `client_id`, `client_secret`, `webhook_secret` **sekali saja** — salin ke `.env` aplikasi tersebut
 (lihat panduan masing-masing). Untuk Website: `pusat:aplikasi-baru web ... --redirect=https://WEBSITE/pusat/callback --webhook=https://WEBSITE/pusat/webhook`.

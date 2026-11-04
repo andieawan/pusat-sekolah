@@ -1,43 +1,44 @@
-# Runbook Produksi — Pusat Sekolah + Absensi + Website
+# Runbook Produksi — Pusat Sekolah + Jurnal Guru + Website
 
 Urutan ini sudah memperhitungkan semua kesalahan yang muncul saat uji coba. Ikuti **berurutan**; tiap tahap punya
 pemeriksaan (✔) — jangan lanjut sebelum ✔ lulus. Langkah rinci pemasangan ada di `PENYIAPAN-VM.md` (Pusat),
-`docs/UBUNTU.md` (Absensi) dan `deploy/PANDUAN-VM.md` (Website).
+`docs/PASANG-VM-JURNAL.md` di repo jurnal-pusat (Jurnal Guru) dan `deploy/PANDUAN-VM.md` (Website).
+BK, TU, dan PKL dipasang dengan cara yang sama (lihat `docs/PASANG-*.md` di repo masing-masing).
 
 ## 0. Sebelum mulai (sekali saja)
 
 | Siapkan | Catatan |
 |---|---|
-| 3 subdomain | `pusat.smkibupakusari.sch.id`, `absensi.smkibupakusari.sch.id`, dan website di `smkibupakusari.sch.id` (+`www` diarahkan ke situ) — **masing-masing HTTPS sendiri** (jangan satu domain berbagi path) |
+| 3 subdomain | `pusat.smkibupakusari.sch.id`, `jurnal.smkibupakusari.sch.id`, dan website di `smkibupakusari.sch.id` (+`www` diarahkan ke situ) — **masing-masing HTTPS sendiri** (jangan satu domain berbagi path) |
 | Sertifikat HTTPS **sah** | Let's Encrypt lewat NPMplus. Jangan sertifikat buatan sendiri di produksi |
 | PHP 8.3+ | Ubuntu 24.04 = 8.3, 26.04 = 8.5. Paket: `php-fpm php-cli php-mysql php-mbstring php-xml php-curl php-zip php-gd` |
 | Token GitHub (repo private) | Fine-grained, **Contents: read-only**. Jangan ditempel di chat/dokumen |
-| Antar-VM saling terjangkau | Absensi/Website → Pusat (`/api/…`) **dan** Pusat → Absensi/Website (webhook). Uji dengan `curl -i https://pusat…/api/v1/ping` dari VM klien (balasan 401 = jaringan OK) |
+| Antar-VM saling terjangkau | Jurnal/Website → Pusat (`/api/…`) **dan** Pusat → Jurnal/Website (webhook). Uji dengan `curl -i https://pusat…/api/v1/ping` dari VM klien (balasan 401 = jaringan OK) |
 
 > **Hairpin NAT:** bila semua VM satu LAN tetapi domain publik lewat router/NPMplus, VM kadang tak bisa membuka
 > domain publiknya sendiri (timeout, "cURL error 28"). Solusi: tambahkan di `/etc/hosts` tiap VM
-> `IP-NPMplus  pusat.smkibupakusari.sch.id absensi.smkibupakusari.sch.id smkibupakusari.sch.id`, atau pakai DNS lokal.
+> `IP-NPMplus  pusat.smkibupakusari.sch.id jurnal.smkibupakusari.sch.id smkibupakusari.sch.id`, atau pakai DNS lokal.
 
 ### Susunan: 1 aplikasi = 1 VM
 
 | VM | Isi | Domain | Saran awal |
 |---|---|---|---|
 | vm-pusat | Pusat + MariaDB + cron | `pusat.smkibupakusari.sch.id` | 1–2 vCPU, 2 GB RAM, 20 GB |
-| vm-absensi | Absensi + MariaDB + cron | `absensi.smkibupakusari.sch.id` | 2 vCPU, 2–4 GB RAM, 30 GB |
+| jurnal-pusat | Jurnal Guru + MariaDB + cron | `jurnal.smkibupakusari.sch.id` | 2 vCPU, 2–4 GB RAM, 30 GB |
 | vm-web | Website + MariaDB | `smkibupakusari.sch.id` | 1–2 vCPU, 2 GB RAM, 20–30 GB |
 
 Aturan jaringan (beri IP tetap/DHCP reservasi untuk tiap VM):
 - NPMplus → tiap VM: port 80 (HTTP biasa; HTTPS berhenti di NPMplus).
-- Antar-VM: **tidak perlu** akses langsung. Absensi/Website memanggil Pusat, dan Pusat mengirim webhook ke Absensi/Website,
+- Antar-VM: **tidak perlu** akses langsung. Jurnal/Website memanggil Pusat, dan Pusat mengirim webhook ke Jurnal/Website,
   semuanya **lewat domain HTTPS** (jadi lewat NPMplus). Karena itu tiap VM wajib bisa me-resolve ketiga subdomain
   (DNS lokal atau `/etc/hosts` → IP NPMplus; lihat catatan hairpin di bawah).
 - Firewall tiap VM (`ufw`): `sudo ufw allow from <IP-NPMplus> to any port 80 proto tcp`, `sudo ufw allow from <IP-admin> to any port 22 proto tcp`, `sudo ufw enable`.
   Database dibiarkan hanya di `127.0.0.1` (default MariaDB) — tiap VM punya database sendiri.
-- Tiap VM punya cron `schedule:run` dan backup sendiri; Pusat dan Absensi sebaiknya di-backup ke tempat berbeda dari VM-nya.
+- Tiap VM punya cron `schedule:run` dan backup sendiri; Pusat dan Jurnal sebaiknya di-backup ke tempat berbeda dari VM-nya.
 
 ### DNS (Cloudflare) dan NPMplus
 
-Buat record `A`/`CNAME` untuk `pusat`, `absensi`, `@` (website) dan `www` ke IP publik/tunnel yang sama. Di NPMplus buat satu
+Buat record `A`/`CNAME` untuk `pusat`, `jurnal`, `@` (website) dan `www` ke IP publik/tunnel yang sama. Di NPMplus buat satu
 Proxy Host per subdomain → teruskan ke IP VM masing-masing (port 80), centang *Force SSL* + *HTTP/2*, minta sertifikat
 Let's Encrypt. Bila memakai proxy Cloudflare (awan oranye), mode SSL harus **Full (strict)**. Lalu isi `TRUSTED_PROXIES`
 di tiap VM dengan IP NPMplus. Cookie sesi tiap subdomain terpisah (jangan isi `SESSION_DOMAIN`).
@@ -64,20 +65,20 @@ Hal yang paling sering salah:
 
 Isi **alamat produksi** (https) — bukan alamat uji:
 
-| Kolom | Absensi | Website |
+| Kolom | Jurnal Guru | Website |
 |---|---|---|
-| Kode | `absensi` | `web` |
-| URL dasar | `https://absensi.smkibupakusari.sch.id` | `https://smkibupakusari.sch.id` |
-| Redirect URI | `https://absensi.smkibupakusari.sch.id/sso/callback` | `https://smkibupakusari.sch.id/pusat/callback` |
-| URL webhook | `https://absensi.smkibupakusari.sch.id/api/pusat/webhook` | `https://smkibupakusari.sch.id/pusat/webhook` |
+| Kode | `jurnal` | `web` |
+| URL dasar | `https://jurnal.smkibupakusari.sch.id` | `https://smkibupakusari.sch.id` |
+| Redirect URI | `https://jurnal.smkibupakusari.sch.id/sso/callback` | `https://smkibupakusari.sch.id/pusat/callback` |
+| URL webhook | `https://jurnal.smkibupakusari.sch.id/api/pusat/webhook` | `https://smkibupakusari.sch.id/pusat/webhook` |
 
 Redirect URI harus **persis sama** (https/http, www, tanpa garis miring di akhir). Salin **Client ID**, **Client Secret**
 dan **Webhook Secret** — secret hanya tampil sekali. Beri tiap pengguna akses/peran di menu Akses
 (superadmin otomatis `admin` di semua aplikasi).
 
-## 3. Pasang Absensi (`docs/UBUNTU.md`) lalu sambungkan
+## 3. Pasang Jurnal Guru (`docs/PASANG-VM-JURNAL.md`) lalu sambungkan
 
-Di `.env` Absensi:
+Di `.env` Jurnal:
 
 ```
 PUSAT_ENABLED=true
@@ -100,9 +101,9 @@ penautan pertama berdasarkan **email**, jadi email di Pusat harus sama dengan em
 
 ## 5. Uji menyeluruh sebelum dipakai guru
 
-1. Ubah nama seorang guru di Pusat → tunggu ≤ 1–2 menit → muncul perubahan di Absensi (webhook, butuh cron).
+1. Ubah nama seorang guru di Pusat → tunggu ≤ 1–2 menit → muncul perubahan di Jurnal (webhook, butuh cron).
    Jika tidak: Pusat → menu Aplikasi → Webhook → lihat galat; `pusat:periksa` menunjukkan webhook tertahan.
-2. Nonaktifkan akun uji di Pusat → akun itu tidak bisa masuk lagi di Absensi.
+2. Nonaktifkan akun uji di Pusat → akun itu tidak bisa masuk lagi di Jurnal.
 3. Cadangan: jalankan `sudo bash deploy/backup.sh` (Pusat) dan `php artisan absensi:backup`; pastikan file dibuat.
    Tes **restore** ke database kosong sekali sebelum produksi.
 
@@ -133,7 +134,7 @@ penautan pertama berdasarkan **email**, jadi email di Pusat harus sama dengan em
 | `git pull` gagal "local changes … vendor" | composer mengubah berkas di vendor/ | `git ls-files -m -- vendor \| xargs git checkout --` (sudah otomatis di `update.sh`) |
 | `git clone` "Password authentication is not supported" | repo private | pakai token (lihat langkah clone di panduan) |
 | Halaman Laravel "419" saat login lewat `http://IP` | `SESSION_SECURE_COOKIE=true` tetapi akses http | set `false` untuk uji http; kembalikan `true` setelah HTTPS |
-| Tampilan polos (tanpa CSS) lewat HTTPS | aset dibuat `http://` (mixed content) karena proxy tak tepercaya | `git pull` (Absensi memaksa https bila `APP_URL` https); isi `TRUSTED_PROXIES` dengan IP NPMplus dari `access.log` |
+| Tampilan polos (tanpa CSS) lewat HTTPS | aset dibuat `http://` (mixed content) karena proxy tak tepercaya | `git pull` (Jurnal memaksa https bila `APP_URL` https); isi `TRUSTED_PROXIES` dengan IP NPMplus dari `access.log` |
 | `dubious ownership` / `Permission denied` di `vendor/` | folder di-clone dengan `sudo` (milik root) | `sudo chown -R $USER:www-data /var/www/<folder>`; clone tanpa sudo |
 | `Unable to set application key` | cache konfigurasi lama / `.env` rusak saat tempel banyak baris ke nano | `cp .env.example .env`, `php artisan config:clear`, lalu isi satu per satu |
 | `Access denied ... using password: NO/YES` | `DB_PASSWORD` kosong/beda dari MariaDB | buat ulang user dengan password acak (lihat `PENYIAPAN-VM.md`) |

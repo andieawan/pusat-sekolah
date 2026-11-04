@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 final class AkunMassal
 {
     /** Peran awal bawaan: [kode aplikasi => [guru => peran|null, staf => peran|null]] */
-    public const BAWAAN = ['absensi' => ['guru' => 'guru', 'staf' => null], 'tu' => ['guru' => 'pegawai', 'staf' => 'pegawai']];
+    public const BAWAAN = ['jurnal' => ['guru' => 'guru', 'staf' => null], 'tu' => ['guru' => 'pegawai', 'staf' => 'pegawai']];
 
     /** @return Collection<int,Pegawai> */
     public static function belumPunyaAkun(): Collection

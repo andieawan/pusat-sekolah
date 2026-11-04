@@ -104,7 +104,7 @@ class AdminAksesTest extends PakaiData
 
     public function test_impor_akun_dari_csv_membuat_akun_dan_peran(): void
     {
-        [$app] = $this->buatAplikasi('absensi', ['siswa'], ['peran_tersedia' => ['guru', 'wali_kelas', 'admin']]);
+        [$app] = $this->buatAplikasi('jurnal', ['siswa'], ['peran_tersedia' => ['guru', 'wali_kelas', 'admin']]);
         \App\Models\Pegawai::create(['nip' => 'budi', 'nama' => 'Budi']);
         $berkas = tempnam(sys_get_temp_dir(), 'akun');
         file_put_contents($berkas, "username;nama;email;nip;peran\nbudi;Budi;;budi;guru|wali_kelas\n");

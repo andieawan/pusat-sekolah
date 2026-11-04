@@ -46,7 +46,7 @@ class SambunganTest extends PakaiData
         $b = collect($this->getJson('/api/v1/sambungan', $this->basic($bk->client_id, $sb))->json('data'))->keyBy('jenis');
         $this->assertSame('https://pkl.example.test', $b['pkl-bk']['url']);
         $this->assertSame($s->kunci, $b['pkl-bk']['kunci']);
-        $this->assertFalse($b['absensi-bk']['aktif']); // absensi belum terdaftar
+        $this->assertFalse($b['absensi-bk']['aktif']); // jurnal belum terdaftar
 
         $lama = $s->kunci;
         $this->actingAs($admin)->post('/admin/sambungan/pkl-bk/ganti-kunci')->assertRedirect();

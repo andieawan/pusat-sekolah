@@ -14,7 +14,7 @@ Tidak perlu membuat kunci atau mengubah `.env`.
 
 | Sambungan | Hasilnya |
 |---|---|
-| Absensi → BK | Menu **Presensi** di BK (rekap kehadiran, absensi manual, tautan delegasi ketua kelas). Kunci otomatis muncul di Absensi → Integrasi API sebagai "BK (Sambungan Pusat)". |
+| Jurnal Guru → BK | Menu **Presensi** di BK (rekap kehadiran, absensi manual, tautan delegasi ketua kelas). Kunci otomatis muncul di Jurnal → Integrasi API sebagai "BK (Sambungan Pusat)". |
 | PKL → BK | Menu **PKL** di BK: siswa PKL yang sering alpa/tanpa keterangan atau jurnal tertunda, riwayat PKL per siswa |
 | PKL ↔ TU | Surat pengantar/penarikan PKL bernomor dari register **Surat Keluar TU** (kode PKL) dan tercatat di TU |
 | PKL → Website | Halaman **Akademik → Mitra Industri (DUDI)**: nama & bidang DUDI, jumlah siswa (tanpa data siswa) |

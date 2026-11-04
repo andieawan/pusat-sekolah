@@ -28,35 +28,10 @@ class Sambungan extends Model
         return self::semua()[$jenis] ?? null;
     }
 
-    /**
-     * Semua jenis sambungan. Pemberi "absensi" diganti aplikasi penyedia absensi yang aktif
-     * (Pengaturan "aplikasi_absensi": absensi atau jurnal) — lihat `php artisan pusat:alihkan-absensi`.
-     *
-     * @return array<string,array{nama:string,keterangan:string,pemberi:string,peminta:string,kunci:bool}>
-     */
+    /** @return array<string,array{nama:string,keterangan:string,pemberi:string,peminta:string,kunci:bool}> */
     public static function semua(): array
     {
-        $penyedia = self::penyediaAbsensi();
-        $hasil = [];
-        foreach ((array) config('pusat.sambungan') as $jenis => $def) {
-            foreach (['pemberi', 'peminta'] as $k) {
-                if ($def[$k] === 'absensi') {
-                    $def[$k] = $penyedia;
-                }
-            }
-            if ($penyedia !== 'absensi') {
-                $def['nama'] = str_replace('Absensi', 'Jurnal Guru', $def['nama']);
-            }
-            $hasil[$jenis] = $def;
-        }
-
-        return $hasil;
-    }
-
-    /** Kode aplikasi yang melayani data kehadiran untuk aplikasi lain (bawaan: absensi). */
-    public static function penyediaAbsensi(): string
-    {
-        return Pengaturan::ambil('aplikasi_absensi', 'absensi');
+        return (array) config('pusat.sambungan');
     }
 
     public function buatKunci(): void
