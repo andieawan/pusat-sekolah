@@ -3,18 +3,9 @@ PHPUnit 12.5.38 by Sebastian Bergmann and contributors.
 Runtime:       PHP 8.3.36
 Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 
-...................................................F............. 65 / 74 ( 87%)
+................................................................. 65 / 74 ( 87%)
 .........                                                         74 / 74 (100%)
 
-Time: 00:04.727, Memory: 66.50 MB
+Time: 00:04.926, Memory: 66.50 MB
 
-There was 1 failure:
-
-1) Tests\Feature\SemuaHalamanTest::test_semua_halaman_bisa_dibuka_tiap_peran
-superadmin tidak membuka satu halaman pun
-Failed asserting that 0 is greater than 0.
-
-/home/runner/work/pusat-sekolah/pusat-sekolah/tests/Feature/SemuaHalamanTest.php:115
-
-FAILURES!
-Tests: 74, Assertions: 456, Failures: 1.
+OK (74 tests, 459 assertions)
