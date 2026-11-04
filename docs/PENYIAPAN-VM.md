@@ -18,8 +18,29 @@ Tiap aplikasi boleh di VM sendiri-sendiri (disarankan: 1 VM per aplikasi, 1 GB R
    sudo timedatectl set-timezone Asia/Jakarta
    ```
    > Bila muncul pesan "unit files have no installation config" atau `start` gagal: itu normal (unit ini dijalankan otomatis oleh udev). Pastikan di Proxmox **Options → QEMU Guest Agent = Enabled**, lalu **Shutdown** dan **Start** ulang VM (bukan sekadar reboot); cek dengan `systemctl status qemu-guest-agent`.
-4. IP tetap: edit file di `/etc/netplan/` (contoh `192.168.10.30/24`, gateway `192.168.10.254`), lalu `sudo netplan apply`.
+4. IP tetap: edit file di `/etc/netplan/` (Pusat: `192.168.10.20/24`, gateway `192.168.10.254`), lalu `sudo netplan apply`.
 5. Firewall (opsional): `sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw --force enable`.
+
+## Cara cepat: satu perintah (disarankan)
+
+Sama seperti BK, TU, PKL, dan Jurnal. Skrip mengerjakan langkah 2–10 di bawah: paket, database berpassword acak,
+`.env`, tabel + data awal, Nginx, penjadwal (wajib untuk webhook), backup harian 01:15, lalu menanyakan password
+superadmin `admin`. Aman diulang: `.env` dan database yang sudah ada tidak diubah.
+
+```bash
+sudo mkdir -p /var/www/pusat-sekolah && sudo chown $USER:$USER /var/www/pusat-sekolah
+git config --global credential.helper store      # repo privat: Username = akun GitHub, Password = token
+git clone https://github.com/andieawan/pusat-sekolah.git /var/www/pusat-sekolah    # TANPA sudo
+cd /var/www/pusat-sekolah
+sudo DOMAIN=pusat.smkibupakusari.sch.id APP_URL=https://pusat.smkibupakusari.sch.id PROXY_IP=192.168.10.10 bash deploy/install.sh
+```
+
+Lanjutkan ke langkah 8 (NPMplus) dan 11 (mendaftarkan aplikasi). Langkah 2–10 di bawah adalah cara manual yang setara.
+
+> **Memasang ulang setelah VM rusak:** jalankan skrip di atas, lalu salin `APP_KEY` dari `.env` lama (tanpa itu kunci
+> sambungan antar-aplikasi tidak terbaca), pulihkan database terakhir
+> (`gunzip < pusat_TANGGAL.sql.gz | sudo mysql pusat`), dan `sudo -u www-data php artisan config:cache`.
+> Simpan salinan `.env` di tempat aman (mis. bersama backup di VPS), karena backup harian hanya berisi database.
 
 ## 2. Pasang paket
 ```bash
