@@ -48,7 +48,7 @@ return [
         'jurnal' => [
             'nama' => 'Jurnal Guru',
             'webhook_path' => '/api/pusat/webhook',
-            'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
+            'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa', 'mgmp'], // mgmp: penyusun draf perangkat ajar
             'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'akun_sandi', 'siswa_kontak', 'mapel', 'pengampu'],
         ],
         'bk' => [
