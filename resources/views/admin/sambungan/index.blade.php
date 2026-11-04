@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="gulir">
-                <table class="tabel">
+                <table class="tabel hp-kartu">
                     <thead><tr><th>Aplikasi</th><th>Peran</th><th>Alamat</th><th>Kabar terakhir dari Pusat</th></tr></thead>
                     <tbody>
                     @foreach (['pemberi' => 'menyediakan data', 'peminta' => 'mengambil data'] as $peran => $teks)
@@ -66,9 +66,9 @@
                                 @if ($a && ! $a->aktif)<span class="lencana warn">nonaktif</span>@endif
                                 @if ($a && ! $a->webhook_url)<span class="lencana warn">tanpa webhook</span>@endif
                             </td>
-                            <td>{{ $teks }}</td>
-                            <td class="mono">{{ $a?->base_url ?? '—' }}</td>
-                            <td>
+                            <td data-label="Peran">{{ $teks }}</td>
+                            <td data-label="Alamat" class="mono">{{ $a?->base_url ?? '—' }}</td>
+                            <td data-label="Kabar terakhir">
                                 @php($o = $a ? ($s['kabar'][$a->kode] ?? null) : null)
                                 @if (! $o)
                                     <span class="samar">—</span>

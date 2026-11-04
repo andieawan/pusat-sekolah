@@ -12,7 +12,6 @@
     $saya = auth()->user();
     $admin = $saya?->bisaAdmin() && request()->routeIs('admin.*');
     $namaSekolah = \App\Models\Pengaturan::ambil('nama');
-    $adaLogo = \App\Services\ProfilSekolah::logoPath() !== null;
     $menu = [
         '' => [
             ['Ringkasan', route('admin.dashboard'), request()->routeIs('admin.dashboard')],
@@ -67,7 +66,7 @@
             </button>
         @endif
         <a class="merek" href="{{ route('portal') }}">
-            @if ($adaLogo)<img src="{{ route('logo.sekolah') }}" alt="" width="30" height="30">@else<span class="merek-ikon" aria-hidden="true">P</span>@endif
+            <img src="{{ route('logo.sekolah') }}" alt="" width="38" height="38">
             <span class="merek-teks">Pusat <b>Sekolah</b>@if ($namaSekolah)<small>{{ $namaSekolah }}</small>@endif</span>
         </a>
         <nav class="nav-utama" aria-label="Menu utama">

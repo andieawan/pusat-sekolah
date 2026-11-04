@@ -55,7 +55,9 @@ class ProfilSekolahController extends Controller
     public function logo()
     {
         $p = ProfilSekolah::logoPath();
-        abort_unless($p, 404);
+        if (! $p) { // belum diunggah: logo bawaan sekolah
+            return response()->file(public_path('img/logo-ibu.png'), ['Cache-Control' => 'public, max-age=3600']);
+        }
 
         return Storage::disk('local')->response($p, null, ['Cache-Control' => 'public, max-age=3600']);
     }

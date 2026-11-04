@@ -3,7 +3,7 @@
 @section('judul', 'Masuk')
 
 @section('isi')
-    @if (\App\Services\ProfilSekolah::logoPath())<img class="logo" src="{{ route('logo.sekolah') }}" alt="">@endif
+    <img class="logo" src="{{ route('logo.sekolah') }}" alt="Logo sekolah" width="76" height="76">
     <h1>Pusat Sekolah</h1>
     <p class="sub">{{ \App\Models\Pengaturan::ambil('nama', 'Satu akun untuk semua aplikasi sekolah') }}</p>
 
@@ -22,5 +22,5 @@
         </div>
         <button class="tombol" type="submit">Masuk</button>
     </form>
-    <p class="samar kanan">Lupa password? Hubungi administrator sekolah.</p>
+    <p class="samar tengah">Lupa password? Hubungi administrator sekolah.</p>
 @endsection
