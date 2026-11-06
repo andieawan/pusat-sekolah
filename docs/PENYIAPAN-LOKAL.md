@@ -6,7 +6,7 @@ Pasang Pusat dulu, lalu aplikasi lain (panduan di repo masing-masing: `docs/PENY
 | Aplikasi | Alamat | Port |
 |---|---|---|
 | Pusat | http://127.0.0.1:8000 | 8000 |
-| Absensi | http://127.0.0.1:8001 | 8001 |
+| Jurnal Guru | http://127.0.0.1:8001 | 8001 |
 | Website | http://127.0.0.1:8002 | 8002 |
 
 > Selalu pakai **`127.0.0.1`** (jangan campur dengan `localhost`) di browser, `.env`, dan pendaftaran aplikasi, karena alamat dicocokkan persis.
@@ -70,17 +70,17 @@ php artisan schedule:work            # terminal 2 — pengirim webhook (tiap men
 Buka http://127.0.0.1:8000/login dan masuk. Menu **Admin → Webhook → Kirim sekarang** juga bisa dipakai tanpa terminal 2.
 
 ## 7. Daftarkan aplikasi lain (otomatis)
-Satu perintah mendaftarkan Absensi (dan Website, bila diberi `--web-url`), mengisi data contoh, dan **menulis kredensialnya langsung ke `.env` aplikasi itu**. Aman diulang.
+Satu perintah mendaftarkan Jurnal Guru (dan Website, bila diberi `--web-url`), mengisi data contoh, dan **menulis kredensialnya langsung ke `.env` aplikasi itu**. Aman diulang.
 ```bash
-php artisan pusat:siapkan-lokal --absensi-url=http://127.0.0.1:8001 --env-absensi=C:\laragon\www\absensi-pusat\.env --demo
+php artisan pusat:siapkan-lokal --jurnal-url=http://127.0.0.1:8001 --env-jurnal=C:\laragon\www\jurnal-pusat\.env --demo
 ```
-Ganti `--absensi-url` dengan alamat Absensi Anda yang sebenarnya (mis. `http://absensi-pusat.test`) dan `--env-absensi` dengan path `.env`-nya. Opsi lain:
+Ganti `--jurnal-url` dengan alamat Jurnal Anda yang sebenarnya (mis. `http://jurnal-pusat.test`) dan `--env-jurnal` dengan path `.env`-nya. Opsi lain:
 
 | Opsi | Fungsi |
 |---|---|
 | `--web-url=http://127.0.0.1:8002 --env-web=...\.env` | ikut mendaftarkan Website |
 | `--pusat-url=http://pusat-sekolah.test` | alamat Pusat yang dilihat aplikasi lain (bawaan: `APP_URL` Pusat) |
-| `--demo` | 3 guru, 2 kelas, 10 siswa contoh + akun `guru.demo` (peran guru di Absensi; password acak ditampilkan sekali) |
+| `--demo` | 3 guru, 2 kelas, 10 siswa contoh + akun `guru.demo` (peran guru di Jurnal; password acak ditampilkan sekali) |
 | `--putar` | buat rahasia baru bila lupa/hilang (rahasia lama tidak berlaku) |
 
 Perintah menulis `PUSAT_ENABLED`, `PUSAT_URL`, `PUSAT_CLIENT_ID`, `PUSAT_CLIENT_SECRET`, `PUSAT_WEBHOOK_SECRET` ke `.env` target (cadangan: `.env.bak-pusat`; isi lain tidak disentuh). Lalu di aplikasi itu jalankan `php artisan config:clear`. Akun **superadmin Pusat otomatis berperan "admin" di semua aplikasi**, jadi langsung bisa masuk lewat tombol "Masuk lewat Pusat".

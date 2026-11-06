@@ -47,18 +47,6 @@ final class AkunMassal
         }
     }
 
-    /** 6 huruf + 4 angka, tanpa huruf yang mirip (l/I/O): mudah dibaca dari kertas, memenuhi aturan (≥10, huruf & angka). */
-    public static function passwordAwal(): string
-    {
-        $huruf = 'abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ';
-        $pw = '';
-        for ($i = 0; $i < 6; $i++) {
-            $pw .= $huruf[random_int(0, strlen($huruf) - 1)];
-        }
-
-        return $pw.str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-    }
-
     /**
      * @param  int[]  $pegawaiIds
      * @param  array<int,array{guru?:string,staf?:string}>  $peran  aplikasi_id => peran untuk guru / staf ('' = tanpa peran)

@@ -1,6 +1,6 @@
 # Menyambungkan aplikasi ke Pusat
 
-Berlaku untuk Absensi, BK, TU, PKL, Website. Contoh memakai Laravel; logika sama di framework lain.
+Berlaku untuk Jurnal Guru, BK, TU, PKL, Tanggungan Siswa, Website. Contoh memakai Laravel; logika sama di framework lain.
 
 ## 0. Persiapan
 Daftarkan aplikasi (`php artisan pusat:aplikasi-baru ...`), lalu isi `.env` aplikasi:
@@ -88,15 +88,18 @@ Cache::forever('pusat_sejak', Carbon::parse($waktu)->subSeconds(5)->toIso8601Str
 Jalankan pertama kali tanpa `updated_since` (impor penuh). Tambahkan kolom `pusat_uuid` (unique) di tabel lokal.
 Jangan menulis balik data induk ke Pusat dari aplikasi lain — ubah hanya di Pusat.
 
-## 4. Absensi (sudah ada kliennya)
-Repo Absensi sudah punya klien siap pakai (patch `absensi-pusat.patch`): tombol *Masuk lewat Pusat*, penerima webhook,
-sinkron kelas & siswa lewat tombol di Admin, ekspor awal, dan dokumen `docs/PUSAT.md`. Gunakan itu sebagai contoh
-untuk aplikasi lain.
+## 4. Contoh klien yang sudah ada
+Klien paling ringkas ada di repo **tanggungan-pusat** (dan **pkl-pusat**, susunannya sama):
+`app/Services/PusatKlien.php` (token & HTTP), `PusatSync.php` (sinkron penuh, tidak pernah menghapus),
+`PusatAkun.php` (login SSO → akun lokal), `app/Http/Controllers/PusatSsoController.php` dan `PusatWebhookController.php`.
+Salin dari sana untuk aplikasi baru, lalu sesuaikan `config/pusat.php` (`peran_peta`).
 
-## 5. Urutan penyambungan yang disarankan
-1. Absensi (percobaan pertama): SSO + sinkron siswa/kelas/guru; pertahankan login lama sebagai cadangan.
-2. BK dan TU: dipecah dari Absensi dengan database sendiri; hanya menyimpan `pusat_uuid` siswa.
-3. PKL: ganti tabel siswa/kelas/akun lokal dengan data Pusat.
-4. Website: ambil `/api/v1/ringkasan` dan jurusan untuk halaman publik (scope minimal).
-
-Selama transisi, Pusat Data Sinkron tetap jadi cadangan; aplikasi baru ikut memakai klien `hub:push`.
+## 5. Aplikasi yang sudah tersambung
+| Aplikasi | Templat di `config/pusat.php` | Catatan |
+|---|---|---|
+| Jurnal Guru | `jurnal` | pemberi data kehadiran untuk BK (sambungan "Jurnal Guru → BK") |
+| BK | `bk` | membaca kehadiran dari Jurnal dan rekap PKL |
+| TU | `tu` | menulis mutasi siswa ke Pusat (`siswa_tulis`) |
+| PKL | `pkl` | mengambil nomor surat dari TU |
+| Tanggungan Siswa | `tanggungan` | data siswa dasar saja |
+| Website | `web` | ringkasan publik & jurusan |

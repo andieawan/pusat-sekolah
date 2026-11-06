@@ -38,13 +38,7 @@ return [
 
     // Nilai awal saat mendaftarkan aplikasi baru di panel admin.
     'aplikasi_bawaan' => [
-        'absensi' => [
-            'nama' => 'Absensi Siswa',
-            'webhook_path' => '/api/pusat/webhook', // klien Absensi menerima di route API
-            'peran' => ['guru', 'wali_kelas', 'kepsek', 'bk', 'tu', 'admin', 'orang_tua', 'siswa'],
-            'scope' => ['tahun_ajaran', 'jurusan', 'kelas', 'siswa', 'pegawai', 'akun', 'akun_sandi', 'siswa_kontak', 'mapel', 'pengampu'],
-        ],
-        // Jurnal Guru: pengganti Absensi (jurnal mengajar + absensi + nilai), memakai klien Pusat yang sama.
+        // Jurnal Guru: jurnal mengajar + absensi + nilai (pengganti aplikasi Absensi Siswa yang lama).
         'jurnal' => [
             'nama' => 'Jurnal Guru',
             'webhook_path' => '/api/pusat/webhook',

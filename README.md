@@ -1,7 +1,7 @@
 # Pusat Sekolah — SMKS Islam Bustanul Ulum
 
 Aplikasi pusat yang mengatur **login tunggal (SSO)**, **data induk** (tahun ajaran, jurusan, kelas, siswa, guru/staf),
-**hak akses per aplikasi**, **API**, dan **webhook** untuk aplikasi-aplikasi sekolah (Jurnal Guru, BK, TU, PKL, Website).
+**hak akses per aplikasi**, **API**, dan **webhook** untuk aplikasi-aplikasi sekolah (Jurnal Guru, BK, TU, PKL, Tanggungan Siswa, Website).
 Tiap aplikasi tetap punya database sendiri; Pusat hanya menyimpan data yang dipakai bersama.
 
 Laravel 13 · PHP 8.3+ · MySQL 8 / MariaDB 10.6+ · tanpa proses build front-end.

@@ -17,23 +17,23 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 /**
- * Menyiapkan Pusat untuk uji coba di komputer sendiri: data awal, pendaftaran aplikasi (Absensi, Website),
+ * Menyiapkan Pusat untuk uji coba di komputer sendiri: data awal, pendaftaran aplikasi (Jurnal Guru, Website),
  * dan (opsional) menuliskan kredensial langsung ke .env aplikasi tersebut. Aman dijalankan berulang.
  */
 class SiapkanLokal extends Command
 {
     protected $signature = 'pusat:siapkan-lokal
-        {--absensi-url= : URL aplikasi Absensi, mis. http://absensi-pusat.test (bawaan: http://127.0.0.1:8001)}
+        {--jurnal-url= : URL aplikasi Jurnal Guru, mis. http://jurnal-pusat.test (bawaan: http://127.0.0.1:8001)}
         {--web-url= : URL Website; kosongkan bila tidak dipakai}
         {--pusat-url= : URL Pusat yang dilihat aplikasi lain (bawaan: APP_URL)}
-        {--env-absensi= : Path berkas .env Absensi; PUSAT_* ditulis otomatis ke sana}
+        {--env-jurnal= : Path berkas .env Jurnal Guru; PUSAT_* ditulis otomatis ke sana}
         {--env-web= : Path berkas .env Website}
-        {--demo : Tambah data contoh (kelas, guru, siswa, akun guru) agar sinkron Absensi ada isinya}
+        {--demo : Tambah data contoh (kelas, guru, siswa, akun guru) agar sinkron Jurnal ada isinya}
         {--putar : Putar ulang rahasia aplikasi yang sudah terdaftar (rahasia lama tidak berlaku lagi)}
         {--abaikan-ssl : Uji lokal dengan HTTPS bersertifikat buatan sendiri: matikan pemeriksaan sertifikat (Pusat→aplikasi dan aplikasi→Pusat)}
         {--paksa : Izinkan di lingkungan production (tidak disarankan)}';
 
-    protected $description = 'Siapkan Pusat untuk uji coba lokal: data awal, daftarkan Absensi/Website, tulis kredensial ke .env mereka';
+    protected $description = 'Siapkan Pusat untuk uji coba lokal: data awal, daftarkan Jurnal/Website, tulis kredensial ke .env mereka';
 
     public function handle(AksesService $akses): int
     {
@@ -44,7 +44,7 @@ class SiapkanLokal extends Command
         }
 
         $pusatUrl = rtrim((string) ($this->option('pusat-url') ?: config('app.url')), '/');
-        $targets = ['absensi' => rtrim((string) ($this->option('absensi-url') ?: 'http://127.0.0.1:8001'), '/')];
+        $targets = ['jurnal' => rtrim((string) ($this->option('jurnal-url') ?: 'http://127.0.0.1:8001'), '/')];
         if ($this->option('web-url')) {
             $targets['web'] = rtrim((string) $this->option('web-url'), '/');
         }
@@ -59,11 +59,11 @@ class SiapkanLokal extends Command
         $this->callSilent('db:seed', ['--class' => DatabaseSeeder::class, '--force' => true]);
         $this->info('Data awal (tahun ajaran, jurusan) siap.');
 
-        $envPaths = ['absensi' => $this->option('env-absensi'), 'web' => $this->option('env-web')];
+        $envPaths = ['jurnal' => $this->option('env-jurnal'), 'web' => $this->option('env-web')];
         $hasil = [];
         foreach ($targets as $kode => $base) {
             $bawaan = config("pusat.aplikasi_bawaan.{$kode}");
-            $callback = $kode === 'absensi' ? '/sso/callback' : '/pusat/callback';
+            $callback = $kode === 'jurnal' ? '/sso/callback' : '/pusat/callback';
             $data = [
                 'nama' => $bawaan['nama'],
                 'base_url' => $base,
@@ -119,7 +119,7 @@ class SiapkanLokal extends Command
 
         $this->newLine();
         $this->line('Superadmin Pusat otomatis berperan "admin" di semua aplikasi, jadi bisa langsung masuk lewat SSO.');
-        $this->line('Berikutnya di Absensi: php artisan migrate, lalu Admin → Pusat → Uji koneksi → Periksa → Terapkan.');
+        $this->line('Berikutnya di Jurnal: php artisan migrate, lalu Admin → Pusat → Uji koneksi → Periksa → Terapkan.');
 
         return self::SUCCESS;
     }
@@ -127,7 +127,7 @@ class SiapkanLokal extends Command
     private function buatDemo(AksesService $akses): void
     {
         $ta = TahunAjaran::where('aktif', true)->first() ?? TahunAjaran::first();
-        $absensi = Aplikasi::where('kode', 'absensi')->first();
+        $jurnal = Aplikasi::where('kode', 'jurnal')->first();
         $jur = Jurusan::pluck('id', 'kode');
 
         $guru = [];
@@ -158,14 +158,14 @@ class SiapkanLokal extends Command
         }
         $this->info('Data contoh: 3 guru, 2 kelas, 10 siswa (NIP/NIS berawalan DEMO-).');
 
-        if ($absensi && ! User::where('username', 'guru.demo')->exists()) {
+        if ($jurnal && ! User::where('username', 'guru.demo')->exists()) {
             $password = Str::random(12).'a1';
             $user = User::create([
                 'username' => 'guru.demo', 'nama' => $guru[0]->nama, 'email' => 'guru.demo@example.test',
                 'password' => $password, 'aktif' => true, 'pegawai_id' => $guru[0]->id,
             ]);
-            $akses->sinkron($user, [$absensi->id => ['guru']]);
-            $this->info('Akun contoh untuk Absensi (peran guru) — catat, tidak ditampilkan lagi:');
+            $akses->sinkron($user, [$jurnal->id => ['guru']]);
+            $this->info('Akun contoh untuk Jurnal Guru (peran guru) — catat, tidak ditampilkan lagi:');
             $this->line("  username: guru.demo   password: {$password}");
         }
     }
