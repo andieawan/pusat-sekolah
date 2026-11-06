@@ -37,7 +37,7 @@
             @csrf
             <div class="kartu">
                 <h2>1. Pilih guru &amp; staf ({{ $pegawai->count() }} belum punya akun)</h2>
-                <p class="samar">Guru yang sudah punya akun di aplikasi Absensi: samakan username di sini dengan username Absensi-nya,
+                <p class="samar">Guru yang sudah punya akun di Jurnal Guru: samakan username di sini dengan username Jurnal-nya,
                     agar akun lamanya (mapel &amp; kelas yang diajar) langsung tersambung saat masuk lewat Pusat.</p>
                 <div class="gulir">
                     <table class="tabel">

@@ -6,7 +6,7 @@
     <div class="kepala">
         <div>
             <h1>Profil sekolah</h1>
-            <p class="samar">Satu tempat untuk identitas sekolah. Kop surat, nama &amp; NIP kepala sekolah, dan logo di Absensi, BK, TU, PKL,
+            <p class="samar">Satu tempat untuk identitas sekolah. Kop surat, nama &amp; NIP kepala sekolah, dan logo di Jurnal Guru, BK, TU, PKL, Tanggungan,
                 dan Website otomatis mengikuti isian ini.</p>
         </div>
     </div>

@@ -55,7 +55,7 @@ class DashboardController extends Controller
         $t[] = [(bool) $tahun, 'Tahun ajaran aktif', $tahun ? "{$tahun->nama}, semester {$tahun->semester}." : 'Belum ada tahun ajaran aktif — dibutuhkan untuk kelas, impor, dan kenaikan kelas.',
             route('admin.master.index', 'tahun-ajaran'), 'Atur'];
         $tanpaWali = $tahun ? Kelas::where('tahun_ajaran_id', $tahun->id)->whereNull('wali_id')->count() : 0;
-        $t[] = [$tanpaWali === 0, 'Wali kelas', $tanpaWali ? "$tanpaWali kelas belum punya wali kelas (wali kelas di Absensi & BK mengikuti isian ini)." : 'Semua kelas sudah punya wali kelas.',
+        $t[] = [$tanpaWali === 0, 'Wali kelas', $tanpaWali ? "$tanpaWali kelas belum punya wali kelas (wali kelas di Jurnal, BK & Tanggungan mengikuti isian ini)." : 'Semua kelas sudah punya wali kelas.',
             route('admin.master.index', 'kelas'), 'Atur wali'];
         $tanpaKelas = Siswa::where('status', 'aktif')->whereNull('kelas_id')->count();
         if ($tanpaKelas) {

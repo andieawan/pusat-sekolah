@@ -57,7 +57,7 @@
         <details class="kartu lipat" @if (session('rincian')) open @endif>
             <summary>Impor dari CSV (banyak sekaligus)</summary>
             <p class="samar">Kolom: <span class="mono">guru;mapel;kelas</span>. Guru = NIP, username, atau nama; mapel = kode atau nama; kelas boleh banyak dipisah koma.
-                File dari Absensi (<em>Pasangan Mapel → Unduh CSV untuk Pusat</em>) bisa langsung diimpor.</p>
+                File dari Jurnal Guru (<em>Pasangan Mapel → Unduh CSV untuk Pusat</em>) bisa langsung diimpor.</p>
             <form class="form" method="post" action="{{ route('admin.pengampu.impor') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="baris"><div><label for="berkas">Berkas CSV</label><input id="berkas" type="file" name="berkas" accept=".csv,text/csv" required></div></div>
