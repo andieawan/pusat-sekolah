@@ -14,7 +14,7 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 /**
- * Membuat akun Pusat + peran di satu aplikasi dari CSV (mis. hasil `php artisan pusat:ekspor` di Absensi).
+ * Membuat akun Pusat + peran di satu aplikasi dari CSV.
  * Kolom: username; nama; email; nip; peran  (peran dipisah "|", mis. guru|bk).
  * Tanpa --terapkan hanya simulasi. Password acak dicatat ke satu file yang HARUS dibagikan lalu dihapus.
  */

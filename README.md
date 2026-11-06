@@ -65,7 +65,7 @@ Bisa juga lewat panel: **Admin → Aplikasi** (ada tombol rotasi rahasia dan uji
 Urutan impor di panel **Admin → Impor CSV**: **Guru & staf → Kelas → Siswa** (selalu ada pratinjau dulu).
 Akun login guru dibuat dari CSV dengan `php artisan pusat:impor-akun akun.csv --aplikasi=jurnal` (simulasi),
 lalu ulangi dengan `--terapkan`; password sementara ditulis ke satu berkas yang harus dibagikan lalu dihapus.
-CSV-nya bisa dibuat oleh `php artisan pusat:ekspor` di sisi Jurnal (lihat `docs/PUSAT.md` di repo jurnal-pusat).
+Format CSV akun: `username;nama;email;nip;peran` (peran dipisah `|`, mis. `guru|bk`).
 
 Preset (peran & scope bawaan): `jurnal`, `bk`, `tu`, `pkl`, `web` — lihat `config/pusat.php`.
 
