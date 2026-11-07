@@ -115,7 +115,7 @@ class AplikasiController extends Controller
             }
         }
         Audit::catat('aplikasi.minta_sinkron', $aplikasi?->kode ?? 'semua');
-        $pesan = ($ok ? 'Permintaan sinkron diterima '.implode(', ', $ok).'; datanya diperbarui dalam ±1 menit.' : '')
+        $pesan = ($ok ? 'Permintaan sinkron diterima '.implode(', ', $ok).'; datanya diperbarui dalam ±1 menit — notifikasi muncul saat tiap aplikasi selesai.' : '')
             .($gagal ? ' Belum terkirim (dicoba ulang otomatis): '.implode('; ', $gagal).'.' : '');
 
         return back()->with($gagal && ! $ok ? 'galat' : 'sukses', trim($pesan));

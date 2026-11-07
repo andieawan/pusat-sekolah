@@ -28,6 +28,7 @@ Route::prefix('v1')->middleware(['app.client', 'throttle:api-master'])->group(fu
     Route::get('akun', [AkunController::class, 'index']);
     Route::post('masuk-lokal', \App\Http\Controllers\Api\MasukLokalController::class)->middleware('throttle:120,1');
     Route::get('sambungan', [SambunganController::class, 'index']);
+    Route::post('sinkron/laporan', \App\Http\Controllers\Api\LaporanSinkronController::class)->middleware('throttle:60,1');
     Route::get('profil', [ProfilController::class, 'index']);
     Route::patch('siswa/{uuid}/kontak', [SiswaKontakController::class, 'update'])->whereUuid('uuid');
     // Tulis siswa (scope siswa_tulis: mutasi oleh Tata Usaha)

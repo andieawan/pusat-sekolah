@@ -26,6 +26,9 @@ class Aplikasi extends Model
             'scope' => 'array',
             'peran_tersedia' => 'array',
             'aktif' => 'boolean',
+            'sinkron_diminta_pada' => 'datetime',
+            'sinkron_lapor_pada' => 'datetime',
+            'sinkron_laporan' => 'array',
             'webhook_secret' => 'encrypted',
             'secret_dibuat_pada' => 'datetime',
         ];

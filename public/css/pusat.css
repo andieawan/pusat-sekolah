@@ -263,3 +263,17 @@ details.lipat[open] > summary { margin-bottom: .8rem; }
 .tanpa-jarak { margin: 0; }
 .jarak-kecil { margin: .3rem 0 0; }
 .jarak-atas { margin-top: .75rem; }
+
+/* Notifikasi di pojok layar (pusat.js) */
+.toast-wadah { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column; gap: .5rem; width: min(360px, calc(100vw - 32px)); }
+.toast { position: relative; background: var(--kartu); border: 1px solid var(--garis-kuat); border-left: 4px solid var(--sukses); border-radius: var(--radius); padding: .7rem 2.2rem .7rem .9rem; box-shadow: 0 6px 20px rgba(0, 0, 0, .12); }
+.toast.galat { border-left-color: var(--bahaya); }
+.toast strong { display: block; }
+.toast p { margin: .25rem 0 .35rem; color: var(--samar); font-size: .9rem; }
+.toast a { font-size: .85rem; }
+.toast-tutup { position: absolute; top: .35rem; right: .4rem; border: 0; background: none; font-size: 1.3rem; line-height: 1; cursor: pointer; color: var(--samar); padding: .2rem .4rem; }
+.notif-baris { display: flex; gap: .75rem; align-items: flex-start; padding: .7rem 0; border-bottom: 1px solid var(--garis); }
+.notif-baris:last-child { border-bottom: 0; }
+.notif-baris.belum strong::after { content: " · baru"; color: var(--hijau); font-size: .8rem; }
+.lencana.galat { background: #fbe4e2; color: var(--bahaya); }
+@media print { .toast-wadah { display: none !important; } }

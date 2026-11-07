@@ -50,6 +50,7 @@ final class Outbox
             foreach ($q->get() as $app) {
                 $ada = WebhookOutbox::where('aplikasi_id', $app->id)->where('event', 'sinkron.diminta')->where('status', 'pending')->first();
                 $hasil[] = $ada ?? self::antre($app, 'sinkron.diminta', ['alasan' => mb_substr($alasan, 0, 100)]);
+                $app->forceFill(['sinkron_diminta_pada' => now()])->saveQuietly(); // laporan berikutnya = jawabannya → notifikasi
             }
         } catch (Throwable $e) {
             report($e);

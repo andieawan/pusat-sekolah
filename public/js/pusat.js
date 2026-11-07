@@ -22,6 +22,55 @@
     document.body.classList.remove('menu-buka');
   });
 
+  // Notifikasi admin (mis. "Jurnal selesai sinkron"): dicek tiap 15 detik, tampil sebagai kotak kecil di pojok layar.
+  (function () {
+    var b = document.body, url = b.getAttribute('data-notif-url');
+    if (!url || !window.fetch) return;
+    var kunci = 'pusat-notif-akhir', sejak = parseInt(b.getAttribute('data-notif-akhir') || '0', 10);
+    try { var s = parseInt(localStorage.getItem(kunci) || '', 10); if (s >= 0 && s <= sejak) sejak = s; } catch (x) {}
+    var wadah = document.createElement('div');
+    wadah.className = 'toast-wadah'; wadah.setAttribute('role', 'status'); wadah.setAttribute('aria-live', 'polite');
+    document.body.appendChild(wadah);
+    function baca(id) {
+      var f = new FormData(); f.append('_token', b.getAttribute('data-csrf') || ''); if (id) f.append('id', id);
+      fetch(b.getAttribute('data-notif-baca'), { method: 'POST', body: f, headers: { 'Accept': 'application/json' }, credentials: 'same-origin' });
+    }
+    function tampil(n) {
+      var t = document.createElement('div');
+      t.className = 'toast ' + (n.jenis === 'galat' ? 'galat' : 'ok');
+      var j = document.createElement('strong'); j.textContent = (n.jenis === 'galat' ? '✗ ' : '✓ ') + n.judul;
+      var p = document.createElement('p'); p.textContent = n.isi || '';
+      var a = document.createElement('a'); a.href = b.getAttribute('data-notif-daftar'); a.textContent = 'Semua notifikasi';
+      var x = document.createElement('button'); x.type = 'button'; x.className = 'toast-tutup'; x.setAttribute('aria-label', 'Tutup dan tandai dibaca'); x.textContent = '×';
+      x.onclick = function () { baca(n.id); t.remove(); };
+      t.appendChild(x); t.appendChild(j); t.appendChild(p); t.appendChild(a);
+      wadah.appendChild(t);
+    }
+    function label(jumlah) {
+      document.querySelectorAll('.sisi a[href="' + b.getAttribute('data-notif-daftar') + '"]').forEach(function (l) {
+        l.textContent = jumlah ? 'Notifikasi (' + jumlah + ')' : 'Notifikasi';
+      });
+    }
+    function cek() {
+      if (document.visibilityState === 'hidden') return;
+      fetch(url + '?sejak=' + sejak, { headers: { 'Accept': 'application/json' }, credentials: 'same-origin', cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) {
+          if (!d) return;
+          (d.baru || []).forEach(tampil);
+          sejak = Math.max(sejak, d.akhir || 0);
+          try { localStorage.setItem(kunci, String(sejak)); } catch (x) {}
+          label(d.jumlah);
+          if ((d.baru || []).length && document.querySelector('[data-segarkan-laporan]')) setTimeout(function () { location.reload(); }, 4000);
+        }).catch(function () {});
+    }
+    cek();
+    setInterval(cek, 15000);
+    // Halaman Aplikasi yang menunggu laporan sinkron: muat ulang tiap 10 detik sampai laporan datang (maks. 10 menit).
+    var tunggu = document.querySelector('[data-segarkan-laporan]');
+    if (tunggu) setTimeout(function () { if (!document.querySelector('details[open]')) location.reload(); }, 10000);
+  })();
+
   document.addEventListener('click', function (e) {
     var el = e.target.closest ? e.target.closest('[data-aksi]') : null;
     if (!el) return;

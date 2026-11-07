@@ -33,6 +33,7 @@
             ['Akun', route('admin.akun.index'), request()->routeIs('admin.akun.*')],
         ],
         'Integrasi' => [
+            [($nNotif = $saya?->superadmin ? \App\Models\Notifikasi::belumDibaca() : 0) ? "Notifikasi ($nNotif)" : 'Notifikasi', route('admin.notifikasi.index'), request()->routeIs('admin.notifikasi.*')],
             ['Aplikasi', route('admin.aplikasi.index'), request()->routeIs('admin.aplikasi.*')],
             ['Sambungan', route('admin.sambungan.index'), request()->routeIs('admin.sambungan.*')],
             ['Webhook', route('admin.webhook.index'), request()->routeIs('admin.webhook.*')],
@@ -56,7 +57,9 @@
         ];
     }
 @endphp
-<body @class(['dengan-sisi' => $admin])>
+<body @class(['dengan-sisi' => $admin])
+    @if ($admin && $saya->superadmin) data-notif-url="{{ route('admin.notifikasi.baru') }}" data-notif-baca="{{ route('admin.notifikasi.baca') }}"
+        data-notif-daftar="{{ route('admin.notifikasi.index') }}" data-notif-akhir="{{ \App\Models\Notifikasi::akhir() }}" data-csrf="{{ csrf_token() }}" @endif>
 <a class="lompat" href="#isi">Lompat ke isi</a>
 <header class="bar">
     <div class="bar-isi">
