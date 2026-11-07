@@ -12,7 +12,7 @@ class AplikasiBaru extends Command
 {
     protected $signature = 'pusat:aplikasi-baru {kode : mis. jurnal, bk, tu, pkl, web}
                             {--base-url= : URL aplikasi, mis. https://jurnal.smkibupakusari.sch.id}
-                            {--redirect= : Redirect URI SSO (bawaan: <base-url>/sso/callback)}
+                            {--redirect= : Redirect URI SSO (bawaan: <base-url>/sso/callback; Website: /pusat/callback)}
                             {--webhook= : URL penerima webhook (bawaan: <base-url>/pusat/webhook; Absensi: <base-url>/api/pusat/webhook)}';
 
     protected $description = 'Daftarkan aplikasi dengan pengaturan bawaan, lalu tampilkan kredensialnya SEKALI';
@@ -49,7 +49,7 @@ class AplikasiBaru extends Command
             'kode' => $kode,
             'nama' => $bawaan['nama'],
             'base_url' => $base,
-            'redirect_uris' => [$this->option('redirect') ?: $base.'/sso/callback'],
+            'redirect_uris' => [$this->option('redirect') ?: $base.($bawaan['redirect_path'] ?? '/sso/callback')],
             'webhook_url' => $this->option('webhook') ?: $base.($bawaan['webhook_path'] ?? '/pusat/webhook'),
             'scope' => $bawaan['scope'],
             'peran_tersedia' => $bawaan['peran'],

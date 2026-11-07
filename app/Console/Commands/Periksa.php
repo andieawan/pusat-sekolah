@@ -114,7 +114,10 @@ class Periksa extends Command
         foreach ($apl as $a) {
             $msg = "Aplikasi {$a->kode}: callback ".($a->redirect_uris[0] ?? '-');
             $uri = implode(' ', (array) ($a->redirect_uris ?? []));
-            if ($prod && preg_match('~http://|localhost|127\.0\.0\.1|\.test~', $uri.' '.$a->webhook_url)) {
+            $harus = config("pusat.aplikasi_bawaan.{$a->kode}.redirect_path");
+            if ($harus && ! str_ends_with((string) ($a->redirect_uris[0] ?? ''), $harus)) {
+                $this->gagalkan($msg, "Aplikasi {$a->kode} memakai {$harus}: ubah Redirect URI di menu Aplikasi → Ubah menjadi ".rtrim((string) $a->base_url, '/').$harus);
+            } elseif ($prod && preg_match('~http://|localhost|127\.0\.0\.1|\.test~', $uri.' '.$a->webhook_url)) {
                 $this->warn2($msg.' (alamat lokal/http)', 'Ubah di menu Aplikasi ke alamat produksi (https)');
             } else {
                 $this->ok($msg);

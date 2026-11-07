@@ -25,6 +25,15 @@ class AplikasiBaruTest extends TestCase
         $this->assertContains('siswa', $a->scope);
     }
 
+    public function test_templat_web_memakai_jalur_pusat(): void
+    {
+        $this->artisan('pusat:aplikasi-baru', ['kode' => 'web', '--base-url' => 'https://web.example.test'])->assertSuccessful();
+        $a = Aplikasi::where('kode', 'web')->firstOrFail();
+        $this->assertSame(['https://web.example.test/pusat/callback'], $a->redirect_uris);
+        $this->assertSame('https://web.example.test/pusat/webhook', $a->webhook_url);
+        $this->assertSame('https://web.example.test/pusat/masuk', $a->urlMasuk());
+    }
+
     public function test_templat_tanggungan_hanya_data_siswa_dasar(): void
     {
         $this->artisan('pusat:aplikasi-baru', ['kode' => 'tanggungan', '--base-url' => 'https://tanggungan.example.test'])->assertSuccessful();

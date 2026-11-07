@@ -75,6 +75,9 @@ return [
         ],
         'web' => [
             'nama' => 'Website Sekolah',
+            // Website memakai /pusat/... (bukan /sso/...) untuk login lewat Pusat dan webhook
+            'redirect_path' => '/pusat/callback',
+            'webhook_path' => '/pusat/webhook',
             'peran' => ['admin', 'editor'],
             'scope' => ['jurusan', 'ringkasan', 'akun', 'akun_sandi'],
         ],
