@@ -70,6 +70,8 @@ Route::middleware(['auth', 'akun.aktif', 'ganti.password'])->group(function () {
         Route::resource('aplikasi', AplikasiController::class)->except('show')->parameters(['aplikasi' => 'aplikasi']);
         Route::post('aplikasi/{aplikasi}/rotasi', [AplikasiController::class, 'rotasi'])->name('aplikasi.rotasi');
         Route::post('aplikasi/{aplikasi}/ping', [AplikasiController::class, 'ping'])->name('aplikasi.ping');
+        Route::post('aplikasi-sinkron', [AplikasiController::class, 'sinkron'])->middleware('throttle:10,1')->name('aplikasi.sinkron');
+        Route::post('aplikasi/{aplikasi}/sinkron', [AplikasiController::class, 'sinkron'])->middleware('throttle:20,1')->name('aplikasi.sinkron.satu');
 
         Route::prefix('webhook')->name('webhook.')->group(function () {
             Route::get('/', [WebhookController::class, 'index'])->name('index');

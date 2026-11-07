@@ -97,6 +97,30 @@ class AplikasiController extends Controller
     }
 
     /** Kirim event "ping" dan tampilkan hasilnya langsung. */
+    /** Minta satu/semua aplikasi sinkron penuh sekarang (dikirim langsung, sisanya dicoba ulang otomatis). */
+    public function sinkron(WebhookPengirim $pengirim, ?Aplikasi $aplikasi = null)
+    {
+        $daftar = Outbox::mintaSinkron($aplikasi, 'tombol Sinkronkan di Pusat');
+        if (! $daftar) {
+            return back()->with('galat', 'Tidak ada aplikasi aktif yang punya URL webhook.');
+        }
+        $ok = [];
+        $gagal = [];
+        foreach ($daftar as $o) {
+            $o->loadMissing('aplikasi');
+            if ($o->status === 'terkirim' || $pengirim->kirim($o)) {
+                $ok[] = $o->aplikasi->nama;
+            } else {
+                $gagal[] = $o->aplikasi->nama.' ('.$o->fresh()->galat_terakhir.')';
+            }
+        }
+        Audit::catat('aplikasi.minta_sinkron', $aplikasi?->kode ?? 'semua');
+        $pesan = ($ok ? 'Permintaan sinkron diterima '.implode(', ', $ok).'; datanya diperbarui dalam ±1 menit.' : '')
+            .($gagal ? ' Belum terkirim (dicoba ulang otomatis): '.implode('; ', $gagal).'.' : '');
+
+        return back()->with($gagal && ! $ok ? 'galat' : 'sukses', trim($pesan));
+    }
+
     public function ping(Aplikasi $aplikasi, WebhookPengirim $pengirim)
     {
         if (! $aplikasi->webhook_url) {

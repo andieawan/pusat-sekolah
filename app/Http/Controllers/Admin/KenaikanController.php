@@ -60,6 +60,7 @@ class KenaikanController extends Controller
         } catch (\RuntimeException $e) {
             return back()->withInput()->with('galat', $e->getMessage());
         }
+        \App\Services\Outbox::mintaSinkron(null, 'kenaikan kelas');
 
         return redirect()->route('admin.kenaikan.index', ['dari' => $dari->id, 'ke' => $ke->id])->with('sukses', sprintf(
             'Kenaikan %s → %s selesai: %d naik, %d tinggal kelas, %d lulus, %d keluar.%s%s Semua aplikasi dikabari otomatis.',

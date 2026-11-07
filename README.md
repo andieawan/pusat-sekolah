@@ -85,6 +85,11 @@ Data induk (CRUD + impor CSV dengan pratinjau), akun & peran per aplikasi, aplik
 ## Keamanan singkat
 
 Kode SSO sekali pakai (60 dtk), token 1 jam; hanya hash disimpan. `redirect_uri` dicocokkan persis. PKCE S256 didukung.
+Sinkron ke aplikasi: setiap perubahan dikirim lewat webhook dan aplikasi menerapkannya sendiri dalam ±1 menit. Setelah impor
+atau kenaikan kelas, Pusat otomatis mengirim `sinkron.diminta` (aplikasi menarik ulang semua data); tombol **Sinkronkan semua
+aplikasi** / **Sinkronkan** di menu Aplikasi melakukan hal yang sama kapan saja. Di tiap aplikasi tetap ada Sinkron manual dan
+sinkron otomatis tiap jam sebagai cadangan.
+
 Webhook ditandatangani HMAC-SHA256 + timestamp. Login dibatasi 5 gagal/15 menit. Siswa/pegawai yang dihapus atau
 tidak aktif otomatis menonaktifkan akun dan mencabut tokennya. Tidak ada password/rahasia bawaan.
 

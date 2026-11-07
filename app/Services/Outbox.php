@@ -35,6 +35,29 @@ final class Outbox
         return $o;
     }
 
+    /**
+     * Minta aplikasi menarik ulang semua datanya dari Pusat (sinkron penuh di aplikasi, ±1 menit setelah diterima).
+     * Dipakai tombol "Sinkronkan" dan otomatis setelah perubahan massal (impor, kenaikan kelas), sehingga admin
+     * aplikasi tidak perlu menekan Sinkron sendiri. Satu permintaan yang belum terkirim per aplikasi sudah cukup.
+     *
+     * @return list<WebhookOutbox>
+     */
+    public static function mintaSinkron(?Aplikasi $hanya = null, string $alasan = 'manual'): array
+    {
+        $hasil = [];
+        try {
+            $q = Aplikasi::where('aktif', true)->whereNotNull('webhook_url')->when($hanya, fn ($q) => $q->whereKey($hanya->id));
+            foreach ($q->get() as $app) {
+                $ada = WebhookOutbox::where('aplikasi_id', $app->id)->where('event', 'sinkron.diminta')->where('status', 'pending')->first();
+                $hasil[] = $ada ?? self::antre($app, 'sinkron.diminta', ['alasan' => mb_substr($alasan, 0, 100)]);
+            }
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        return $hasil;
+    }
+
     /** Event perubahan data induk: dikirim ke setiap aplikasi aktif yang berhak atas sumber tersebut. */
     public static function dari(Model $m, string $aksi): void
     {

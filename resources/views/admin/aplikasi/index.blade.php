@@ -8,7 +8,15 @@
             <h1>Aplikasi terdaftar</h1>
             <p class="samar">Setiap aplikasi punya kredensial sendiri, hak baca data (scope), dan alamat penerima webhook.</p>
         </div>
-        <a class="tombol" href="{{ route('admin.aplikasi.create') }}">+ Daftarkan aplikasi</a>
+        <div class="aksi">
+            @if ($items->where('aktif', true)->whereNotNull('webhook_url')->isNotEmpty())
+                <form method="post" action="{{ route('admin.aplikasi.sinkron') }}">
+                    @csrf
+                    <button class="tombol sekunder" type="submit" title="Semua aplikasi menarik ulang data dari Pusat dalam ±1 menit">Sinkronkan semua aplikasi</button>
+                </form>
+            @endif
+            <a class="tombol" href="{{ route('admin.aplikasi.create') }}">+ Daftarkan aplikasi</a>
+        </div>
     </div>
 
     <div class="kartu">
@@ -30,6 +38,10 @@
                                     <form method="post" action="{{ route('admin.aplikasi.ping', $a) }}">
                                         @csrf
                                         <button class="tombol sekunder kecil" type="submit">Uji webhook</button>
+                                    </form>
+                                    <form method="post" action="{{ route('admin.aplikasi.sinkron.satu', $a) }}">
+                                        @csrf
+                                        <button class="tombol sekunder kecil" type="submit">Sinkronkan</button>
                                     </form>
                                 @endif
                             </div>

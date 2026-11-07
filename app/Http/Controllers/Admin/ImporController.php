@@ -79,6 +79,9 @@ class ImporController extends Controller
 
         Storage::disk('local')->delete("impor/{$token}.csv");
         $request->session()->forget('impor');
+        if ($hasil['baru'] + $hasil['ubah'] > 0) {
+            \App\Services\Outbox::mintaSinkron(null, 'impor '.$sesi['sumber']); // semua aplikasi menarik data baru sendiri
+        }
 
         return redirect()->route('admin.master.index', $sesi['sumber'])->with(
             'sukses',

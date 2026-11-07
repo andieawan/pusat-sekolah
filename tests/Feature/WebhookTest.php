@@ -108,4 +108,23 @@ class WebhookTest extends PakaiData
         $this->assertFalse(Tanda::verifikasi('lain', 1000, $badan, $t, 300, 1100));
         $this->assertFalse(Tanda::verifikasi('r', 1000, $badan.' ', $t, 300, 1100));
     }
+
+    public function test_tombol_sinkronkan_mengirim_sinkron_diminta_tanpa_duplikat(): void
+    {
+        [$app] = $this->appDenganWebhook();
+        $this->buatAplikasi('pkl', ['jurusan']); // tanpa webhook: dilewati
+        Http::fake(['*' => Http::response('gagal', 500)]);
+        $admin = $this->buatUser(['superadmin' => true]);
+
+        $this->actingAs($admin)->post(route('admin.aplikasi.sinkron'))->assertSessionHas('galat');
+        $this->actingAs($admin)->post(route('admin.aplikasi.sinkron.satu', $app))->assertSessionHas('galat');
+        $o = WebhookOutbox::where('event', 'sinkron.diminta')->get();
+        $this->assertCount(1, $o, 'permintaan yang masih tertunda dipakai ulang, tidak menumpuk');
+        $this->assertSame($app->id, $o[0]->aplikasi_id);
+
+        Http::fake(['*' => Http::response('ok', 200)]);
+        $o[0]->update(['jadwal_berikutnya' => null]);
+        $this->actingAs($admin)->post(route('admin.aplikasi.sinkron'))->assertSessionHas('sukses');
+        $this->assertSame('terkirim', $o[0]->fresh()->status);
+    }
 }
