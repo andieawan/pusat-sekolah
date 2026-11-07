@@ -125,7 +125,7 @@ class Periksa extends Command
         $this->line('<options=bold>Webhook & cron</>');
         $macet = WebhookOutbox::where('status', 'pending')->where('created_at', '<', now()->subMinutes(10))->count();
         $gagal = WebhookOutbox::where('status', 'gagal')->count();
-        $macet > 0 ? $this->gagalkan("$macet webhook tertahan >10 menit", 'Cron `schedule:run` belum jalan (crontab -u www-data -l) atau aplikasi tujuan tak terjangkau; lihat menu Aplikasi → Webhook') : $this->ok('Tidak ada webhook tertahan');
+        $macet > 0 ? $this->gagalkan("$macet webhook tertahan >10 menit", 'Lihat kolom Hasil di Administrasi → Webhook: biasanya aplikasi tujuan menolak (integrasi PUSAT_* di .env-nya belum lengkap) atau mati. Bila kolom Percobaan tidak bertambah, cron schedule:run belum jalan (cat /etc/cron.d/pusat)') : $this->ok('Tidak ada webhook tertahan');
         $gagal > 0 ? $this->warn2("$gagal webhook berstatus gagal", 'Periksa URL webhook & secret di aplikasi tujuan') : null;
         $this->line('  <comment>[INFO]</comment>   Cron wajib: * * * * * cd '.base_path().' && php artisan schedule:run >> /dev/null 2>&1');
 
