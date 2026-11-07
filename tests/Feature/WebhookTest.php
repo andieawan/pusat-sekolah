@@ -113,7 +113,7 @@ class WebhookTest extends PakaiData
     {
         [$app] = $this->appDenganWebhook();
         $this->buatAplikasi('pkl', ['jurusan']); // tanpa webhook: dilewati
-        Http::fake(['*' => Http::response('gagal', 500)]);
+        Http::fake(['*' => Http::sequence()->push('gagal', 500)->push('gagal', 500)->push('ok', 200)]);
         $admin = $this->buatUser(['superadmin' => true]);
 
         $this->actingAs($admin)->post(route('admin.aplikasi.sinkron'))->assertSessionHas('galat');
@@ -122,8 +122,6 @@ class WebhookTest extends PakaiData
         $this->assertCount(1, $o, 'permintaan yang masih tertunda dipakai ulang, tidak menumpuk');
         $this->assertSame($app->id, $o[0]->aplikasi_id);
 
-        Http::fake(['*' => Http::response('ok', 200)]);
-        $o[0]->update(['jadwal_berikutnya' => null]);
         $this->actingAs($admin)->post(route('admin.aplikasi.sinkron'))->assertSessionHas('sukses');
         $this->assertSame('terkirim', $o[0]->fresh()->status);
     }
