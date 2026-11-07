@@ -47,7 +47,7 @@ class WebhookPengirim
                 ->post($app->webhook_url);
             $kode = $res->status();
             $ok = $res->successful();
-            $galat = $ok ? null : 'HTTP '.$kode;
+            $galat = $ok ? null : self::alasan($kode, (string) ($res->json('error') ?? ''));
         } catch (Throwable $e) {
             $ok = false;
             $galat = mb_substr($e->getMessage(), 0, 500);
@@ -104,5 +104,15 @@ class WebhookPengirim
         }
 
         return $hasil;
+    }
+
+    /** Pesan gagal yang bisa ditindaklanjuti, dari kode HTTP + kode galat yang dikirim aplikasi penerima. */
+    public static function alasan(?int $kode, string $error): string
+    {
+        return 'HTTP '.$kode.match ($error) {
+            'integrasi_belum_aktif' => ': integrasi Pusat di aplikasi itu belum aktif — lengkapi PUSAT_ENABLED, PUSAT_URL, PUSAT_CLIENT_ID, PUSAT_CLIENT_SECRET, PUSAT_WEBHOOK_SECRET di .env-nya lalu php artisan config:cache',
+            'tanda_tangan_salah' => ': rahasia webhook berbeda — samakan PUSAT_WEBHOOK_SECRET di .env aplikasi dengan rahasia webhook di Pusat',
+            default => $kode === 404 ? ': alamat webhook tidak ditemukan — periksa URL webhook aplikasi' : '',
+        };
     }
 }
