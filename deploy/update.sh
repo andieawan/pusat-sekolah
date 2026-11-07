@@ -8,7 +8,13 @@ OWNER="$(stat -c %U "$APP")"; as_owner() { sudo -u "$OWNER" -H "$@"; }
 trap 'php artisan up >/dev/null 2>&1 || true' EXIT
 echo "==> Backup database"; bash deploy/backup.sh
 php artisan down --retry=30 >/dev/null 2>&1 || true
-echo "==> git pull + composer"; as_owner git ls-files -m -- vendor | as_owner xargs -r git checkout --; as_owner git pull --ff-only; as_owner composer install --no-dev --optimize-autoloader --no-interaction
+echo "==> git pull"; as_owner git ls-files -m -- vendor | as_owner xargs -r git checkout --; as_owner git pull --ff-only
+# vendor/ ikut di repo: composer tidak wajib (install.sh tidak memasangnya). Dipakai hanya bila ada.
+if command -v composer >/dev/null 2>&1; then
+    echo "==> composer"; as_owner composer install --no-dev --optimize-autoloader --no-interaction
+else
+    echo "==> composer tidak terpasang — dilewati (vendor/ sudah ikut di repo)"
+fi
 echo "==> migrate"; php artisan migrate --force
 php artisan optimize:clear; php artisan config:cache; php artisan route:cache; php artisan view:cache
 chown -R "$OWNER":www-data storage bootstrap/cache; chmod -R ug+rwX storage bootstrap/cache
