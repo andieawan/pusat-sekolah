@@ -4,19 +4,8 @@ Runtime:       PHP 8.3.36
 Configuration: /home/runner/work/pusat-sekolah/pusat-sekolah/phpunit.xml
 
 ................................................................. 65 / 78 ( 83%)
-............F                                                     78 / 78 (100%)
+.............                                                     78 / 78 (100%)
 
-Time: 00:04.212, Memory: 66.50 MB
+Time: 00:05.041, Memory: 66.50 MB
 
-There was 1 failure:
-
-1) Tests\Feature\WebhookTest::test_tombol_sinkronkan_mengirim_sinkron_diminta_tanpa_duplikat
-Session is missing expected key [sukses].
-Failed asserting that false is true.
-
-/home/runner/work/pusat-sekolah/pusat-sekolah/vendor/laravel/framework/src/Illuminate/Testing/TestResponseAssert.php:46
-/home/runner/work/pusat-sekolah/pusat-sekolah/vendor/laravel/framework/src/Illuminate/Testing/TestResponse.php:1595
-/home/runner/work/pusat-sekolah/pusat-sekolah/tests/Feature/WebhookTest.php:127
-
-FAILURES!
-Tests: 78, Assertions: 478, Failures: 1.
+OK (78 tests, 479 assertions)
