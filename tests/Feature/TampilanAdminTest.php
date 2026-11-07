@@ -16,6 +16,13 @@ class TampilanAdminTest extends PakaiData
             ->assertSee('Data induk')->assertSee('Integrasi');
     }
 
+    public function test_daftar_periksa_data_kosong_tidak_dicentang(): void
+    {
+        $this->actingAs($this->buatUser(['superadmin' => true]))->get('/admin')->assertOk()
+            ->assertSee('Belum ada kelas di tahun ajaran aktif')->assertSee('Belum ada data guru')
+            ->assertDontSee('Semua kelas sudah punya wali kelas')->assertDontSee('Semua guru &amp; staf sudah punya akun', false);
+    }
+
     public function test_saringan_siswa_per_kelas_dan_hapus_di_halaman_ubah(): void
     {
         $s = $this->buatKelasDanSiswa('3001');
@@ -29,8 +36,8 @@ class TampilanAdminTest extends PakaiData
 
     public function test_portal_kartu_aplikasi(): void
     {
-        [$app] = $this->buatAplikasi('absensi', ['siswa'], ['peran_tersedia' => ['guru']]);
+        [$app] = $this->buatAplikasi('jurnal', ['siswa'], ['peran_tersedia' => ['guru']]);
         $u = $this->buatUser([], $app, ['guru']);
-        $this->actingAs($u)->get('/portal')->assertOk()->assertSee('Absensi siswa harian')->assertSee('Buka →', false)->assertDontSee('Buka Administrasi');
+        $this->actingAs($u)->get('/portal')->assertOk()->assertSee('Jurnal mengajar')->assertSee('Buka →', false)->assertDontSee('Buka Administrasi');
     }
 }

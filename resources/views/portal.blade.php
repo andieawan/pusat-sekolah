@@ -5,7 +5,7 @@
 @php
     $info = [
         'jurnal' => ['📘', 'Jurnal mengajar, absensi siswa, nilai, dan rekap kehadiran.'],
-        'absensi' => ['✅', 'Absensi siswa harian, nilai, dan rekap kehadiran.'],
+        'tanggungan' => ['💳', 'Daftar ulang, iuran syariah, kuitansi, dan rekap tanggungan siswa.'],
         'bk' => ['💬', 'Catatan bimbingan, kasus, home visit, dan surat BK.'],
         'pkl' => ['🏭', 'Penempatan, absen, jurnal, dan nilai PKL.'],
         'tu' => ['🗂️', 'Surat masuk/keluar, mutasi siswa, absen pegawai.'],

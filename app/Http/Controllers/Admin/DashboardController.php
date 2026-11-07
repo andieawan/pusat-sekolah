@@ -54,16 +54,28 @@ class DashboardController extends Controller
             route('admin.profil.edit'), 'Isi profil'];
         $t[] = [(bool) $tahun, 'Tahun ajaran aktif', $tahun ? "{$tahun->nama}, semester {$tahun->semester}." : 'Belum ada tahun ajaran aktif — dibutuhkan untuk kelas, impor, dan kenaikan kelas.',
             route('admin.master.index', 'tahun-ajaran'), 'Atur'];
+        $jmlKelas = $tahun ? Kelas::where('tahun_ajaran_id', $tahun->id)->count() : 0;
+        if ($jmlKelas === 0) {
+            $t[] = [false, 'Kelas', 'Belum ada kelas di tahun ajaran aktif — impor atau tambah kelas dulu, lalu atur wali kelasnya.',
+                route('admin.impor.form'), 'Impor CSV'];
+        }
         $tanpaWali = $tahun ? Kelas::where('tahun_ajaran_id', $tahun->id)->whereNull('wali_id')->count() : 0;
-        $t[] = [$tanpaWali === 0, 'Wali kelas', $tanpaWali ? "$tanpaWali kelas belum punya wali kelas (wali kelas di Jurnal, BK & Tanggungan mengikuti isian ini)." : 'Semua kelas sudah punya wali kelas.',
-            route('admin.master.index', 'kelas'), 'Atur wali'];
+        if ($jmlKelas) {
+            $t[] = [$tanpaWali === 0, 'Wali kelas', $tanpaWali ? "$tanpaWali kelas belum punya wali kelas (wali kelas di Jurnal, BK & Tanggungan mengikuti isian ini)." : 'Semua kelas sudah punya wali kelas.',
+                route('admin.master.index', 'kelas'), 'Atur wali'];
+        }
         $tanpaKelas = Siswa::where('status', 'aktif')->whereNull('kelas_id')->count();
         if ($tanpaKelas) {
             $t[] = [false, 'Siswa tanpa kelas', "$tanpaKelas siswa aktif belum masuk kelas.", route('admin.master.index', 'siswa'), 'Lihat siswa'];
         }
         $guruTanpaAkun = Pegawai::where('aktif', true)->whereDoesntHave('akun')->count();
-        $t[] = [$guruTanpaAkun === 0, 'Akun guru & staf', $guruTanpaAkun ? "$guruTanpaAkun guru/staf belum punya akun login." : 'Semua guru & staf sudah punya akun.',
-            route('admin.akun.massal'), 'Buat akun'];
+        if (! Pegawai::where('aktif', true)->exists()) {
+            $t[] = [false, 'Guru & staf', 'Belum ada data guru & staf — impor dulu, lalu buat akun loginnya sekaligus.', route('admin.impor.form'), 'Impor CSV'];
+        }
+        if (Pegawai::where('aktif', true)->exists()) {
+            $t[] = [$guruTanpaAkun === 0, 'Akun guru & staf', $guruTanpaAkun ? "$guruTanpaAkun guru/staf belum punya akun login." : 'Semua guru & staf sudah punya akun.',
+                route('admin.akun.massal'), 'Buat akun'];
+        }
         $tanpaAkses = User::where('aktif', true)->where('superadmin', false)->doesntHave('akses')->count();
         if ($tanpaAkses) {
             $t[] = [false, 'Akun tanpa akses', "$tanpaAkses akun aktif belum diberi peran di aplikasi mana pun.", route('admin.akun.index'), 'Lihat akun'];

@@ -7,7 +7,7 @@
         <div>
             <h1>Kenaikan kelas</h1>
             <p class="samar">Dilakukan sekali di akhir tahun ajaran. Siswa aktif dipindah ke kelas tahun ajaran berikutnya
-                (X → XI → XII), kelas XII diluluskan. Hasilnya otomatis terkirim ke semua aplikasi (Absensi, BK, TU, PKL).</p>
+                (X → XI → XII), kelas XII diluluskan. Hasilnya otomatis terkirim ke semua aplikasi (Jurnal, BK, TU, PKL, Tanggungan).</p>
         </div>
     </div>
 

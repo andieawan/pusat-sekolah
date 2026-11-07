@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\RateLimiter;
  * POST /api/v1/masuk-lokal   (Basic client_id:client_secret, scope "akun")
  * Body: username, password, ip (IP pengguna di aplikasi, untuk pembatasan percobaan)
  *
- * Dipakai formulir login biasa di aplikasi (Absensi, BK, TU, PKL) agar akun Pusat bisa masuk dengan
+ * Dipakai formulir login biasa di aplikasi (Jurnal, BK, TU, PKL, Tanggungan) agar akun Pusat bisa masuk dengan
  * username & password Pusat tanpa pindah halaman. Password tidak disimpan aplikasi; hanya diperiksa di sini.
  * Balasan sukses = bentuk yang sama dengan /api/sso/userinfo.
  */

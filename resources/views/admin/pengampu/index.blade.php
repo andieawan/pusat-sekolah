@@ -6,7 +6,7 @@
     <div class="kepala">
         <div>
             <h1>Pengampu mapel</h1>
-            <p class="samar">Siapa mengajar mapel apa di kelas mana{{ $ta ? ' — tahun ajaran '.$ta->nama : '' }}. Absensi memakai daftar ini
+            <p class="samar">Siapa mengajar mapel apa di kelas mana{{ $ta ? ' — tahun ajaran '.$ta->nama : '' }}. Jurnal memakai daftar ini
                 untuk menentukan kelas &amp; mapel yang boleh diisi tiap guru. Setelah kenaikan kelas, isi lagi untuk kelas tahun ajaran baru.</p>
         </div>
     </div>

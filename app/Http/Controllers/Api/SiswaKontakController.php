@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 /**
  * PATCH /api/v1/siswa/{uuid}/kontak  {no_hp_ortu?, nama_ortu?, petugas?} — scope "siswa_kontak".
- * Absensi (wali kelas/admin) memperbarui kontak orang tua; perubahan diteruskan ke semua aplikasi lewat webhook.
+ * Jurnal (wali kelas/admin) memperbarui kontak orang tua; perubahan diteruskan ke semua aplikasi lewat webhook.
  */
 class SiswaKontakController extends Controller
 {
