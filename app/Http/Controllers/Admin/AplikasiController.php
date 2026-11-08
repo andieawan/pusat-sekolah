@@ -32,8 +32,17 @@ class AplikasiController extends Controller
             $app->scope = $bawaan['scope'];
             $app->peran_tersedia = $bawaan['peran'];
         }
+        // Contoh alamat mengikuti jalur aplikasi yang dipilih (Website tanpa /api, aplikasi lain dengan /api).
+        $contoh = 'https://'.($bawaan && $request->query('kode') !== 'web' ? $request->query('kode').'.' : 'jurnal.').'smkibupakusari.sch.id';
+        if ($request->query('kode') === 'web') {
+            $contoh = 'https://smkibupakusari.sch.id';
+        }
 
-        return view('admin.aplikasi.form', ['app' => $app, 'baru' => true]);
+        return view('admin.aplikasi.form', ['app' => $app, 'baru' => true, 'contoh' => [
+            'url' => $contoh,
+            'redirect' => $contoh.($bawaan['redirect_path'] ?? '/sso/callback'),
+            'webhook' => $contoh.($bawaan['webhook_path'] ?? '/api/pusat/webhook'),
+        ]]);
     }
 
     public function store(Request $request)

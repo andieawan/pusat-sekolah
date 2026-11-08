@@ -43,4 +43,5 @@ class AplikasiBaruTest extends TestCase
         $this->assertNotContains('siswa', $a->scope);
         $this->assertSame(['admin', 'bendahara', 'kepsek', 'wali_kelas'], $a->peran_tersedia);
     }
+
 }

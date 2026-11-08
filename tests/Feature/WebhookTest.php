@@ -125,4 +125,14 @@ class WebhookTest extends PakaiData
         $this->actingAs($admin)->post(route('admin.aplikasi.sinkron'))->assertSessionHas('sukses');
         $this->assertSame('terkirim', $o[0]->fresh()->status);
     }
+
+    public function test_contoh_alamat_webhook_mengikuti_aplikasi_yang_dipilih(): void
+    {
+        $admin = $this->buatUser(['superadmin' => true]);
+        $this->actingAs($admin)->get(route('admin.aplikasi.create', ['kode' => 'jurnal']))
+            ->assertOk()->assertSee('https://jurnal.smkibupakusari.sch.id/api/pusat/webhook', false);
+        $this->actingAs($admin)->get(route('admin.aplikasi.create', ['kode' => 'web']))
+            ->assertOk()->assertSee('placeholder="https://smkibupakusari.sch.id/pusat/webhook"', false)
+            ->assertSee('https://smkibupakusari.sch.id/pusat/callback', false);
+    }
 }

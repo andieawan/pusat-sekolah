@@ -39,7 +39,7 @@
             </div>
             <div class="baris">
                 <label for="base_url">Alamat aplikasi (URL)</label>
-                <input type="url" id="base_url" name="base_url" value="{{ old('base_url', $app->base_url) }}" required placeholder="https://jurnal.smkibupakusari.sch.id">
+                <input type="url" id="base_url" name="base_url" value="{{ old('base_url', $app->base_url) }}" required placeholder="{{ $contoh['url'] ?? 'https://jurnal.smkibupakusari.sch.id' }}">
             </div>
             <label class="centang">
                 <input type="checkbox" name="aktif" value="1" @checked($adaOld ? (bool) old('aktif') : (bool) $app->aktif)>
@@ -51,7 +51,7 @@
             <h2>Login tunggal (SSO)</h2>
             <div class="baris">
                 <label for="redirect_uris">Redirect URI (satu per baris)</label>
-                <textarea id="redirect_uris" name="redirect_uris" required class="mono" placeholder="https://jurnal.smkibupakusari.sch.id/sso/callback">{{ old('redirect_uris', implode("\n", $app->redirect_uris ?? [])) }}</textarea>
+                <textarea id="redirect_uris" name="redirect_uris" required class="mono" placeholder="{{ $contoh['redirect'] ?? 'https://jurnal.smkibupakusari.sch.id/sso/callback' }}">{{ old('redirect_uris', implode("\n", $app->redirect_uris ?? [])) }}</textarea>
                 <div class="samar">Harus persis sama dengan yang dikirim aplikasi. Alamat lain ditolak (mencegah pembajakan login).</div>
             </div>
             <div class="baris">
@@ -75,8 +75,9 @@
             <h2>Webhook</h2>
             <div class="baris">
                 <label for="webhook_url">URL penerima webhook (opsional)</label>
-                <input type="url" id="webhook_url" name="webhook_url" value="{{ old('webhook_url', $app->webhook_url) }}" placeholder="https://jurnal.smkibupakusari.sch.id/pusat/webhook">
-                <div class="samar">Perubahan data induk dikirim ke sini, ditandatangani HMAC. Boleh http:// untuk jaringan lokal.</div>
+                <input type="url" id="webhook_url" name="webhook_url" value="{{ old('webhook_url', $app->webhook_url) }}" placeholder="{{ $contoh['webhook'] ?? 'https://jurnal.smkibupakusari.sch.id/api/pusat/webhook' }}">
+                <div class="samar">Perubahan data induk dikirim ke sini, ditandatangani HMAC. Boleh http:// untuk jaringan lokal.
+                    Jalurnya: Jurnal, BK, TU, PKL, Tanggungan <code>/api/pusat/webhook</code> · Website <code>/pusat/webhook</code>.</div>
             </div>
         </div>
 
