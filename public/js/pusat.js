@@ -66,9 +66,9 @@
     }
     cek();
     setInterval(cek, 15000);
-    // Halaman Aplikasi yang menunggu laporan sinkron: muat ulang tiap 10 detik sampai laporan datang (maks. 10 menit).
+    // Halaman Aplikasi yang menunggu laporan sinkron: muat ulang tiap 4 detik sampai laporan datang (maks. 10 menit).
     var tunggu = document.querySelector('[data-segarkan-laporan]');
-    if (tunggu) setTimeout(function () { if (!document.querySelector('details[open]')) location.reload(); }, 10000);
+    if (tunggu) setTimeout(function () { if (!document.querySelector('details[open]')) location.reload(); }, 4000);
   })();
 
   document.addEventListener('click', function (e) {

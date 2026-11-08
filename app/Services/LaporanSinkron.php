@@ -27,7 +27,7 @@ class LaporanSinkron
         $menjawab = $app->sinkron_diminta_pada !== null;
         $app->forceFill([
             'sinkron_lapor_pada' => now(),
-            'sinkron_laporan' => ['ok' => $ok, 'pemicu' => $pemicu, 'ringkas' => $ringkas, 'galat' => $galat],
+            'sinkron_laporan' => ['ok' => $ok, 'pemicu' => $menjawab ? 'diminta Pusat' : $pemicu, 'ringkas' => $ringkas, 'galat' => $galat],
             'sinkron_diminta_pada' => $ok ? null : $app->sinkron_diminta_pada,
         ])->save();
 
